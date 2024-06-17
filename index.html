@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>something</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			html {
+			  position: fixed;
+			  height: 100%;
+			  overflow: hidden;
+			}
+
+			body {
+			  width: 100vw;
+			  height: 100vh;
+			  overflow-y: hidden;
+			  overflow-x: hidden;
+			  -webkit-overflow-scrolling: touch;
+			}
+
+			a,
+			a:hover,
+			a:link,
+			a:visited,
+			a:active {
+				color: #fff;
+			}
+
+			.button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				width: 48px;
+				height: 48px;
+				background: url('baseline-volume_up-24px.svg') no-repeat center center;
+				border: none;
+
+				z-index:200;
+
+				text-indent: -9999px;
+				overflow: hidden;
+			}
+
+			.muted .muteButton {
+				background-image: url('baseline-volume_off-24px.svg');
+			}
+
+			body .infoButton {
+				right: inherit;
+				left: 20px;
+				background-image: url('baseline-help_outline-24px.svg')
+			}
+
+			.overlay {
+				position: fixed;
+				left: 0;
+			    top: 0;
+			    width: 100%;
+			    height: 100%;
+				background: rgba(0,0,0,0.8);
+				color: #fff;
+
+				z-index:100;
+
+				transition: all 0.3s ease-in;
+			}
+
+			.overlay.closed {
+				opacity: 0;
+				background: rgba(0,0,0,0.0);
+				/*transform: scaleX(0) scaleY(0) translateY(120vh);*/
+			}
+
+			.dialog {
+				position: absolute;
+			    left: 50%;
+			    top: 50%;
+			    margin: -150px 0 0 -120px;
+			    width: 240px;
+			    height: 300px;
+			}
+
+			.dialog button {
+				margin-top: 25px;
+				border: solid 1px #fff;
+				width: 100px;
+			    
+			    background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=) no-repeat 0 0;
+			    background-size: 100% 100%;
+			    animation: loadingbar 140s;
+
+			    transition: background-size 0.3s ease-in;
+
+			    color: #000;
+			    padding: 7px 20px;
+			    /* text-transform: uppercase; */
+			    font-variant: small-caps;
+			}
+
+			.loading .dialog button {
+				color: #999;
+				animation-duration: 140s;
+			}
+
+			.loaded .dialog button {
+				animation: none;
+				background-size: 100% 100%;
+			}
+
+			.loaded .dialog button:hover,
+			.loaded .dialog button:active {
+			    background: #000;
+			    color: #fff;
+			}
+
+			@keyframes loadingbar {
+			  0% {
+			    background-size: 0% 100%;
+			  }
+
+			  3% {
+			    background-size: 30% 100%;
+			  }
+
+			  15% {
+			    background-size: 50% 100%;
+			  }
+
+			  50% {
+			    background-size: 80% 100%;
+			  }
+
+			  90% {
+			    background-size: 95% 100%;
+			  }
+
+			  100% {
+			    background-size: 97% 100%;
+			  }
+			}
+
+			/* Cross-fade */
+			.crossfade {
+				position: relative;
+			}
+
+			.about .crossfade div {
+				/*transition: all 0.3s ease-in-out;*/
+				animation-name: crossFade;
+				animation-duration: 0.3s;
+				animation-timing-function: ease-in-out;
+			}
+			
+			.info {
+				opacity: 0;
+			}
+
+			.welcome {
+				top: 0;
+				position: absolute;
+				
+				animation-fill-mode: forwards;
+			}
+
+			html .about .info {
+				z-index: 10;
+				animation-direction: reverse;
+				animation-fill-mode: forwards;
+			}
+
+			@keyframes crossFade {
+				0% {
+					opacity: 1;
+					transform: scale(1);
+				}
+				99% {
+					opacity: 0;
+					transform: scale(1);
+				}
+				100% {
+					opacity: 0;
+					transform: scale(0);
+				}
+			}
+
+		</style>
+
+		<link rel="stylesheet" href="a11y/A11yHelper.css" />
+
+	</head>
+	<body class="loading">
+
+		<div id="container">
+
+		</div>
+
+		<button id="muteButton" class="muteButton button">Mute volume</button>
+
+		<div id="intro" class="overlay">
+			<div class="dialog">
+				<h2>Welcome</h2>
+
+				<div class="crossfade">
+					<div class="welcome">
+						<p>Loading Assets</p>
+						<p>Don't forget to unmute your speakers</p>
+					</div>
+					
+					<div class="info">
+						<p>Credits</p>
+						<p>3d models from Google Poly
+						   Thanks to THREE.js, Tone.js and a long weekend</p>
+					</div>
+				</div>
+
+				<button class="start" id="startButton">Loading...</button>
+			</div>
+
+			<button id="infoButton" class="infoButton button">About</button>
+		</div>
+
+
+		<script>
+			var DEBUG = window.location.href.indexOf('debug=true') > 0;
+			var debugPrint = DEBUG ? function () {
+					console.log.apply(console, arguments);
+				} 
+				: 
+				function () {};
+
+
+
+			function glowMaterial(material) {
+				material.__currentHex = material.emissive.getHex();
+				material.emissive.setHex( material.color.getHex() );
+			}
+
+			function unglowMaterial(material) {
+				if (typeof(material.__currentHex) != 'undefined') {
+					material.emissive.setHex( material.__currentHex );
+				}
+			}
+		</script>
+
+
+		<script src="js/three.js"></script>
+		<script src="a11y/A11yHelper.js"></script>
+
+		<script src="js/loaders/MTLLoader.js"></script>
+		<script src="js/loaders/OBJLoader.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/libs/dat.gui.min.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
+
+		<script src="js/objects/Water.js"></script>
+		<script src="js/objects/Sky.js"></script>
+
+		<script src="js/WebGL.js"></script>
+
+		<script type="text/javascript" src="lib/Tone.min.js"></script>
+		<script type="text/javascript" src="lib/StartAudioContext.js"></script>
+
+		<script src="lib/LetterDistributions.js"></script>
+		<script src="lib/synth.js"></script>
+		<script src="lib/palettes.js"></script>
+		<script src="lib/main.js"></script>
+		<script src="lib/loops.js"></script>
+
+
+	
+
+
+
+
+		<script>
+			// UI
+			var muteButton = document.getElementById('muteButton');
+			muteButton.addEventListener('click', function (ev) {
+				var isMuted = Tone.Master.mute = !Tone.Master.mute;
+				if (isMuted) {
+					document.body.className += ' muted';
+				} else {
+					document.body.className = document.body.className.replace(' muted', '');
+				}
+			});
+
+			var infoButton = document.getElementById('infoButton');
+			infoButton.addEventListener('click', function (ev) {
+				document.body.className += ' about';
+			});
+
+			var isIntroClosed = false,
+				onStartedListeners = [],
+				addOnStartedListener = function(listener) {
+					onStartedListeners.push(listener);
+				},
+				intro = document.getElementById('intro'),
+				startButton = document.getElementById('startButton');
+			startButton.addEventListener('click', function(ev) {
+				intro.className += ' closed';
+				setTimeout(function () { intro.style.display = 'none'; }, 350);
+
+				isIntroClosed = true;
+
+				setTimeout(function() {
+						onStartedListeners.forEach(function(listener) {
+							listener();
+						});
+						onStartedListeners = null;
+					}, 100);
+			});
+
+			startButton.disabled = true;
+			startButton.innerText = "Loading...";
+
+			var numItemsLoading = 0,
+				incrementLoadingItems = function() {
+					numItemsLoading++;
+				},
+				decrementLoadingItems = function() {
+					if (--numItemsLoading == 0) {
+						document.body.className = document.body.className.replace('loading', 'loaded');
+						startButton.disabled = false;
+						startButton.innerText = "Begin";
+					}
+				};
+
+			StartAudioContext(Tone.context, startButton, function() {debugPrint('auto started')});
+
+		</script>
+
+
+
+
+
+
+
+		<!-- ocean -->
+		<script>
+
+		if ( WEBGL.isWebGLAvailable() === false ) {
+
+			document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+
+		}
+
+		var Ocean = function (renderer, scene, camera) {
+				
+			var light;
+			var controls, water, sphere;
+
+			var updateSun;
+			var parameters = {
+				distance: 400,
+				inclination: 0.49,
+				azimuth: 0.205
+			};
+
+
+			var init = function() {
+
+				//
+
+				// camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
+				// camera.position.set( 30, 30, 100 );
+
+				//
+
+				light = new THREE.DirectionalLight( 0xffffff, 0.8 );
+				scene.add( light );
+
+				// Water
+
+				var waterGeometry = new THREE.PlaneBufferGeometry( 10000, 10000 );
+
+				water = new THREE.Water(
+					waterGeometry,
+					{
+						textureWidth: 512,
+						textureHeight: 512,
+						waterNormals: new THREE.TextureLoader().load( 'textures/waternormals.jpg', function ( texture ) {
+
+							texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+
+						} ),
+						alpha: 1.0,
+						sunDirection: light.position.clone().normalize(),
+						sunColor: 0xffffff,
+						waterColor: 0x001e0f,
+						distortionScale: 3.7,
+						fog: scene.fog !== undefined
+					}
+				);
+
+				water.rotation.x = - Math.PI / 2;
+
+				scene.add( water );
+
+				// Skybox
+
+				var sky = new THREE.Sky();
+				sky.scale.setScalar( 10000 );
+				scene.add( sky );
+
+				var uniforms = sky.material.uniforms;
+
+				uniforms.turbidity.value = 10;
+				uniforms.rayleigh.value = 2;
+				uniforms.luminance.value = 1;
+				uniforms.mieCoefficient.value = 0.005;
+				uniforms.mieDirectionalG.value = 0.8;
+
+				var cubeCamera = new THREE.CubeCamera( 1, 20000, 256 );
+				cubeCamera.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+
+				updateSun = function() {
+
+					var theta = Math.PI * ( parameters.inclination - 0.5 );
+					var phi = 2 * Math.PI * ( parameters.azimuth - 0.5 );
+
+					light.position.x = parameters.distance * Math.cos( phi );
+					light.position.y = parameters.distance * Math.sin( phi ) * Math.sin( theta );
+					light.position.z = parameters.distance * Math.sin( phi ) * Math.cos( theta );
+
+					sky.material.uniforms.sunPosition.value = light.position.copy( light.position );
+					water.material.uniforms.sunDirection.value.copy( light.position ).normalize();
+
+					cubeCamera.update( renderer, scene );
+
+				}
+
+				updateSun();
+
+				//
+
+				var geometry = new THREE.IcosahedronBufferGeometry( 20, 1 );
+				var count = geometry.attributes.position.count;
+
+				var colors = [];
+				var color = new THREE.Color();
+
+				for ( var i = 0; i < count; i += 3 ) {
+
+					color.setHex( Math.random() * 0xffffff );
+
+					colors.push( color.r, color.g, color.b );
+					colors.push( color.r, color.g, color.b );
+					colors.push( color.r, color.g, color.b );
+
+				}
+
+				geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+
+				var material = new THREE.MeshStandardMaterial( {
+					vertexColors: THREE.VertexColors,
+					roughness: 0.0,
+					flatShading: true,
+					envMap: cubeCamera.renderTarget.texture,
+					side: THREE.DoubleSide
+				} );
+
+				// sphere = new THREE.Mesh( geometry, material );
+				// scene.add( sphere );
+
+				//
+
+				// controls = new THREE.OrbitControls( camera, renderer.domElement );
+				// controls.maxPolarAngle = Math.PI * 0.495;
+				// controls.target.set( 0, 10, 0 );
+				// controls.minDistance = 40.0;
+				// controls.maxDistance = 200.0;
+				// camera.lookAt( controls.target );
+
+				//
+
+				// GUI
+
+				if (DEBUG) {
+					var gui = new dat.GUI();
+
+					var folder = gui.addFolder( 'Sky' );
+					folder.add( parameters, 'inclination', 0, 0.5, 0.0001 ).onChange( updateSun );
+					folder.add( parameters, 'azimuth', 0, 1, 0.0001 ).onChange( updateSun );
+					folder.open();
+
+					var uniforms = water.material.uniforms;
+
+					var folder = gui.addFolder( 'Water' );
+					folder.add( uniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
+					folder.add( uniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+					folder.add( uniforms.alpha, 'value', 0.9, 1, .001 ).name( 'alpha' );
+					folder.open();
+
+				}
+			}
+
+
+			var render = function() {
+
+				var time = performance.now() * 0.001;
+
+				// sphere.position.y = Math.sin( time ) * 20 + 5;
+				// sphere.rotation.x = time * 0.5;
+				// sphere.rotation.z = time * 0.51;
+
+				water.material.uniforms.time.value += 1.0 / 60.0;
+
+				if (isIntroClosed) {
+					parameters.inclination -= 0.000036;
+					if (parameters.inclination < -0.5) {
+						parameters.inclination = 0.51;
+					}
+					updateSun();
+				}
+			}
+
+			init();
+
+
+			return {
+				update: render
+			};
+		};
+
+
+		</script>
+
+
+
+
+
+
+
+
+
+
+		<script>
+			var ocean, boats;
+
+			var container, stats, controls;
+			var camera, scene, raycaster, renderer;
+
+			var mouse = new THREE.Vector2(-500, -500), INTERSECTED;
+			var radius = 100, theta = 0;
+
+			var trees = [];
+
+			init();
+			animate();
+
+			function rebuild() {
+				for ( var j = 0; j < trees.length; j++) {
+					var tree = trees[j].child;
+					scene.remove(tree.group);
+				}
+				trees = Hill_rebuild(0);
+				for ( var j = 0; j < trees.length; j++) {
+					var tree = trees[j].child;
+					scene.add( tree.group );
+				}
+			}
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				
+
+				camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
+				camera.position.set( 150, 300, 600 );
+					// 
+				scene = new THREE.Scene();
+
+				ocean = Ocean(renderer, scene, camera);
+
+				raycaster = new THREE.Raycaster();
+
+
+				if (DEBUG) {
+					stats = new Stats();
+					container.appendChild( stats.dom );
+
+					// var ambientLight = new THREE.AmbientLight('#fff');
+					// scene.add(ambientLight);
+				}
+
+				controls = new THREE.OrbitControls( camera, renderer.domElement );	
+				// controls.autoRotate = true;
+				// 				controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+				// controls.dampingFactor = 0.25;
+				// controls.screenSpacePanning = false;
+				// controls.minDistance = 100;
+				// controls.maxDistance = 500;
+				// controls.maxPolarAngle = Math.PI / 2;
+
+				// controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls.maxPolarAngle = Math.PI * 0.495;
+				controls.target.set( 0, 10, 0 );
+				controls.minDistance = 40.0;
+				controls.maxDistance = 2000.0;
+				camera.lookAt( controls.target );
+
+				scene.background = new THREE.Color( 0xf0f0f0 );
+
+
+				var light = new THREE.DirectionalLight( 0xffffff, 1 );
+				light.position.set( 1, 1, 1 ).normalize();
+				scene.add( light );
+
+				var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
+
+				// for ( var i = 0; i < 200; i ++ ) {
+
+				// 	var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+
+				// 	object.position.x = Math.random() * 800 - 400;
+				// 	object.position.y = Math.random() * 800 - 400;
+				// 	object.position.z = -400;
+
+				// 	// object.rotation.x = Math.random() * 2 * Math.PI;
+				// 	// object.rotation.y = Math.random() * 2 * Math.PI;
+				// 	// object.rotation.z = Math.random() * 2 * Math.PI;
+
+				// 	object.scale.x = Math.random() + 0.5;
+				// 	object.scale.y = Math.random() + 0.5;
+				// 	object.scale.z = Math.random() + 0.5;
+
+				// 	scene.add( object );
+
+				// }
+
+				initBoats();
+
+				rebuild();
+
+				initKeyboardControl();
+
+				addOnStartedListener(function() {
+					document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+					document.addEventListener( 'touchstart', onDocumentMouseMove, false );
+					document.addEventListener( 'touchmove', onDocumentMouseMove, false );
+					document.addEventListener( 'touchend', onDocumentTouchEnd, false );
+					document.addEventListener( 'click', onDocumentMouseClick, false );
+				});
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				// animate transparency for now
+				// var curBoxIdx = 0;
+				// setInterval(function () {
+				// 	if (++curBoxIdx >= slates.length) {
+				// 		curBoxIdx = 0;
+
+				// 	// rebuild();
+				// 	}
+				// 	var slate = slates[curBoxIdx];
+				// 	if (!slate) return;
+				// 	slate.material.transparent = true;	
+				// 	if (slate.material.opacity > 0.5) {
+				// 		slate.material.opacity = 0.32;
+				// 	} else {
+				// 		slate.material.opacity = 0.75;
+				// 	}
+					
+				// }, 30);
+
+
+
+				if (DEBUG) {
+					initGui();
+				}
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+				// debugPrint("onDocumentMouseMove ", event);
+					
+				var clientX, clientY;
+				if (event.touches) {
+					// event.preventDefault();
+					clientX = event.touches[0].clientX;
+					clientY = event.touches[0].clientY;
+				} else {
+					event.preventDefault();
+
+					clientX = event.clientX;
+					clientY = event.clientY;
+				}
+				
+
+				mouse.x = ( clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( clientY / window.innerHeight ) * 2 + 1;
+
+			}
+
+			var clickedMouse;
+			function onDocumentMouseClick(event) {
+				clickedMouse = mouse;
+			}
+
+			function onDocumentTouchEnd( event ) {
+				clickedMouse = mouse;
+
+				mouse.x = -200;
+				mouse.y = -200;
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				ocean.update();
+
+				boats.update();
+
+				TWEEN.update();
+
+				render();
+				stats && stats.update();
+
+			}
+
+			function onMouseOverSlate(INTERSECTED) {
+				glowMaterial(INTERSECTED.material);
+
+				INTERSECTED.noteOn();
+
+				debugPrint("box: ", INTERSECTED.position);
+			}
+
+			function onMouseOutSlate(INTERSECTED) {
+				if ( INTERSECTED ) {
+					unglowMaterial(INTERSECTED.material);
+
+					INTERSECTED.noteOff();
+				}
+			}
+
+			function render() {
+
+				theta += 0.1;
+
+				// required if controls.enableDamping or controls.autoRotate are set to true
+				controls.update();
+
+				// camera.position.x = radius * Math.sin( THREE.Math.degToRad( theta ) );
+				// camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+				// camera.position.z = radius * Math.cos( THREE.Math.degToRad( theta ) );
+				// camera.lookAt( scene.position );
+
+				camera.updateMatrixWorld();
+
+				// find intersections
+
+				raycaster.setFromCamera( mouse, camera );
+
+				var intersects;
+				for ( var j = 0; j < trees.length; j++) {
+					var tree = trees[j].child;
+					intersects = raycaster.intersectObjects( tree.slates );
+					if ( intersects.length > 0 ) {
+						break;
+					}
+				}
+
+				if ( intersects.length > 0 ) {
+
+					if ( INTERSECTED != intersects[ 0 ].object ) {
+
+						onMouseOutSlate( INTERSECTED );
+
+						INTERSECTED = intersects[ 0 ].object;
+						
+						onMouseOverSlate( INTERSECTED );
+					}
+
+				} else {
+
+					onMouseOutSlate( INTERSECTED );
+
+					INTERSECTED = null;
+
+				}
+
+				if (clickedMouse) {
+					raycaster.setFromCamera(clickedMouse, camera);
+				}
+				boats.checkMouse(raycaster, clickedMouse);
+				clickedMouse = false;
+
+				renderer.render( scene, camera );
+
+			}
+
+
+			function initBoats() {
+				incrementLoadingItems();
+
+				var loopFiles = {
+						'pad' : {
+							url: 'samples/pad.m4a'
+						},
+						'bell' : {
+							url: 'samples/bell.m4a'
+						},
+						'chords' : {
+							url: 'samples/chords.m4a'
+						},
+						'latin' : {
+							url: 'samples/latin.m4a',
+							volume: -16
+						},
+						'techno' : {
+							url: 'samples/techno.m4a',
+							volume: -10
+						}
+					},
+					loops = new Loops(loopFiles,
+						function () {
+							debugPrint('All samples loaded');
+
+							loops.startAll();
+
+							// must mute AFTER starting because that's when volumes are adjusted.
+							for (var name in loopFiles) {
+								loops.mute(name, name !== 'pad');
+							}
+							decrementLoadingItems();
+						},
+						function (sampleName) {
+							debugPrint('Loaded sample ' + sampleName);
+						});
+
+
+				var boatFiles = [
+					{ 
+						'assetPath': 'models/lighthouse',
+						'mtlFile': 'Lighthouse.mtl',
+						'objFile': 'Lighthouse.obj',
+						scale: 3
+					},
+					{ 
+						'assetPath': 'models/boat',
+						'mtlFile': 'Boat Texture 1.mtl',
+						'objFile': 'Boat Texture 1.obj',
+						scale: 0.045,
+						y: -2,
+						rotation: 4
+					},
+					{ 
+						'assetPath': 'models/sailboat',
+						'mtlFile': '1368 Sailboat.mtl',
+						'objFile': '1368 Sailboat.obj',
+						scale: 0.9,
+						y: -6,
+						rotation: 6
+					},
+					{ 
+						'assetPath': 'models/submarine',
+						'mtlFile': 'submarine.mtl',
+						'objFile': 'submarine.obj',
+						scale: 8,
+						rotation: 6
+					},
+					{ 
+						'assetPath': 'models/blimp',
+						'mtlFile': 'CUPIC_BLIMP.mtl',
+						'objFile': 'CUPIC_BLIMP.obj',
+						scale: 0.07,
+						y: 250,
+						rotation: 4
+					}
+				];
+
+				boats = new Boats(scene, loops, boatFiles, decrementLoadingItems, incrementLoadingItems);
+			}
+
+			function initKeyboardControl() {
+				var SLATES_KEYCODE_START = 65; // 'a'
+				var SLATES_KEYCODE_END = 90; // 'z'
+
+				var makeSlateKeyboardCallback = function(tree, i) {
+					return function () {
+						var obj = tree.slates[i];
+						onMouseOverSlate(obj);
+						setTimeout(function () { onMouseOutSlate(obj);}, 400);
+					};
+				};
+				var keysPerTree = Math.floor((SLATES_KEYCODE_END - SLATES_KEYCODE_START) / trees.length);
+
+				// TODO: this is not terribly efficient since it has to make a new callback function for every key.
+				for ( var j = 0; j < trees.length; j++) {
+					var tree = trees[j].child;
+					for (var i = 0; i < tree.slates.length && i < keysPerTree; i++ ) {
+						var keycode = SLATES_KEYCODE_START + j * keysPerTree + i;
+						//debugPrint('makeSlateKeyboardCallback ' + tree.slates[i] + " " + i + " " + keycode);
+						a11y.addKeyboardShortcut(keycode, makeSlateKeyboardCallback(tree, i));
+					}
+				}
+			}
+
+			function initGui() {
+				// Sometimes I love javascript. this fuckery would get any other programming language fired.
+				var params = {
+					MIN_BOX_SIZE : MIN_BOX_SIZE,
+					MAX_BOX_SIZE : MAX_BOX_SIZE,
+
+					FRACTAL_BOX_MARGIN : FRACTAL_BOX_MARGIN,
+
+					OFFSET_SIZE : OFFSET_SIZE,
+					BRANCH_LENGTH : BRANCH_LENGTH,
+
+					TWEET_TREE_Y: TWEET_TREE_Y,
+
+					MODEL_ROTATION: MODEL_ROTATION,
+
+					//showHelpers: false,
+					cameraX: camera.position.x, 
+					cameraY: camera.position.y,
+					cameraZ: camera.position.z
+				};
+
+				var gui = new dat.GUI();
+				
+				Object.keys(params).forEach(function(key, el) {
+					var curValue = window[key];
+					if (typeof(curValue) != 'undefined') {
+						// it's a global var, alter it
+						if (curValue == 0) curValue = 1;
+
+						gui.add( params, key, curValue - curValue * 4, curValue + curValue * 4 )
+							.step( curValue / 16 ).name( key )
+							.onChange( function ( value ) {
+							
+							window[key] = value;
+							rebuild();
+							render();
+						} );
+
+					} else {
+						curValue = params[key];
+						gui.add( params, key, curValue - curValue * 4, curValue + curValue * 4 )
+							.step( 1 ).name( key )
+							.onChange( function ( value ) {
+							
+							if (key.indexOf('camera') == 0) {
+
+								camera.position.set( params.cameraX, params.cameraY, params.cameraZ );
+								camera.lookAt( scene.position );
+								
+								render();
+							}
+						} );
+					}
+				});
+				// gui.add( params, 'showHelpers' ).name( 'show helpers' ).onChange( function ( value ) {
+					
+				// 	render();
+				// } );
+			}
+
+		</script>
+
+	</body>
+</html>
