@@ -262,6 +262,20 @@ function heat(v) {
   return `hsla(${hue}, 60%, 40%, ${0.10 + (v/100)*0.22})`;
 }
 
+/* ---------- auction eligibility (mirrors the game) ---------- */
+const AUCTION_EXCLUDED_NATIONALITIES = ['PAK', 'BAN'];
+const OVERSEAS_AUCTION_OVERALL_FLOOR = 80;
+// The game's built-in default rule: international-only nationalities + overseas
+// players below the rating floor are held out of the franchise auction. Used to
+// SEED the editable excludeFromAuction flag for rosters that predate it, so old
+// JSON (and the stock roster) come in matching the game's defaults.
+function defaultAuctionExcluded(nat, batting, bowling) {
+  if (AUCTION_EXCLUDED_NATIONALITIES.indexOf(nat) !== -1) return true;
+  const overseas = nat !== 'IND';
+  const overall = Math.max(batting || 0, bowling || 0);
+  return overseas && overall <= OVERSEAS_AUCTION_OVERALL_FLOOR;
+}
+
 /* ---------- import / parse ---------- */
 function parsePreset(json) {
   if (!json || json.kind !== 'criccoach_roster')
@@ -288,7 +302,12 @@ function parsePlayer(j) {
   const e = j.evolving || {};
   return {
     id: j.id, name: j.name || '', jersey: j.jersey != null ? j.jersey : (e.jerseyNumber || 0),
-    role: j.role || 0, canKeep: !!j.canKeep, excludeFromAuction: !!j.excludeFromAuction,
+    role: j.role || 0, canKeep: !!j.canKeep,
+    // Respect an explicit flag; otherwise seed the game's default rule so old
+    // rosters (no key) come in with PAK/BAN/sub-floor players pre-excluded.
+    excludeFromAuction: ('excludeFromAuction' in j)
+      ? !!j.excludeFromAuction
+      : defaultAuctionExcluded(j.nationality || 'IND', e.batting || 0, e.bowling || 0),
     bowlerType: j.bowlerType || 0,
     handedness: j.handedness || 0, nationality: j.nationality || 'IND',
     startingTeamId: j.startingTeamId != null ? j.startingTeamId : null,
