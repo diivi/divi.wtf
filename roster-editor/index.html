@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cricket Coach — Roster Editor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%8F%8F%3C/text%3E%3C/svg%3E" />
+<meta name="description" content="Edit the Cricket Coach player pool in a spreadsheet, then export your roster." />
+<style>
+  :root {
+    --bg: #0e1116;
+    --panel: #161b22;
+    --panel2: #1c232d;
+    --line: #2a313c;
+    --text: #e6edf3;
+    --muted: #8b97a7;
+    --accent: #4f9dff;
+    --good: #2ea043;
+    --warn: #d29922;
+    --bad: #f85149;
+    --chip: #222a35;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+  }
+  header {
+    padding: 10px 14px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: var(--panel);
+  }
+  header h1 { font-size: 15px; margin: 0; font-weight: 650; letter-spacing: .2px; }
+  header h1 small { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 6px; }
+  .grow { flex: 1; }
+  button, .btn {
+    background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+    padding: 7px 12px; border-radius: 7px; cursor: pointer; font-size: 12.5px;
+    font-weight: 550; white-space: nowrap;
+  }
+  button:hover, .btn:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #04101f; }
+  button.danger { color: var(--bad); }
+  button:disabled { opacity: .45; cursor: default; }
+  input, select { font: inherit; color: var(--text); }
+  .toolbar2 {
+    padding: 8px 14px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: var(--panel);
+  }
+  .search {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 7px;
+    padding: 6px 10px; min-width: 200px;
+  }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: var(--chip); border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 11px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px;
+  }
+  .chip.active { background: var(--accent); color: #04101f; border-color: var(--accent); }
+  .chip .ct { opacity: .7; font-variant-numeric: tabular-nums; }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: transparent; }
+  .chip .dot.err { background: var(--bad); }
+  .chip .dot.warn { background: var(--warn); }
+  .wrap { flex: 1; overflow: auto; position: relative; }
+  table { border-collapse: separate; border-spacing: 0; width: max-content; }
+  th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0; }
+  thead th {
+    position: sticky; top: 0; z-index: 3; background: var(--panel2);
+    padding: 7px 8px; font-size: 11px; color: var(--muted); text-align: center;
+    font-weight: 600; white-space: nowrap; letter-spacing: .3px;
+  }
+  thead th .full { display: block; font-size: 9px; color: #5c6675; font-weight: 400; }
+  tbody td { background: var(--panel); height: 30px; }
+  tbody tr:hover td { background: #1a212b; }
+  td input, td select {
+    background: transparent; border: 0; width: 100%; height: 30px; padding: 0 7px;
+    outline: none; text-align: center;
+  }
+  td.txt input { text-align: left; }
+  td input:focus, td select:focus { background: #0c1722; box-shadow: inset 0 0 0 1.5px var(--accent); }
+  td.num input { font-variant-numeric: tabular-nums; }
+  td select { cursor: pointer; appearance: none; -webkit-appearance: none; }
+  /* sticky first columns */
+  .sticky1 { position: sticky; left: 0; z-index: 2; }
+  .sticky2 { position: sticky; z-index: 2; }
+  thead .sticky1, thead .sticky2 { z-index: 4; }
+  td.sticky1, td.sticky2 { background: var(--panel2); border-right: 1px solid var(--line); }
+  tbody tr:hover td.sticky1, tbody tr:hover td.sticky2 { background: #232c38; }
+  .rowtools { display: flex; gap: 2px; justify-content: center; }
+  .rowtools button { padding: 2px 6px; font-size: 11px; border-radius: 5px; }
+  .tagcell { padding: 0 6px; cursor: pointer; min-height: 30px; display: flex; align-items: center; flex-wrap: wrap; gap: 3px; justify-content: center; }
+  .tag { background: var(--chip); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: 10.5px; }
+  .tag.empty { color: #5c6675; }
+  /* validation panel */
+  .valbar {
+    padding: 7px 14px; border-bottom: 1px solid var(--line); background: var(--panel);
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+  }
+  .valbar .badge { padding: 3px 9px; border-radius: 6px; font-weight: 650; font-size: 12px; }
+  .valbar .badge.ok { background: rgba(46,160,67,.18); color: #56d364; }
+  .valbar .badge.err { background: rgba(248,81,73,.16); color: #ff7b72; }
+  .valbar .badge.warn { background: rgba(210,153,34,.16); color: #e3b341; }
+  .vallist { max-height: 30vh; overflow: auto; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .vallist .v { padding: 6px 16px; border-bottom: 1px solid #1a2029; font-size: 12px; cursor: pointer; }
+  .vallist .v:hover { background: var(--panel); }
+  .vallist .v .sev { font-weight: 700; margin-right: 8px; }
+  .vallist .v.err .sev { color: var(--bad); }
+  .vallist .v.warn .sev { color: var(--warn); }
+  .hidden { display: none !important; }
+  /* modal */
+  .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 50; display: flex; align-items: center; justify-content: center; }
+  .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; width: min(560px, 92vw); max-height: 86vh; overflow: auto; }
+  .modal h2 { margin: 0; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .modal .body { padding: 14px 18px; }
+  .modal .row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .modal .row label { width: 150px; color: var(--muted); font-size: 12px; }
+  .modal .row input, .modal .row select { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; flex: 1; }
+  .modal .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .modal .foot { padding: 12px 18px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; }
+  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; }
+  .checklist label { display: flex; align-items: center; gap: 7px; width: auto; color: var(--text); font-size: 12.5px; padding: 3px 0; cursor: pointer; }
+  .checklist input { flex: none; width: auto; }
+  .empty-state { text-align: center; color: var(--muted); padding: 60px 20px; }
+  .empty-state .big { font-size: 16px; color: var(--text); margin-bottom: 8px; }
+  .note { color: var(--muted); font-size: 11.5px; }
+  .pill-team { font-size: 11px; padding: 2px 7px; border-radius: 5px; background: var(--chip); border: 1px solid var(--line); }
+  a { color: var(--accent); }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel2); border: 1px solid var(--accent); color: var(--text); padding: 10px 18px; border-radius: 8px; z-index: 80; box-shadow: 0 6px 24px rgba(0,0,0,.4); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cricket Coach Roster Editor <small>edit teams &amp; players, export your version</small></h1>
+  <span class="grow"></span>
+  <input id="contributor" class="search" style="min-width:160px" placeholder="Your name (optional)" />
+  <button id="btnImport">Import roster…</button>
+  <button id="btnDefault">Load default</button>
+  <button id="btnExport" class="primary">Export roster</button>
+  <input id="fileInput" type="file" accept=".json,application/json" class="hidden" />
+</header>
+
+<div id="valbar" class="valbar">
+  <span id="valBadge" class="badge ok">Roster OK</span>
+  <span id="valSummary" class="note">No problems found.</span>
+  <span class="grow"></span>
+  <span class="note">click to view issues ▾</span>
+</div>
+<div id="vallist" class="vallist hidden"></div>
+
+<div class="toolbar2">
+  <input id="search" class="search" placeholder="Search player name…" />
+  <div id="chips" class="chips"></div>
+  <span class="grow"></span>
+  <button id="btnAdd">+ Add player</button>
+</div>
+
+<div class="wrap" id="wrap">
+  <div id="emptyState" class="empty-state">
+    <div class="big">Loading default roster…</div>
+    <div class="note">If nothing appears, click “Load default”, or “Import roster…” to open a file someone shared.</div>
+  </div>
+  <table id="tbl" class="hidden">
+    <thead><tr id="head"></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+"use strict";
+
+/* ---------- enum metadata (indices MUST match the Flutter app) ---------- */
+const ROLES = ['Top-order bat','Middle-order bat','Finisher','All-rounder','Wicket-keeper','Pace bowler','Spin bowler'];
+const BOWLER_TYPES = ['—','Right-arm fast','Left-arm fast','Right-arm medium-fast','Right-arm swing','Left-arm swing','Right-arm off-spin','Left-arm orthodox','Right-arm leg-spin','Left-arm chinaman'];
+const HANDS = ['Right-handed','Left-handed'];
+const WEAKNESSES = ['—','Spin','Swing','Pace','Bouncer','Yorker','Slower ball','Flighted ball','Darted ball'];
+const STRENGTHS = ['Cover drive','Cut','Pull','Hook','Sweep','Straight drive','Ramp / scoop','Slog-sweep'];
+const NATIONS = [
+  ['IND','India'],['AUS','Australia'],['ENG','England'],['NZ','New Zealand'],
+  ['SA','South Africa'],['WI','West Indies'],['SL','Sri Lanka'],['AFG','Afghanistan'],
+  ['BAN','Bangladesh'],['PAK','Pakistan'],['USA','USA'],
+];
+const NATION_CODES = NATIONS.map(n => n[0]);
+// Cup nations that MUST be able to field an XI (USA excluded — see app).
+const CUP_NATIONS = ['IND','AUS','ENG','NZ','SA','WI','SL','AFG','BAN','PAK'];
+const CUSTOM_ID_BASE = 500000;
+const MIN_SQUAD = 18, MAX_SQUAD = 25, MAX_OVERSEAS = 8;
+
+/* Numeric skill columns shown inline (0-100). */
+const ATTRS = [
+  ['batting','BAT','Batting'],['power','POW','Power'],['technique','TEC','Technique'],
+  ['temperament','TMP','Temperament'],['aggression','AGG','Aggression'],['style','STY','Style'],
+  ['running','RUN','Running'],['vsPace','vP','vs Pace'],['vsSpin','vS','vs Spin'],
+  ['bowling','BOWL','Bowling'],['pace','PAC','Pace'],['control','CTR','Control'],
+  ['variation','VAR','Variation'],['death','DTH','Death'],['composure','COMP','Composure'],
+  ['catching','CAT','Catching'],['fielding','FLD','Fielding'],
+];
+
+/* ---------- state ---------- */
+let roster = null;           // { id, name, createdAt, updatedAt, nextCustomId, teams[], players[] }
+let teamIndex = {};          // id -> branding
+let teamOrder = [];          // ['mum', ...]
+let filterTeam = 'ALL';      // 'ALL' | 'FREE' | team id
+let searchText = '';
+let issues = [];             // validation
+let issuesByTeam = {};       // teamId/'FREE' -> {err,warn}
+
+/* ---------- helpers ---------- */
+const $ = sel => document.querySelector(sel);
+const el = (tag, props) => Object.assign(document.createElement(tag), props || {});
+function toast(msg) {
+  const t = el('div', { className: 'toast', textContent: msg });
+  $('#toastRoot').appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+function teamLabel(id) {
+  if (id === 'FREE' || id == null) return 'Free agent';
+  const b = teamIndex[id];
+  return b ? b.name : id;
+}
+function heat(v) {
+  // green high, red low — soft tints behind the number
+  v = Math.max(0, Math.min(100, v || 0));
+  const hue = (v / 100) * 130;       // 0 red -> 130 green
+  return `hsla(${hue}, 60%, 40%, ${0.10 + (v/100)*0.22})`;
+}
+
+/* ---------- import / parse ---------- */
+function parsePreset(json) {
+  if (!json || json.kind !== 'criccoach_roster')
+    throw new Error("That file isn't a Cricket Coach roster.");
+  const schema = json.schema || 0;
+  if (schema < 1 || schema > 1)
+    throw new Error('Unsupported roster version — update the editor.');
+  const players = (json.players || []).map(parsePlayer);
+  const teams = (json.teams || []).map(t => ({
+    id: t.id, name: t.name || '', nickname: t.nickname || '', shortName: t.shortName || '',
+    icon: t.icon || 'shield', primaryColor: t.primaryColor || 0, secondaryColor: t.secondaryColor || 0,
+  }));
+  let nextCustom = json.nextCustomId || CUSTOM_ID_BASE;
+  for (const p of players) if (p.id >= nextCustom) nextCustom = p.id + 1;
+  return {
+    id: json.id || 'roster',
+    name: json.name || 'Roster',
+    createdAt: json.createdAt || new Date().toISOString(),
+    updatedAt: json.updatedAt || new Date().toISOString(),
+    nextCustomId: Math.max(CUSTOM_ID_BASE, nextCustom),
+    teams, players,
+  };
+}
+function parsePlayer(j) {
+  const e = j.evolving || {};
+  return {
+    id: j.id, name: j.name || '', jersey: j.jersey != null ? j.jersey : (e.jerseyNumber || 0),
+    role: j.role || 0, canKeep: !!j.canKeep, bowlerType: j.bowlerType || 0,
+    handedness: j.handedness || 0, nationality: j.nationality || 'IND',
+    startingTeamId: j.startingTeamId != null ? j.startingTeamId : null,
+    weaknesses: (j.weaknesses || []).slice(),
+    strengths: (j.strengths || []).slice(),
+    shotWeaknesses: (j.shotWeaknesses || []).slice(),
+    age: e.age != null ? e.age : 24,
+    batting: e.batting||0, power: e.power||0, technique: e.technique||0, temperament: e.temperament||0,
+    aggression: e.aggression||0, style: e.style||0, running: e.running||0, vsPace: e.vsPace||0, vsSpin: e.vsSpin||0,
+    bowling: e.bowling||0, pace: e.pace||0, control: e.control||0, variation: e.variation||0, death: e.death||0,
+    composure: e.composure||0, catching: e.catching||0, fielding: e.fielding||0,
+    fitness: e.fitness != null ? e.fitness : null,
+    form: e.form != null ? e.form : 60, morale: e.morale != null ? e.morale : 7,
+    staminaPct: e.staminaPct != null ? e.staminaPct : 100, isCaptain: !!e.isCaptain,
+    avgRuns: e.avgRuns||0, avgStrikeRate: e.avgStrikeRate||0, avgEconomy: e.avgEconomy||0,
+    avgBowlAvg: e.avgBowlAvg||0, wickets: e.wickets||0,
+    injuredDays: e.injuredDays||0, injuryDesc: e.injuryDesc || '',
+    basePrice: e.basePrice||0, soldPrice: e.soldPrice||0, soldViaRtm: !!e.soldViaRtm,
+  };
+}
+
+/* ---------- export ---------- */
+function playerToJson(p) {
+  const ev = {
+    age: p.age, jerseyNumber: p.jersey,
+    batting: p.batting, power: p.power, technique: p.technique, temperament: p.temperament,
+    aggression: p.aggression, style: p.style, running: p.running, vsPace: p.vsPace, vsSpin: p.vsSpin,
+    bowling: p.bowling, pace: p.pace, control: p.control, variation: p.variation, death: p.death,
+    composure: p.composure, catching: p.catching, fielding: p.fielding,
+  };
+  if (p.fitness != null) ev.fitness = p.fitness;
+  ev.form = p.form; ev.morale = p.morale; ev.staminaPct = p.staminaPct; ev.isCaptain = p.isCaptain;
+  ev.avgRuns = p.avgRuns; ev.avgStrikeRate = p.avgStrikeRate; ev.avgEconomy = p.avgEconomy;
+  ev.avgBowlAvg = p.avgBowlAvg; ev.wickets = p.wickets; ev.injuredDays = p.injuredDays;
+  if (p.injuryDesc) ev.injuryDesc = p.injuryDesc;
+  if (p.basePrice) ev.basePrice = p.basePrice;
+  if (p.soldPrice) ev.soldPrice = p.soldPrice;
+  if (p.soldViaRtm) ev.soldViaRtm = true;
+  const out = {
+    id: p.id, name: p.name, jersey: p.jersey, role: p.role,
+  };
+  if (p.canKeep) out.canKeep = true;
+  out.bowlerType = p.bowlerType; out.handedness = p.handedness; out.nationality = p.nationality;
+  if (p.startingTeamId != null) out.startingTeamId = p.startingTeamId;
+  out.weaknesses = p.weaknesses.slice();
+  out.strengths = p.strengths.slice();
+  out.shotWeaknesses = p.shotWeaknesses.slice();
+  out.evolving = ev;
+  return out;
+}
+function rosterToJson() {
+  let nextCustom = CUSTOM_ID_BASE;
+  for (const p of roster.players) if (p.id >= nextCustom) nextCustom = p.id + 1;
+  const contributor = $('#contributor').value.trim();
+  let name = roster.name;
+  if (contributor) {
+    name = name.replace(/\s*\(edited by .*\)\s*$/, '');
+    name = `${name} (edited by ${contributor})`;
+  }
+  return {
+    schema: 1, kind: 'criccoach_roster',
+    id: roster.id, name,
+    createdAt: roster.createdAt, updatedAt: new Date().toISOString(),
+    nextCustomId: nextCustom,
+    teams: roster.teams.map(t => ({
+      id: t.id, name: t.name, nickname: t.nickname, shortName: t.shortName,
+      icon: t.icon, primaryColor: t.primaryColor, secondaryColor: t.secondaryColor,
+    })),
+    players: roster.players.map(playerToJson),
+  };
+}
+
+/* ---------- validation (mirrors the app's roster_validator.dart) ---------- */
+function validate() {
+  issues = [];
+  issuesByTeam = {};
+  const err = (msg, team) => { issues.push({ sev: 'err', msg, team }); };
+  const warn = (msg, team) => { issues.push({ sev: 'warn', msg, team }); };
+
+  // duplicate ids
+  const seen = new Set();
+  for (const p of roster.players) {
+    if (seen.has(p.id)) err(`Two players share id ${p.id} (${p.name}).`);
+    seen.add(p.id);
+    if (!p.name.trim()) err(`A player (id ${p.id}) has no name.`);
+    if (!NATION_CODES.includes(p.nationality)) err(`${p.name}: unknown nationality "${p.nationality}".`);
+    if (p.startingTeamId != null && !teamIndex[p.startingTeamId]) err(`${p.name}: assigned to a team that doesn't exist.`);
+    if (p.age < 14 || p.age > 45) err(`${p.name}: age ${p.age} must be 14–45.`);
+    const bad = attrsOutOfRange(p);
+    if (bad.length) err(`${p.name}: out of range — ${bad.join(', ')}.`);
+  }
+  // duplicate names (warn)
+  const nameCount = {};
+  for (const p of roster.players) { const n = p.name.trim(); if (n) nameCount[n] = (nameCount[n]||0)+1; }
+  for (const n in nameCount) if (nameCount[n] > 1) warn(`${nameCount[n]} players are named ${n}.`);
+
+  // per-squad
+  for (const tid of teamOrder) {
+    const b = teamIndex[tid];
+    const squad = roster.players.filter(p => p.startingTeamId === tid);
+    const nm = (b && b.name) || tid;
+    if (!b || !b.name.trim()) err(`A team is missing its name.`, tid);
+    if (b && !b.nickname.trim()) err(`${nm} needs a nickname.`, tid);
+    const code = (b && b.shortName || '').trim();
+    if (code.length < 2 || code.length > 4) err(`${nm} needs a 2–4 letter short code.`, tid);
+    if (squad.length < MIN_SQUAD || squad.length > MAX_SQUAD)
+      err(`${nm} carry ${squad.length} players — must be ${MIN_SQUAD}–${MAX_SQUAD}.`, tid);
+    const overseas = squad.filter(p => p.nationality !== 'IND').length;
+    if (overseas > MAX_OVERSEAS) err(`${nm} have ${overseas} overseas players — cap is ${MAX_OVERSEAS}.`, tid);
+    const keepers = squad.filter(p => p.role === 4 || p.canKeep).length;
+    if (keepers === 0) err(`${nm} have no wicket-keeper.`, tid);
+    else if (keepers === 1) warn(`${nm} have only one wicket-keeper.`, tid);
+    const bowlers = squad.filter(p => p.bowling >= 50).length;
+    if (bowlers < 5) err(`${nm} have only ${bowlers} players who can bowl — need at least 5.`, tid);
+    // jerseys
+    const js = new Set(); let jtrouble = false;
+    for (const p of squad) { if (p.jersey < 1 || p.jersey > 99 || js.has(p.jersey)) jtrouble = true; js.add(p.jersey); }
+    if (jtrouble) warn(`${nm} have duplicate or out-of-range jersey numbers.`, tid);
+  }
+  // nations must field a side
+  for (const code of CUP_NATIONS) {
+    const n = roster.players.filter(p => p.nationality === code).length;
+    if (n < 11) err(`${NATIONS.find(x=>x[0]===code)[1]} have only ${n} players — a nation needs at least 11.`);
+  }
+
+  // tally by team for chip dots
+  for (const i of issues) {
+    const key = i.team || '_global';
+    issuesByTeam[key] = issuesByTeam[key] || { err: 0, warn: 0 };
+    issuesByTeam[key][i.sev]++;
+  }
+  renderValbar();
+  renderChips();
+}
+function attrsOutOfRange(p) {
+  const out = [];
+  const ck = (label, v, min=0, max=100) => { if (v < min || v > max) out.push(label); };
+  for (const [k, code] of ATTRS) ck(code, p[k]);
+  ck('FORM', p.form); ck('STA', p.staminaPct); ck('MOR', p.morale, 1, 10);
+  if (p.fitness != null) ck('FIT', p.fitness);
+  return out;
+}
+
+/* ---------- rendering ---------- */
+function buildHead() {
+  const head = $('#head');
+  head.innerHTML = '';
+  const th = (label, full, cls) => {
+    const t = el('th');
+    t.className = cls || '';
+    t.innerHTML = label + (full ? `<span class="full">${full}</span>` : '');
+    head.appendChild(t);
+  };
+  th('', 'edit', 'sticky1'); // rowtools
+  th('Name', '', 'sticky2 txt');
+  th('Team');
+  th('Nat');
+  th('Age');
+  th('Role');
+  th('Keep');
+  th('Bat hand');
+  th('Bowler type');
+  th('#', 'jersey');
+  for (const [, code, full] of ATTRS) th(code, full);
+  th('Weak', 'vs');
+  th('Strengths', 'shots');
+  th('Mishits', 'shot weak');
+  th('More', '');
+  // position sticky2 left offset after first column width is known
+  requestAnimationFrame(positionSticky);
+}
+function positionSticky() {
+  const firstTh = $('#head').children[0];
+  const w = firstTh ? firstTh.offsetWidth : 44;
+  document.querySelectorAll('.sticky2').forEach(e => { e.style.left = w + 'px'; });
+}
+
+function visiblePlayers() {
+  let list = roster.players;
+  if (filterTeam === 'FREE') list = list.filter(p => p.startingTeamId == null);
+  else if (filterTeam !== 'ALL') list = list.filter(p => p.startingTeamId === filterTeam);
+  if (searchText) {
+    const q = searchText.toLowerCase();
+    list = list.filter(p => p.name.toLowerCase().includes(q));
+  }
+  // sort: team then role then batting desc
+  return list.slice().sort((a, b) => {
+    const ta = a.startingTeamId || 'zzz', tb = b.startingTeamId || 'zzz';
+    if (ta !== tb) return ta < tb ? -1 : 1;
+    return (b.batting + b.bowling) - (a.batting + a.bowling);
+  });
+}
+
+function renderRows() {
+  const rows = $('#rows');
+  rows.innerHTML = '';
+  const list = visiblePlayers();
+  const frag = document.createDocumentFragment();
+  for (const p of list) frag.appendChild(buildRow(p));
+  rows.appendChild(frag);
+  $('#tbl').classList.remove('hidden');
+  $('#emptyState').classList.add('hidden');
+  requestAnimationFrame(positionSticky);
+}
+
+function cell(child, cls) {
+  const td = el('td'); if (cls) td.className = cls;
+  td.appendChild(child); return td;
+}
+function numInput(p, key, min, max) {
+  const i = el('input', { type: 'number', value: p[key] });
+  i.min = min; i.max = max;
+  i.addEventListener('change', () => {
+    let v = parseFloat(i.value); if (isNaN(v)) v = 0;
+    if (Number.isInteger(min)) v = Math.round(v);
+    p[key] = v; validate();
+  });
+  return i;
+}
+function attrInput(p, key) {
+  const td = el('td', { className: 'num' });
+  td.style.background = heat(p[key]);
+  const i = el('input', { type: 'number', value: p[key] });
+  i.min = 0; i.max = 100;
+  i.addEventListener('input', () => { td.style.background = heat(parseFloat(i.value) || 0); });
+  i.addEventListener('change', () => {
+    let v = Math.round(parseFloat(i.value)); if (isNaN(v)) v = 0;
+    v = Math.max(0, Math.min(100, v));
+    p[key] = v; i.value = v; td.style.background = heat(v); validate();
+  });
+  td.appendChild(i);
+  return td;
+}
+function selectInput(p, key, options, onChange) {
+  const s = el('select');
+  options.forEach((label, idx) => {
+    const o = el('option', { value: idx, textContent: label });
+    if (p[key] === idx) o.selected = true;
+    s.appendChild(o);
+  });
+  s.addEventListener('change', () => { p[key] = parseInt(s.value); (onChange||(()=>{}))(); validate(); });
+  return s;
+}
+
+function buildRow(p) {
+  const tr = el('tr');
+  tr.dataset.pid = p.id;
+
+  // rowtools
+  const tools = el('div', { className: 'rowtools' });
+  const del = el('button', { className: 'danger', textContent: '✕', title: 'Delete player' });
+  del.addEventListener('click', () => {
+    if (!confirm(`Delete ${p.name}?`)) return;
+    roster.players = roster.players.filter(x => x.id !== p.id);
+    renderRows(); validate();
+  });
+  tools.appendChild(del);
+  tr.appendChild(cell(tools, 'sticky1'));
+
+  // name
+  const nameI = el('input', { value: p.name });
+  nameI.addEventListener('change', () => { p.name = nameI.value; validate(); });
+  tr.appendChild(cell(nameI, 'sticky2 txt'));
+
+  // team
+  const teamSel = el('select');
+  teamSel.appendChild(el('option', { value: 'FREE', textContent: 'Free agent' }));
+  for (const tid of teamOrder) teamSel.appendChild(el('option', { value: tid, textContent: teamLabel(tid) }));
+  teamSel.value = p.startingTeamId == null ? 'FREE' : p.startingTeamId;
+  teamSel.addEventListener('change', () => {
+    p.startingTeamId = teamSel.value === 'FREE' ? null : teamSel.value;
+    // if filtering by a team, a moved player should drop out of view
+    if (filterTeam !== 'ALL') renderRows();
+    validate();
+  });
+  tr.appendChild(cell(teamSel));
+
+  // nationality
+  const natSel = el('select');
+  for (const [code, nm] of NATIONS) {
+    const o = el('option', { value: code, textContent: code });
+    o.title = nm; if (p.nationality === code) o.selected = true;
+    natSel.appendChild(o);
+  }
+  natSel.addEventListener('change', () => { p.nationality = natSel.value; validate(); });
+  tr.appendChild(cell(natSel));
+
+  // age
+  tr.appendChild(cell(numInput(p, 'age', 14, 45), 'num'));
+  // role
+  tr.appendChild(cell(selectInput(p, 'role', ROLES)));
+  // canKeep
+  const keep = el('input', { type: 'checkbox', checked: p.canKeep });
+  keep.style.width = 'auto';
+  keep.addEventListener('change', () => { p.canKeep = keep.checked; validate(); });
+  tr.appendChild(cell(keep));
+  // handedness
+  tr.appendChild(cell(selectInput(p, 'handedness', HANDS)));
+  // bowlerType
+  tr.appendChild(cell(selectInput(p, 'bowlerType', BOWLER_TYPES)));
+  // jersey
+  tr.appendChild(cell(numInput(p, 'jersey', 1, 99), 'num'));
+
+  // attrs
+  for (const [key] of ATTRS) tr.appendChild(attrInput(p, key));
+
+  // tag columns
+  tr.appendChild(tagCell(p, 'weaknesses', WEAKNESSES, true));
+  tr.appendChild(tagCell(p, 'strengths', STRENGTHS, false));
+  tr.appendChild(tagCell(p, 'shotWeaknesses', STRENGTHS, false));
+
+  // more
+  const more = el('button', { textContent: '⋯', title: 'Career stats, form, prices…' });
+  more.style.padding = '2px 8px';
+  more.addEventListener('click', () => openDetail(p));
+  const moreTd = el('td'); const wrap = el('div', { className: 'rowtools' }); wrap.appendChild(more); moreTd.appendChild(wrap);
+  tr.appendChild(moreTd);
+
+  return tr;
+}
+
+function tagCell(p, key, labels, hideNone) {
+  const td = el('td');
+  const div = el('div', { className: 'tagcell' });
+  const render = () => {
+    div.innerHTML = '';
+    const vals = p[key].filter(i => !(hideNone && i === 0));
+    if (!vals.length) {
+      div.appendChild(el('span', { className: 'tag empty', textContent: '+' }));
+    } else {
+      for (const i of vals) div.appendChild(el('span', { className: 'tag', textContent: labels[i] }));
+    }
+  };
+  render();
+  div.addEventListener('click', () => openTagPicker(p, key, labels, hideNone, render));
+  td.appendChild(div);
+  return td;
+}
+
+function renderChips() {
+  const chips = $('#chips');
+  chips.innerHTML = '';
+  const mk = (id, label, count) => {
+    const c = el('div', { className: 'chip' + (filterTeam === id ? ' active' : '') });
+    const it = issuesByTeam[id] || {};
+    const dot = el('span', { className: 'dot' + (it.err ? ' err' : it.warn ? ' warn' : '') });
+    c.appendChild(dot);
+    c.appendChild(el('span', { textContent: label }));
+    if (count != null) c.appendChild(el('span', { className: 'ct', textContent: count }));
+    c.addEventListener('click', () => { filterTeam = id; renderChips(); renderRows(); });
+    chips.appendChild(c);
+  };
+  mk('ALL', 'All', roster.players.length);
+  mk('FREE', 'Free agents', roster.players.filter(p => p.startingTeamId == null).length);
+  for (const tid of teamOrder)
+    mk(tid, teamLabel(tid), roster.players.filter(p => p.startingTeamId === tid).length);
+  // team-branding edit button
+  const edit = el('div', { className: 'chip' });
+  edit.appendChild(el('span', { textContent: '✎ Team names & colours' }));
+  edit.addEventListener('click', openTeamEditor);
+  chips.appendChild(edit);
+}
+
+function renderValbar() {
+  const errs = issues.filter(i => i.sev === 'err').length;
+  const warns = issues.filter(i => i.sev === 'warn').length;
+  const badge = $('#valBadge'), sum = $('#valSummary');
+  if (errs) {
+    badge.className = 'badge err'; badge.textContent = `${errs} error${errs>1?'s':''}`;
+    sum.textContent = warns ? `${warns} warning${warns>1?'s':''} too. Errors must be fixed before this roster works in-game.` :
+      'Errors must be fixed before this roster works in-game.';
+  } else if (warns) {
+    badge.className = 'badge warn'; badge.textContent = `${warns} warning${warns>1?'s':''}`;
+    sum.textContent = 'No blocking errors — warnings are safe to ignore.';
+  } else {
+    badge.className = 'badge ok'; badge.textContent = 'Roster OK';
+    sum.textContent = 'No problems found. Ready to export.';
+  }
+  // refresh list if open
+  if (!$('#vallist').classList.contains('hidden')) renderValList();
+}
+function renderValList() {
+  const list = $('#vallist');
+  list.innerHTML = '';
+  if (!issues.length) { list.appendChild(el('div', { className: 'v', textContent: 'No issues.' })); return; }
+  const sorted = issues.slice().sort((a,b)=> (a.sev===b.sev?0:a.sev==='err'?-1:1));
+  for (const i of sorted) {
+    const v = el('div', { className: 'v ' + i.sev });
+    v.innerHTML = `<span class="sev">${i.sev==='err'?'ERROR':'warn'}</span>${i.msg}`;
+    if (i.team) v.addEventListener('click', () => { filterTeam = i.team; renderChips(); renderRows(); });
+    list.appendChild(v);
+  }
+}
+
+/* ---------- modals ---------- */
+function closeModal() { $('#modalRoot').innerHTML = ''; }
+function modal(titleText, bodyNode, footNodes) {
+  const scrim = el('div', { className: 'scrim' });
+  scrim.addEventListener('click', e => { if (e.target === scrim) closeModal(); });
+  const m = el('div', { className: 'modal' });
+  m.appendChild(el('h2', { textContent: titleText }));
+  const body = el('div', { className: 'body' }); body.appendChild(bodyNode); m.appendChild(body);
+  const foot = el('div', { className: 'foot' });
+  (footNodes || []).forEach(n => foot.appendChild(n));
+  m.appendChild(foot);
+  scrim.appendChild(m);
+  $('#modalRoot').appendChild(scrim);
+}
+
+function openTagPicker(p, key, labels, hideNone, onDone) {
+  const body = el('div', { className: 'checklist' });
+  labels.forEach((label, idx) => {
+    if (hideNone && idx === 0) return;
+    const lab = el('label');
+    const cb = el('input', { type: 'checkbox', checked: p[key].includes(idx) });
+    cb.addEventListener('change', () => {
+      if (cb.checked) { if (!p[key].includes(idx)) p[key].push(idx); }
+      else p[key] = p[key].filter(x => x !== idx);
+    });
+    lab.appendChild(cb); lab.appendChild(el('span', { textContent: label }));
+    body.appendChild(lab);
+  });
+  const done = el('button', { className: 'primary', textContent: 'Done' });
+  done.addEventListener('click', () => { closeModal(); onDone(); validate(); });
+  const titles = { weaknesses: 'Bowling weaknesses', strengths: 'Favourite shots (strengths)', shotWeaknesses: 'Shots they mishit' };
+  modal(`${p.name} — ${titles[key]}`, body, [done]);
+}
+
+function openDetail(p) {
+  const body = el('div');
+  const rowNum = (label, key, min, max, step) => {
+    const r = el('div', { className: 'row' });
+    r.appendChild(el('label', { textContent: label }));
+    const i = el('input', { type: 'number', value: p[key] });
+    if (min != null) i.min = min; if (max != null) i.max = max; if (step) i.step = step;
+    i.addEventListener('change', () => { let v = parseFloat(i.value); if (isNaN(v)) v = 0; p[key] = v; validate(); });
+    r.appendChild(i); body.appendChild(r);
+  };
+  const grid = el('div', { className: 'grid' });
+  body.appendChild(grid);
+  const gridNum = (label, key, min, max, step) => {
+    const r = el('div'); r.appendChild(el('label', { textContent: label, style: 'color:var(--muted);font-size:11px;display:block;margin-bottom:3px' }));
+    const i = el('input', { type: 'number', value: p[key], style: 'background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 9px;width:100%' });
+    if (min != null) i.min = min; if (max != null) i.max = max; if (step) i.step = step;
+    i.addEventListener('change', () => { let v = parseFloat(i.value); if (isNaN(v)) v = 0; p[key] = v; validate(); });
+    r.appendChild(i); grid.appendChild(r);
+  };
+  gridNum('Form (0-100)', 'form', 0, 100);
+  gridNum('Morale (1-10)', 'morale', 1, 10);
+  gridNum('Stamina % (0-100)', 'staminaPct', 0, 100);
+  gridNum('Fitness (0-100, blank=auto)', 'fitness', 0, 100);
+  gridNum('Avg runs', 'avgRuns', 0, null, 0.1);
+  gridNum('Strike rate', 'avgStrikeRate', 0, null, 0.1);
+  gridNum('Economy', 'avgEconomy', 0, null, 0.1);
+  gridNum('Bowl avg', 'avgBowlAvg', 0, null, 0.1);
+  gridNum('Wickets', 'wickets', 0);
+  gridNum('Injured days', 'injuredDays', 0);
+  gridNum('Base price (lakhs)', 'basePrice', 0);
+  gridNum('Sold price (lakhs)', 'soldPrice', 0);
+
+  const capRow = el('div', { className: 'row', style: 'margin-top:10px' });
+  capRow.appendChild(el('label', { textContent: 'Captain' }));
+  const cap = el('input', { type: 'checkbox', checked: p.isCaptain, style: 'flex:none;width:auto' });
+  cap.addEventListener('change', () => { p.isCaptain = cap.checked; });
+  capRow.appendChild(cap);
+  capRow.appendChild(el('span', { className: 'note', textContent: 'one per squad recommended' }));
+  body.appendChild(capRow);
+
+  body.appendChild(el('div', { className: 'note', style: 'margin-top:10px', textContent: `Internal id: ${p.id}${p.id >= CUSTOM_ID_BASE ? ' (created)' : ' (original)'}` }));
+
+  const done = el('button', { className: 'primary', textContent: 'Done' });
+  done.addEventListener('click', closeModal);
+  modal(`${p.name} — career, form & prices`, body, [done]);
+}
+
+function openTeamEditor() {
+  const body = el('div');
+  body.appendChild(el('div', { className: 'note', style: 'margin-bottom:12px', textContent: 'Rebrand any franchise. The 10 teams and their internal ids are fixed; you can change names, nicknames, short codes and colours.' }));
+  for (const tid of teamOrder) {
+    const b = teamIndex[tid];
+    const box = el('div', { style: 'border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px' });
+    const mkField = (label, key, kind) => {
+      const r = el('div', { className: 'row' });
+      r.appendChild(el('label', { textContent: label }));
+      if (kind === 'color') {
+        const argb = b[key] >>> 0;
+        const hex = '#' + (argb & 0xFFFFFF).toString(16).padStart(6, '0');
+        const i = el('input', { type: 'color', value: hex });
+        i.addEventListener('change', () => { b[key] = (0xFF000000 | parseInt(i.value.slice(1), 16)) >>> 0; });
+        r.appendChild(i);
+      } else {
+        const i = el('input', { value: b[key] });
+        i.addEventListener('change', () => { b[key] = i.value; validate(); renderChips(); });
+        r.appendChild(i);
+      }
+      box.appendChild(r);
+    };
+    box.appendChild(el('div', { style: 'font-weight:650;margin-bottom:6px', textContent: `${b.shortName} — ${b.name}` }));
+    mkField('Name', 'name');
+    mkField('Nickname', 'nickname');
+    mkField('Short code (2-4)', 'shortName');
+    mkField('Primary colour', 'primaryColor', 'color');
+    mkField('Secondary colour', 'secondaryColor', 'color');
+    body.appendChild(box);
+  }
+  const done = el('button', { className: 'primary', textContent: 'Done' });
+  done.addEventListener('click', closeModal);
+  modal('Edit teams', body, [done]);
+}
+
+function addPlayer() {
+  let nextId = CUSTOM_ID_BASE;
+  for (const p of roster.players) if (p.id >= nextId) nextId = p.id + 1;
+  const team = (filterTeam === 'ALL' || filterTeam === 'FREE') ? null : filterTeam;
+  const p = parsePlayer({
+    id: nextId, name: 'New Player', jersey: 1, role: 1, bowlerType: 0, handedness: 0,
+    nationality: 'IND', startingTeamId: team, weaknesses: [], strengths: [], shotWeaknesses: [],
+    evolving: { age: 24, batting: 50, power: 50, technique: 50, temperament: 50, aggression: 50,
+      style: 50, running: 50, vsPace: 50, vsSpin: 50, bowling: 30, pace: 50, control: 50,
+      variation: 50, death: 50, composure: 50, catching: 50, fielding: 50, form: 60, morale: 7,
+      staminaPct: 100 },
+  });
+  roster.players.push(p);
+  searchText = ''; $('#search').value = '';
+  renderRows(); validate();
+  toast(`Added player (id ${p.id})`);
+}
+
+/* ---------- file I/O ---------- */
+function loadRoster(json) {
+  roster = parsePreset(json);
+  teamOrder = roster.teams.map(t => t.id);
+  teamIndex = {}; for (const t of roster.teams) teamIndex[t.id] = t;
+  filterTeam = 'ALL';
+  buildHead(); renderChips(); renderRows(); validate();
+}
+function doExport() {
+  const json = rosterToJson();
+  const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
+  const slug = (json.name || 'roster').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '') || 'roster';
+  const a = el('a', { href: URL.createObjectURL(blob), download: `criccoach-roster-${slug}.json` });
+  document.body.appendChild(a); a.click(); a.remove();
+  const errs = issues.filter(i => i.sev === 'err').length;
+  toast(errs ? `Exported — but ${errs} error(s) remain; fix them or the app will reject it.` : 'Exported. Send this file back!');
+}
+function importFile(file) {
+  const fr = new FileReader();
+  fr.onload = () => {
+    try { loadRoster(JSON.parse(fr.result)); toast('Roster loaded.'); }
+    catch (e) { alert('Could not load that file:\n' + e.message); }
+  };
+  fr.readAsText(file);
+}
+
+/* ---------- wiring ---------- */
+$('#btnImport').addEventListener('click', () => $('#fileInput').click());
+$('#fileInput').addEventListener('change', e => { if (e.target.files[0]) importFile(e.target.files[0]); e.target.value = ''; });
+$('#btnExport').addEventListener('click', doExport);
+$('#btnAdd').addEventListener('click', addPlayer);
+$('#btnDefault').addEventListener('click', () => {
+  if (roster && !confirm('Discard current edits and reload the default roster?')) return;
+  loadDefault();
+});
+$('#search').addEventListener('input', e => { searchText = e.target.value.trim(); renderRows(); });
+$('#valbar').addEventListener('click', () => {
+  const l = $('#vallist'); l.classList.toggle('hidden');
+  if (!l.classList.contains('hidden')) renderValList();
+});
+window.addEventListener('beforeunload', e => { if (roster) { e.preventDefault(); e.returnValue = ''; } });
+window.addEventListener('resize', positionSticky);
+
+function loadDefault() {
+  fetch('default_roster.json')
+    .then(r => { if (!r.ok) throw new Error('default_roster.json not found'); return r.json(); })
+    .then(j => { loadRoster(j); })
+    .catch(e => {
+      $('#emptyState').querySelector('.big').textContent = 'Could not load the default roster.';
+      $('#emptyState').querySelector('.note').textContent = e.message + ' — use “Import roster…” to open a file instead.';
+    });
+}
+loadDefault();
+</script>
+</body>
+</html>
