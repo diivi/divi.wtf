@@ -288,7 +288,8 @@ function parsePlayer(j) {
   const e = j.evolving || {};
   return {
     id: j.id, name: j.name || '', jersey: j.jersey != null ? j.jersey : (e.jerseyNumber || 0),
-    role: j.role || 0, canKeep: !!j.canKeep, bowlerType: j.bowlerType || 0,
+    role: j.role || 0, canKeep: !!j.canKeep, excludeFromAuction: !!j.excludeFromAuction,
+    bowlerType: j.bowlerType || 0,
     handedness: j.handedness || 0, nationality: j.nationality || 'IND',
     startingTeamId: j.startingTeamId != null ? j.startingTeamId : null,
     weaknesses: (j.weaknesses || []).slice(),
@@ -328,6 +329,7 @@ function playerToJson(p) {
   if (p.soldViaRtm) ev.soldViaRtm = true;
   const out = { id: p.id, name: p.name, jersey: p.jersey, role: p.role };
   if (p.canKeep) out.canKeep = true;
+  if (p.excludeFromAuction) out.excludeFromAuction = true;
   out.bowlerType = p.bowlerType; out.handedness = p.handedness; out.nationality = p.nationality;
   if (p.startingTeamId != null) out.startingTeamId = p.startingTeamId;
   out.weaknesses = p.weaknesses.slice();
@@ -412,8 +414,6 @@ function attrsOutOfRange(p) {
   const out = [];
   const ck = (label, v, min=0, max=100) => { if (v < min || v > max) out.push(label); };
   for (const [k, code] of ATTRS) ck(code, p[k]);
-  ck('FORM', p.form); ck('STA', p.staminaPct); ck('MOR', p.morale, 1, 10);
-  if (p.fitness != null) ck('FIT', p.fitness);
   return out;
 }
 
@@ -463,7 +463,11 @@ function buildColumns() {
       sortVal: p => p.strengths.length, render: p => tagCell(p,'strengths',STRENGTHS,false) },
     { key: 'shotWeaknesses', label: 'Mishits', full: 'shot weak', kind: 'tags', tagLabels: STRENGTHS, hideNone: false,
       sortVal: p => p.shotWeaknesses.length, render: p => tagCell(p,'shotWeaknesses',STRENGTHS,false) },
-    { key: '_more', label: 'More', full: '', noSort: true, noFilter: true, render: moreCell },
+    { key: 'basePrice', label: 'Base', full: 'price (L)', kind: 'num',
+      sortVal: p => p.basePrice, render: p => cell(numInput(p,'basePrice',0,2000),'num') },
+    { key: 'excludeFromAuction', label: 'Excl.', full: 'auction', kind: 'bool',
+      sortVal: p => p.excludeFromAuction ? 1 : 0,
+      boolVal: p => p.excludeFromAuction, render: excludeCell },
   ];
 }
 
@@ -512,12 +516,12 @@ function keepCell(p) {
   cb.addEventListener('change', () => { p.canKeep = cb.checked; validate(); });
   return cell(cb);
 }
-function moreCell(p) {
-  const more = el('button', { textContent: '⋯', title: 'Career stats, form, prices…' });
-  more.style.padding = '2px 8px';
-  more.addEventListener('click', () => openDetail(p));
-  const td = el('td'); const w = el('div', { className: 'rowtools' }); w.appendChild(more); td.appendChild(w);
-  return td;
+function excludeCell(p) {
+  const cb = el('input', { type: 'checkbox', checked: p.excludeFromAuction });
+  cb.style.width = 'auto';
+  cb.title = 'Hold this player OUT of the franchise auction (they still play internationally)';
+  cb.addEventListener('change', () => { p.excludeFromAuction = cb.checked; validate(); });
+  return cell(cb);
 }
 function numInput(p, key, min, max) {
   const i = el('input', { type: 'number', value: p[key] }); i.min = min; i.max = max;
@@ -754,39 +758,6 @@ function openTagPicker(p, key, labels, hideNone, onDone) {
   const titles = { weaknesses: 'Bowling weaknesses', strengths: 'Favourite shots (strengths)', shotWeaknesses: 'Shots they mishit' };
   modal(`${p.name} — ${titles[key]}`, body, [done]);
 }
-function openDetail(p) {
-  const body = el('div');
-  const grid = el('div', { className: 'grid' }); body.appendChild(grid);
-  const gridNum = (label, key, min, max, step) => {
-    const r = el('div');
-    r.appendChild(el('label', { textContent: label, style: 'color:var(--muted);font-size:11px;display:block;margin-bottom:3px' }));
-    const i = el('input', { type: 'number', value: p[key], style: 'background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 9px;width:100%' });
-    if (min != null) i.min = min; if (max != null) i.max = max; if (step) i.step = step;
-    i.addEventListener('change', () => { let v = parseFloat(i.value); if (isNaN(v)) v = 0; p[key] = v; validate(); });
-    r.appendChild(i); grid.appendChild(r);
-  };
-  gridNum('Form (0-100)', 'form', 0, 100);
-  gridNum('Morale (1-10)', 'morale', 1, 10);
-  gridNum('Stamina % (0-100)', 'staminaPct', 0, 100);
-  gridNum('Fitness (0-100, blank=auto)', 'fitness', 0, 100);
-  gridNum('Avg runs', 'avgRuns', 0, null, 0.1);
-  gridNum('Strike rate', 'avgStrikeRate', 0, null, 0.1);
-  gridNum('Economy', 'avgEconomy', 0, null, 0.1);
-  gridNum('Bowl avg', 'avgBowlAvg', 0, null, 0.1);
-  gridNum('Wickets', 'wickets', 0);
-  gridNum('Injured days', 'injuredDays', 0);
-  gridNum('Base price (lakhs)', 'basePrice', 0);
-  gridNum('Sold price (lakhs)', 'soldPrice', 0);
-  const capRow = el('div', { className: 'row', style: 'margin-top:10px' });
-  capRow.appendChild(el('label', { textContent: 'Captain' }));
-  const cap = el('input', { type: 'checkbox', checked: p.isCaptain, style: 'flex:none;width:auto' });
-  cap.addEventListener('change', () => { p.isCaptain = cap.checked; });
-  capRow.appendChild(cap); capRow.appendChild(el('span', { className: 'note', textContent: 'one per squad recommended' }));
-  body.appendChild(capRow);
-  body.appendChild(el('div', { className: 'note', style: 'margin-top:10px', textContent: `Internal id: ${p.id}${p.id >= CUSTOM_ID_BASE ? ' (created)' : ' (original)'}` }));
-  const done = el('button', { className: 'primary', textContent: 'Done' }); done.addEventListener('click', closeModal);
-  modal(`${p.name} — career, form & prices`, body, [done]);
-}
 function openTeamEditor() {
   const body = el('div');
   body.appendChild(el('div', { className: 'note', style: 'margin-bottom:12px', textContent: 'Rebrand any franchise. The 10 teams and their internal ids are fixed; you can change names, nicknames, short codes and colours.' }));
@@ -828,12 +799,8 @@ const PLAYER_FIELDS = [
   ['bowlerType','Bowler type', v=>BOWLER_TYPES[v]],
   ['jersey','Jersey', v=>v],
   ...ATTRS.map(([k,code,full]) => [k, `${code} (${full})`, v=>v]),
-  ['form','Form', v=>v],['morale','Morale', v=>v],['staminaPct','Stamina', v=>v],
-  ['fitness','Fitness', v=>v==null?'auto':v],
-  ['avgRuns','Avg runs', v=>v],['avgStrikeRate','Strike rate', v=>v],
-  ['avgEconomy','Economy', v=>v],['avgBowlAvg','Bowl avg', v=>v],['wickets','Wickets', v=>v],
-  ['isCaptain','Captain', v=>v?'yes':'no'],
-  ['basePrice','Base price', v=>v],['soldPrice','Sold price', v=>v],
+  ['basePrice','Base price', v=>v],
+  ['excludeFromAuction','Excl. auction', v=>v?'yes':'no'],
 ];
 const TAG_FIELDS = [
   ['weaknesses','Weaknesses', WEAKNESSES],
