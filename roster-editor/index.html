@@ -43,6 +43,7 @@
   button:hover, .btn:hover { border-color: var(--accent); }
   button.primary { background: var(--accent); border-color: var(--accent); color: #04101f; }
   button.danger { color: var(--bad); }
+  button.toggle.on { background: var(--accent); border-color: var(--accent); color: #04101f; }
   button:disabled { opacity: .45; cursor: default; }
   input, select { font: inherit; color: var(--text); }
   .toolbar2 {
@@ -68,10 +69,22 @@
   th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0; }
   thead th {
     position: sticky; top: 0; z-index: 3; background: var(--panel2);
-    padding: 7px 8px; font-size: 11px; color: var(--muted); text-align: center;
-    font-weight: 600; white-space: nowrap; letter-spacing: .3px;
+    vertical-align: top; white-space: nowrap;
   }
-  thead th .full { display: block; font-size: 9px; color: #5c6675; font-weight: 400; }
+  thead th .hlabel {
+    padding: 7px 8px 6px; font-size: 11px; color: var(--muted); text-align: center;
+    font-weight: 600; letter-spacing: .3px; cursor: pointer; user-select: none;
+  }
+  thead th .hlabel.nosort { cursor: default; }
+  thead th .hlabel:hover:not(.nosort) { color: var(--text); }
+  thead th .hlabel .full { display: block; font-size: 9px; color: #5c6675; font-weight: 400; }
+  thead th .hlabel .arrow { color: var(--accent); font-size: 10px; }
+  thead th .hfilter { padding: 0 4px 5px; }
+  thead th .hfilter input, thead th .hfilter select {
+    width: 100%; min-width: 52px; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 5px; padding: 3px 4px; font-size: 11px; text-align: center;
+  }
+  thead.nofilter th .hfilter { display: none; }
   tbody td { background: var(--panel); height: 30px; }
   tbody tr:hover td { background: #1a212b; }
   td input, td select {
@@ -82,7 +95,6 @@
   td input:focus, td select:focus { background: #0c1722; box-shadow: inset 0 0 0 1.5px var(--accent); }
   td.num input { font-variant-numeric: tabular-nums; }
   td select { cursor: pointer; appearance: none; -webkit-appearance: none; }
-  /* sticky first columns */
   .sticky1 { position: sticky; left: 0; z-index: 2; }
   .sticky2 { position: sticky; z-index: 2; }
   thead .sticky1, thead .sticky2 { z-index: 4; }
@@ -93,7 +105,6 @@
   .tagcell { padding: 0 6px; cursor: pointer; min-height: 30px; display: flex; align-items: center; flex-wrap: wrap; gap: 3px; justify-content: center; }
   .tag { background: var(--chip); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: 10.5px; }
   .tag.empty { color: #5c6675; }
-  /* validation panel */
   .valbar {
     padding: 7px 14px; border-bottom: 1px solid var(--line); background: var(--panel);
     display: flex; align-items: center; gap: 10px; cursor: pointer;
@@ -109,25 +120,42 @@
   .vallist .v.err .sev { color: var(--bad); }
   .vallist .v.warn .sev { color: var(--warn); }
   .hidden { display: none !important; }
-  /* modal */
   .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 50; display: flex; align-items: center; justify-content: center; }
-  .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; width: min(560px, 92vw); max-height: 86vh; overflow: auto; }
-  .modal h2 { margin: 0; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; width: min(640px, 94vw); max-height: 88vh; overflow: auto; }
+  .modal.wide { width: min(820px, 96vw); }
+  .modal h2 { margin: 0; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: 14px; position: sticky; top: 0; background: var(--panel); z-index: 1; }
   .modal .body { padding: 14px 18px; }
   .modal .row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
   .modal .row label { width: 150px; color: var(--muted); font-size: 12px; }
   .modal .row input, .modal .row select { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; flex: 1; }
   .modal .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .modal .foot { padding: 12px 18px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; }
+  .modal .foot { padding: 12px 18px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--panel); }
   .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; }
   .checklist label { display: flex; align-items: center; gap: 7px; width: auto; color: var(--text); font-size: 12.5px; padding: 3px 0; cursor: pointer; }
   .checklist input { flex: none; width: auto; }
   .empty-state { text-align: center; color: var(--muted); padding: 60px 20px; }
   .empty-state .big { font-size: 16px; color: var(--text); margin-bottom: 8px; }
   .note { color: var(--muted); font-size: 11.5px; }
-  .pill-team { font-size: 11px; padding: 2px 7px; border-radius: 5px; background: var(--chip); border: 1px solid var(--line); }
-  a { color: var(--accent); }
   .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel2); border: 1px solid var(--accent); color: var(--text); padding: 10px 18px; border-radius: 8px; z-index: 80; box-shadow: 0 6px 24px rgba(0,0,0,.4); }
+  /* diff */
+  .diff-summary { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .diff-stat { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+  .diff-stat b { font-size: 18px; display: block; }
+  .diff-stat span { font-size: 11px; color: var(--muted); }
+  .diff-sec { margin-bottom: 16px; }
+  .diff-sec h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 0 0 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .diff-player { border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px; margin-bottom: 7px; background: var(--bg); }
+  .diff-player .ph { font-weight: 650; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .diff-player .ph .where { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .diff-player .badge-add { color: #56d364; font-size: 11px; font-weight: 700; }
+  .diff-player .badge-del { color: #ff7b72; font-size: 11px; font-weight: 700; }
+  .diff-field { font-size: 12px; margin: 2px 0; }
+  .diff-field .fk { color: var(--muted); display: inline-block; min-width: 92px; }
+  .old { color: #ff7b72; }
+  .arrowc { color: var(--muted); margin: 0 5px; }
+  .new { color: #56d364; }
+  .diff-none { color: var(--muted); padding: 30px; text-align: center; }
+  a { color: var(--accent); }
 </style>
 </head>
 <body>
@@ -135,6 +163,7 @@
   <h1>Cricket Coach Roster Editor <small>edit teams &amp; players, export your version</small></h1>
   <span class="grow"></span>
   <input id="contributor" class="search" style="min-width:160px" placeholder="Your name (optional)" />
+  <button id="btnDiff">Diff vs default</button>
   <button id="btnImport">Import roster…</button>
   <button id="btnDefault">Load default</button>
   <button id="btnExport" class="primary">Export roster</button>
@@ -153,6 +182,8 @@
   <input id="search" class="search" placeholder="Search player name…" />
   <div id="chips" class="chips"></div>
   <span class="grow"></span>
+  <button id="btnFilters" class="toggle">Column filters</button>
+  <button id="btnClear" class="hidden">Clear sort/filters</button>
   <button id="btnAdd">+ Add player</button>
 </div>
 
@@ -162,7 +193,7 @@
     <div class="note">If nothing appears, click “Load default”, or “Import roster…” to open a file someone shared.</div>
   </div>
   <table id="tbl" class="hidden">
-    <thead><tr id="head"></tr></thead>
+    <thead id="thead" class="nofilter"><tr id="head"></tr></thead>
     <tbody id="rows"></tbody>
   </table>
 </div>
@@ -184,13 +215,12 @@ const NATIONS = [
   ['SA','South Africa'],['WI','West Indies'],['SL','Sri Lanka'],['AFG','Afghanistan'],
   ['BAN','Bangladesh'],['PAK','Pakistan'],['USA','USA'],
 ];
+const NATION_NAME = Object.fromEntries(NATIONS);
 const NATION_CODES = NATIONS.map(n => n[0]);
-// Cup nations that MUST be able to field an XI (USA excluded — see app).
 const CUP_NATIONS = ['IND','AUS','ENG','NZ','SA','WI','SL','AFG','BAN','PAK'];
 const CUSTOM_ID_BASE = 500000;
 const MIN_SQUAD = 18, MAX_SQUAD = 25, MAX_OVERSEAS = 8;
 
-/* Numeric skill columns shown inline (0-100). */
 const ATTRS = [
   ['batting','BAT','Batting'],['power','POW','Power'],['technique','TEC','Technique'],
   ['temperament','TMP','Temperament'],['aggression','AGG','Aggression'],['style','STY','Style'],
@@ -201,13 +231,17 @@ const ATTRS = [
 ];
 
 /* ---------- state ---------- */
-let roster = null;           // { id, name, createdAt, updatedAt, nextCustomId, teams[], players[] }
-let teamIndex = {};          // id -> branding
-let teamOrder = [];          // ['mum', ...]
-let filterTeam = 'ALL';      // 'ALL' | 'FREE' | team id
+let roster = null;
+let baseline = null;          // parsed default — never mutated; used by the diff view
+let teamIndex = {};
+let teamOrder = [];
+let filterTeam = 'ALL';
 let searchText = '';
-let issues = [];             // validation
-let issuesByTeam = {};       // teamId/'FREE' -> {err,warn}
+let issues = [];
+let issuesByTeam = {};
+let sortKey = null, sortDir = 0;   // 0 none, 1 asc, -1 desc
+let filtersOn = false;
+let colFilters = {};               // key -> filter value
 
 /* ---------- helpers ---------- */
 const $ = sel => document.querySelector(sel);
@@ -215,7 +249,7 @@ const el = (tag, props) => Object.assign(document.createElement(tag), props || {
 function toast(msg) {
   const t = el('div', { className: 'toast', textContent: msg });
   $('#toastRoot').appendChild(t);
-  setTimeout(() => t.remove(), 2200);
+  setTimeout(() => t.remove(), 2600);
 }
 function teamLabel(id) {
   if (id === 'FREE' || id == null) return 'Free agent';
@@ -223,9 +257,8 @@ function teamLabel(id) {
   return b ? b.name : id;
 }
 function heat(v) {
-  // green high, red low — soft tints behind the number
   v = Math.max(0, Math.min(100, v || 0));
-  const hue = (v / 100) * 130;       // 0 red -> 130 green
+  const hue = (v / 100) * 130;
   return `hsla(${hue}, 60%, 40%, ${0.10 + (v/100)*0.22})`;
 }
 
@@ -244,8 +277,7 @@ function parsePreset(json) {
   let nextCustom = json.nextCustomId || CUSTOM_ID_BASE;
   for (const p of players) if (p.id >= nextCustom) nextCustom = p.id + 1;
   return {
-    id: json.id || 'roster',
-    name: json.name || 'Roster',
+    id: json.id || 'roster', name: json.name || 'Roster',
     createdAt: json.createdAt || new Date().toISOString(),
     updatedAt: json.updatedAt || new Date().toISOString(),
     nextCustomId: Math.max(CUSTOM_ID_BASE, nextCustom),
@@ -294,9 +326,7 @@ function playerToJson(p) {
   if (p.basePrice) ev.basePrice = p.basePrice;
   if (p.soldPrice) ev.soldPrice = p.soldPrice;
   if (p.soldViaRtm) ev.soldViaRtm = true;
-  const out = {
-    id: p.id, name: p.name, jersey: p.jersey, role: p.role,
-  };
+  const out = { id: p.id, name: p.name, jersey: p.jersey, role: p.role };
   if (p.canKeep) out.canKeep = true;
   out.bowlerType = p.bowlerType; out.handedness = p.handedness; out.nationality = p.nationality;
   if (p.startingTeamId != null) out.startingTeamId = p.startingTeamId;
@@ -316,8 +346,7 @@ function rosterToJson() {
     name = `${name} (edited by ${contributor})`;
   }
   return {
-    schema: 1, kind: 'criccoach_roster',
-    id: roster.id, name,
+    schema: 1, kind: 'criccoach_roster', id: roster.id, name,
     createdAt: roster.createdAt, updatedAt: new Date().toISOString(),
     nextCustomId: nextCustom,
     teams: roster.teams.map(t => ({
@@ -328,14 +357,11 @@ function rosterToJson() {
   };
 }
 
-/* ---------- validation (mirrors the app's roster_validator.dart) ---------- */
+/* ---------- validation (mirrors roster_validator.dart) ---------- */
 function validate() {
-  issues = [];
-  issuesByTeam = {};
-  const err = (msg, team) => { issues.push({ sev: 'err', msg, team }); };
-  const warn = (msg, team) => { issues.push({ sev: 'warn', msg, team }); };
-
-  // duplicate ids
+  issues = []; issuesByTeam = {};
+  const err = (msg, team) => issues.push({ sev: 'err', msg, team });
+  const warn = (msg, team) => issues.push({ sev: 'warn', msg, team });
   const seen = new Set();
   for (const p of roster.players) {
     if (seen.has(p.id)) err(`Two players share id ${p.id} (${p.name}).`);
@@ -347,12 +373,9 @@ function validate() {
     const bad = attrsOutOfRange(p);
     if (bad.length) err(`${p.name}: out of range — ${bad.join(', ')}.`);
   }
-  // duplicate names (warn)
   const nameCount = {};
   for (const p of roster.players) { const n = p.name.trim(); if (n) nameCount[n] = (nameCount[n]||0)+1; }
   for (const n in nameCount) if (nameCount[n] > 1) warn(`${nameCount[n]} players are named ${n}.`);
-
-  // per-squad
   for (const tid of teamOrder) {
     const b = teamIndex[tid];
     const squad = roster.players.filter(p => p.startingTeamId === tid);
@@ -370,25 +393,20 @@ function validate() {
     else if (keepers === 1) warn(`${nm} have only one wicket-keeper.`, tid);
     const bowlers = squad.filter(p => p.bowling >= 50).length;
     if (bowlers < 5) err(`${nm} have only ${bowlers} players who can bowl — need at least 5.`, tid);
-    // jerseys
     const js = new Set(); let jtrouble = false;
     for (const p of squad) { if (p.jersey < 1 || p.jersey > 99 || js.has(p.jersey)) jtrouble = true; js.add(p.jersey); }
     if (jtrouble) warn(`${nm} have duplicate or out-of-range jersey numbers.`, tid);
   }
-  // nations must field a side
   for (const code of CUP_NATIONS) {
     const n = roster.players.filter(p => p.nationality === code).length;
-    if (n < 11) err(`${NATIONS.find(x=>x[0]===code)[1]} have only ${n} players — a nation needs at least 11.`);
+    if (n < 11) err(`${NATION_NAME[code]} have only ${n} players — a nation needs at least 11.`);
   }
-
-  // tally by team for chip dots
   for (const i of issues) {
     const key = i.team || '_global';
     issuesByTeam[key] = issuesByTeam[key] || { err: 0, warn: 0 };
     issuesByTeam[key][i.sev]++;
   }
-  renderValbar();
-  renderChips();
+  renderValbar(); renderChips();
 }
 function attrsOutOfRange(p) {
   const out = [];
@@ -399,112 +417,59 @@ function attrsOutOfRange(p) {
   return out;
 }
 
-/* ---------- rendering ---------- */
-function buildHead() {
-  const head = $('#head');
-  head.innerHTML = '';
-  const th = (label, full, cls) => {
-    const t = el('th');
-    t.className = cls || '';
-    t.innerHTML = label + (full ? `<span class="full">${full}</span>` : '');
-    head.appendChild(t);
-  };
-  th('', 'edit', 'sticky1'); // rowtools
-  th('Name', '', 'sticky2 txt');
-  th('Team');
-  th('Nat');
-  th('Age');
-  th('Role');
-  th('Keep');
-  th('Bat hand');
-  th('Bowler type');
-  th('#', 'jersey');
-  for (const [, code, full] of ATTRS) th(code, full);
-  th('Weak', 'vs');
-  th('Strengths', 'shots');
-  th('Mishits', 'shot weak');
-  th('More', '');
-  // position sticky2 left offset after first column width is known
-  requestAnimationFrame(positionSticky);
-}
-function positionSticky() {
-  const firstTh = $('#head').children[0];
-  const w = firstTh ? firstTh.offsetWidth : 44;
-  document.querySelectorAll('.sticky2').forEach(e => { e.style.left = w + 'px'; });
-}
-
-function visiblePlayers() {
-  let list = roster.players;
-  if (filterTeam === 'FREE') list = list.filter(p => p.startingTeamId == null);
-  else if (filterTeam !== 'ALL') list = list.filter(p => p.startingTeamId === filterTeam);
-  if (searchText) {
-    const q = searchText.toLowerCase();
-    list = list.filter(p => p.name.toLowerCase().includes(q));
-  }
-  // sort: team then role then batting desc
-  return list.slice().sort((a, b) => {
-    const ta = a.startingTeamId || 'zzz', tb = b.startingTeamId || 'zzz';
-    if (ta !== tb) return ta < tb ? -1 : 1;
-    return (b.batting + b.bowling) - (a.batting + a.bowling);
+/* ---------- column model ---------- */
+let COLS = [];
+function buildColumns() {
+  const num = (key, label, full) => ({
+    key, label, full, kind: 'num', sticky: '',
+    sortVal: p => p[key],
+    render: p => key === 'age' ? cell(numInput(p,'age',14,45),'num')
+               : key === 'jersey' ? cell(numInput(p,'jersey',1,99),'num') : null,
   });
+  COLS = [
+    { key: '_tools', label: '', full: 'edit', sticky: 'sticky1', noSort: true, noFilter: true,
+      render: toolsCell },
+    { key: 'name', label: 'Name', sticky: 'sticky2', kind: 'text',
+      sortVal: p => p.name.toLowerCase(), render: nameCell },
+    { key: 'startingTeamId', label: 'Team', kind: 'cat',
+      sortVal: p => teamLabel(p.startingTeamId || 'FREE'),
+      catVal: p => p.startingTeamId == null ? 'FREE' : p.startingTeamId,
+      options: () => [['FREE','Free agent'], ...teamOrder.map(t => [t, teamLabel(t)])],
+      render: teamCell },
+    { key: 'nationality', label: 'Nat', kind: 'cat',
+      sortVal: p => p.nationality, catVal: p => p.nationality,
+      options: () => NATIONS, render: natCell },
+    num('age', 'Age', ''),
+    { key: 'role', label: 'Role', kind: 'cat',
+      sortVal: p => ROLES[p.role], catVal: p => p.role,
+      options: () => ROLES.map((l,i) => [i,l]), render: p => cell(selectInput(p,'role',ROLES)) },
+    { key: 'canKeep', label: 'Keep', kind: 'bool',
+      sortVal: p => (p.role === 4 || p.canKeep) ? 1 : 0,
+      boolVal: p => (p.role === 4 || p.canKeep), render: keepCell },
+    { key: 'handedness', label: 'Bat hand', kind: 'cat',
+      sortVal: p => p.handedness, catVal: p => p.handedness,
+      options: () => HANDS.map((l,i) => [i,l]), render: p => cell(selectInput(p,'handedness',HANDS)) },
+    { key: 'bowlerType', label: 'Bowler type', kind: 'cat',
+      sortVal: p => p.bowlerType, catVal: p => p.bowlerType,
+      options: () => BOWLER_TYPES.map((l,i) => [i,l]), render: p => cell(selectInput(p,'bowlerType',BOWLER_TYPES)) },
+    num('jersey', '#', 'jersey'),
+    ...ATTRS.map(([key, code, full]) => ({
+      key, label: code, full, kind: 'num',
+      sortVal: p => p[key], render: p => attrInput(p, key),
+    })),
+    { key: 'weaknesses', label: 'Weak', full: 'vs', kind: 'tags', tagLabels: WEAKNESSES, hideNone: true,
+      sortVal: p => p.weaknesses.filter(i => i !== 0).length, render: p => tagCell(p,'weaknesses',WEAKNESSES,true) },
+    { key: 'strengths', label: 'Strengths', full: 'shots', kind: 'tags', tagLabels: STRENGTHS, hideNone: false,
+      sortVal: p => p.strengths.length, render: p => tagCell(p,'strengths',STRENGTHS,false) },
+    { key: 'shotWeaknesses', label: 'Mishits', full: 'shot weak', kind: 'tags', tagLabels: STRENGTHS, hideNone: false,
+      sortVal: p => p.shotWeaknesses.length, render: p => tagCell(p,'shotWeaknesses',STRENGTHS,false) },
+    { key: '_more', label: 'More', full: '', noSort: true, noFilter: true, render: moreCell },
+  ];
 }
 
-function renderRows() {
-  const rows = $('#rows');
-  rows.innerHTML = '';
-  const list = visiblePlayers();
-  const frag = document.createDocumentFragment();
-  for (const p of list) frag.appendChild(buildRow(p));
-  rows.appendChild(frag);
-  $('#tbl').classList.remove('hidden');
-  $('#emptyState').classList.add('hidden');
-  requestAnimationFrame(positionSticky);
-}
-
-function cell(child, cls) {
-  const td = el('td'); if (cls) td.className = cls;
-  td.appendChild(child); return td;
-}
-function numInput(p, key, min, max) {
-  const i = el('input', { type: 'number', value: p[key] });
-  i.min = min; i.max = max;
-  i.addEventListener('change', () => {
-    let v = parseFloat(i.value); if (isNaN(v)) v = 0;
-    if (Number.isInteger(min)) v = Math.round(v);
-    p[key] = v; validate();
-  });
-  return i;
-}
-function attrInput(p, key) {
-  const td = el('td', { className: 'num' });
-  td.style.background = heat(p[key]);
-  const i = el('input', { type: 'number', value: p[key] });
-  i.min = 0; i.max = 100;
-  i.addEventListener('input', () => { td.style.background = heat(parseFloat(i.value) || 0); });
-  i.addEventListener('change', () => {
-    let v = Math.round(parseFloat(i.value)); if (isNaN(v)) v = 0;
-    v = Math.max(0, Math.min(100, v));
-    p[key] = v; i.value = v; td.style.background = heat(v); validate();
-  });
-  td.appendChild(i);
-  return td;
-}
-function selectInput(p, key, options, onChange) {
-  const s = el('select');
-  options.forEach((label, idx) => {
-    const o = el('option', { value: idx, textContent: label });
-    if (p[key] === idx) o.selected = true;
-    s.appendChild(o);
-  });
-  s.addEventListener('change', () => { p[key] = parseInt(s.value); (onChange||(()=>{}))(); validate(); });
-  return s;
-}
-
-function buildRow(p) {
-  const tr = el('tr');
-  tr.dataset.pid = p.id;
-
-  // rowtools
+/* ---------- cell renderers ---------- */
+function cell(child, cls) { const td = el('td'); if (cls) td.className = cls; td.appendChild(child); return td; }
+function toolsCell(p) {
   const tools = el('div', { className: 'rowtools' });
   const del = el('button', { className: 'danger', textContent: '✕', title: 'Delete player' });
   del.addEventListener('click', () => {
@@ -513,96 +478,212 @@ function buildRow(p) {
     renderRows(); validate();
   });
   tools.appendChild(del);
-  tr.appendChild(cell(tools, 'sticky1'));
-
-  // name
-  const nameI = el('input', { value: p.name });
-  nameI.addEventListener('change', () => { p.name = nameI.value; validate(); });
-  tr.appendChild(cell(nameI, 'sticky2 txt'));
-
-  // team
-  const teamSel = el('select');
-  teamSel.appendChild(el('option', { value: 'FREE', textContent: 'Free agent' }));
-  for (const tid of teamOrder) teamSel.appendChild(el('option', { value: tid, textContent: teamLabel(tid) }));
-  teamSel.value = p.startingTeamId == null ? 'FREE' : p.startingTeamId;
-  teamSel.addEventListener('change', () => {
-    p.startingTeamId = teamSel.value === 'FREE' ? null : teamSel.value;
-    // if filtering by a team, a moved player should drop out of view
+  return cell(tools, 'sticky1');
+}
+function nameCell(p) {
+  const i = el('input', { value: p.name });
+  i.addEventListener('change', () => { p.name = i.value; validate(); });
+  return cell(i, 'sticky2 txt');
+}
+function teamCell(p) {
+  const s = el('select');
+  s.appendChild(el('option', { value: 'FREE', textContent: 'Free agent' }));
+  for (const tid of teamOrder) s.appendChild(el('option', { value: tid, textContent: teamLabel(tid) }));
+  s.value = p.startingTeamId == null ? 'FREE' : p.startingTeamId;
+  s.addEventListener('change', () => {
+    p.startingTeamId = s.value === 'FREE' ? null : s.value;
     if (filterTeam !== 'ALL') renderRows();
     validate();
   });
-  tr.appendChild(cell(teamSel));
-
-  // nationality
-  const natSel = el('select');
+  return cell(s);
+}
+function natCell(p) {
+  const s = el('select');
   for (const [code, nm] of NATIONS) {
-    const o = el('option', { value: code, textContent: code });
-    o.title = nm; if (p.nationality === code) o.selected = true;
-    natSel.appendChild(o);
+    const o = el('option', { value: code, textContent: code }); o.title = nm;
+    if (p.nationality === code) o.selected = true; s.appendChild(o);
   }
-  natSel.addEventListener('change', () => { p.nationality = natSel.value; validate(); });
-  tr.appendChild(cell(natSel));
-
-  // age
-  tr.appendChild(cell(numInput(p, 'age', 14, 45), 'num'));
-  // role
-  tr.appendChild(cell(selectInput(p, 'role', ROLES)));
-  // canKeep
-  const keep = el('input', { type: 'checkbox', checked: p.canKeep });
-  keep.style.width = 'auto';
-  keep.addEventListener('change', () => { p.canKeep = keep.checked; validate(); });
-  tr.appendChild(cell(keep));
-  // handedness
-  tr.appendChild(cell(selectInput(p, 'handedness', HANDS)));
-  // bowlerType
-  tr.appendChild(cell(selectInput(p, 'bowlerType', BOWLER_TYPES)));
-  // jersey
-  tr.appendChild(cell(numInput(p, 'jersey', 1, 99), 'num'));
-
-  // attrs
-  for (const [key] of ATTRS) tr.appendChild(attrInput(p, key));
-
-  // tag columns
-  tr.appendChild(tagCell(p, 'weaknesses', WEAKNESSES, true));
-  tr.appendChild(tagCell(p, 'strengths', STRENGTHS, false));
-  tr.appendChild(tagCell(p, 'shotWeaknesses', STRENGTHS, false));
-
-  // more
+  s.addEventListener('change', () => { p.nationality = s.value; validate(); });
+  return cell(s);
+}
+function keepCell(p) {
+  const cb = el('input', { type: 'checkbox', checked: p.canKeep });
+  cb.style.width = 'auto';
+  cb.addEventListener('change', () => { p.canKeep = cb.checked; validate(); });
+  return cell(cb);
+}
+function moreCell(p) {
   const more = el('button', { textContent: '⋯', title: 'Career stats, form, prices…' });
   more.style.padding = '2px 8px';
   more.addEventListener('click', () => openDetail(p));
-  const moreTd = el('td'); const wrap = el('div', { className: 'rowtools' }); wrap.appendChild(more); moreTd.appendChild(wrap);
-  tr.appendChild(moreTd);
-
-  return tr;
+  const td = el('td'); const w = el('div', { className: 'rowtools' }); w.appendChild(more); td.appendChild(w);
+  return td;
 }
-
+function numInput(p, key, min, max) {
+  const i = el('input', { type: 'number', value: p[key] }); i.min = min; i.max = max;
+  i.addEventListener('change', () => {
+    let v = parseFloat(i.value); if (isNaN(v)) v = 0; v = Math.round(v);
+    p[key] = v; i.value = v; validate();
+  });
+  return i;
+}
+function attrInput(p, key) {
+  const td = el('td', { className: 'num' });
+  td.style.background = heat(p[key]);
+  const i = el('input', { type: 'number', value: p[key] }); i.min = 0; i.max = 100;
+  i.addEventListener('input', () => { td.style.background = heat(parseFloat(i.value) || 0); });
+  i.addEventListener('change', () => {
+    let v = Math.round(parseFloat(i.value)); if (isNaN(v)) v = 0; v = Math.max(0, Math.min(100, v));
+    p[key] = v; i.value = v; td.style.background = heat(v); validate();
+  });
+  td.appendChild(i); return td;
+}
+function selectInput(p, key, options, onChange) {
+  const s = el('select');
+  options.forEach((label, idx) => {
+    const o = el('option', { value: idx, textContent: label });
+    if (p[key] === idx) o.selected = true; s.appendChild(o);
+  });
+  s.addEventListener('change', () => { p[key] = parseInt(s.value); (onChange||(()=>{}))(); validate(); });
+  return s;
+}
 function tagCell(p, key, labels, hideNone) {
   const td = el('td');
   const div = el('div', { className: 'tagcell' });
   const render = () => {
     div.innerHTML = '';
     const vals = p[key].filter(i => !(hideNone && i === 0));
-    if (!vals.length) {
-      div.appendChild(el('span', { className: 'tag empty', textContent: '+' }));
-    } else {
-      for (const i of vals) div.appendChild(el('span', { className: 'tag', textContent: labels[i] }));
-    }
+    if (!vals.length) div.appendChild(el('span', { className: 'tag empty', textContent: '+' }));
+    else for (const i of vals) div.appendChild(el('span', { className: 'tag', textContent: labels[i] }));
   };
   render();
   div.addEventListener('click', () => openTagPicker(p, key, labels, hideNone, render));
-  td.appendChild(div);
-  return td;
+  td.appendChild(div); return td;
 }
 
+/* ---------- sort + filter ---------- */
+function numMatch(v, expr) {
+  expr = String(expr).trim(); if (!expr) return true;
+  let m = expr.match(/^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)$/);
+  if (m) return v >= parseFloat(m[1]) && v <= parseFloat(m[2]);
+  m = expr.match(/^(>=|<=|>|<|=)?\s*(\d+(?:\.\d+)?)$/);
+  if (!m) return true;
+  const op = m[1] || '=', n = parseFloat(m[2]);
+  switch (op) { case '>': return v > n; case '>=': return v >= n; case '<': return v < n;
+    case '<=': return v <= n; default: return v === n; }
+}
+function passesFilters(p) {
+  for (const col of COLS) {
+    const f = colFilters[col.key];
+    if (f == null || f === '') continue;
+    if (col.kind === 'num') { if (!numMatch(col.sortVal(p), f)) return false; }
+    else if (col.kind === 'cat') { if (String(col.catVal(p)) !== String(f)) return false; }
+    else if (col.kind === 'bool') { const b = col.boolVal(p); if (f === 'yes' && !b) return false; if (f === 'no' && b) return false; }
+    else if (col.kind === 'tags') { if (!p[col.key].includes(parseInt(f))) return false; }
+    else if (col.kind === 'text') { if (!String(p[col.key]).toLowerCase().includes(String(f).toLowerCase())) return false; }
+  }
+  return true;
+}
+function activeColumns() {
+  return Object.keys(colFilters).some(k => colFilters[k] !== '' && colFilters[k] != null) || sortKey;
+}
+function visiblePlayers() {
+  let list = roster.players;
+  if (filterTeam === 'FREE') list = list.filter(p => p.startingTeamId == null);
+  else if (filterTeam !== 'ALL') list = list.filter(p => p.startingTeamId === filterTeam);
+  if (searchText) { const q = searchText.toLowerCase(); list = list.filter(p => p.name.toLowerCase().includes(q)); }
+  list = list.filter(passesFilters);
+  const col = sortKey ? COLS.find(c => c.key === sortKey) : null;
+  if (col && sortDir) {
+    list = list.slice().sort((a, b) => {
+      const va = col.sortVal(a), vb = col.sortVal(b);
+      let c = (typeof va === 'string') ? va.localeCompare(vb) : (va - vb);
+      return c * sortDir;
+    });
+  } else {
+    list = list.slice().sort((a, b) => {
+      const ta = a.startingTeamId || 'zzz', tb = b.startingTeamId || 'zzz';
+      if (ta !== tb) return ta < tb ? -1 : 1;
+      return (b.batting + b.bowling) - (a.batting + a.bowling);
+    });
+  }
+  return list;
+}
+
+/* ---------- rendering ---------- */
+function buildHead() {
+  const head = $('#head');
+  head.innerHTML = '';
+  for (const col of COLS) {
+    const th = el('th'); th.className = col.sticky || '';
+    const label = el('div', { className: 'hlabel' + (col.noSort ? ' nosort' : '') });
+    const arrow = (sortKey === col.key && sortDir) ? (sortDir === 1 ? ' ▲' : ' ▼') : '';
+    label.innerHTML = (col.label || '') + `<span class="arrow">${arrow}</span>` + (col.full ? `<span class="full">${col.full}</span>` : '');
+    if (!col.noSort) label.addEventListener('click', () => cycleSort(col.key));
+    th.appendChild(label);
+    if (!col.noFilter) th.appendChild(filterControl(col));
+    head.appendChild(th);
+  }
+  requestAnimationFrame(positionSticky);
+}
+function filterControl(col) {
+  const wrap = el('div', { className: 'hfilter' });
+  let ctrl;
+  if (col.kind === 'cat') {
+    ctrl = el('select');
+    ctrl.appendChild(el('option', { value: '', textContent: 'All' }));
+    for (const [val, lbl] of col.options()) ctrl.appendChild(el('option', { value: val, textContent: lbl }));
+  } else if (col.kind === 'bool') {
+    ctrl = el('select');
+    for (const [v, l] of [['','All'],['yes','Yes'],['no','No']]) ctrl.appendChild(el('option', { value: v, textContent: l }));
+  } else if (col.kind === 'tags') {
+    ctrl = el('select');
+    ctrl.appendChild(el('option', { value: '', textContent: 'Any' }));
+    col.tagLabels.forEach((l, i) => { if (col.hideNone && i === 0) return; ctrl.appendChild(el('option', { value: i, textContent: l })); });
+  } else if (col.kind === 'num') {
+    ctrl = el('input', { placeholder: '>80', title: 'e.g. >80, <50, 60-90, 75' });
+  } else {
+    ctrl = el('input', { placeholder: 'filter' });
+  }
+  ctrl.value = colFilters[col.key] || '';
+  const ev = ctrl.tagName === 'SELECT' ? 'change' : 'input';
+  ctrl.addEventListener(ev, () => { colFilters[col.key] = ctrl.value; renderRows(); updateClearBtn(); });
+  ctrl.addEventListener('click', e => e.stopPropagation());
+  wrap.appendChild(ctrl);
+  return wrap;
+}
+function cycleSort(key) {
+  if (sortKey !== key) { sortKey = key; sortDir = 1; }
+  else if (sortDir === 1) sortDir = -1;
+  else { sortKey = null; sortDir = 0; }
+  buildHead(); renderRows(); updateClearBtn();
+}
+function updateClearBtn() { $('#btnClear').classList.toggle('hidden', !activeColumns()); }
+function positionSticky() {
+  const firstTh = $('#head').children[0];
+  const w = firstTh ? firstTh.offsetWidth : 44;
+  document.querySelectorAll('.sticky2').forEach(e => { e.style.left = w + 'px'; });
+}
+function renderRows() {
+  const rows = $('#rows'); rows.innerHTML = '';
+  const list = visiblePlayers();
+  const frag = document.createDocumentFragment();
+  for (const p of list) frag.appendChild(buildRow(p));
+  rows.appendChild(frag);
+  $('#tbl').classList.remove('hidden'); $('#emptyState').classList.add('hidden');
+  requestAnimationFrame(positionSticky);
+}
+function buildRow(p) {
+  const tr = el('tr'); tr.dataset.pid = p.id;
+  for (const col of COLS) tr.appendChild(col.render(p));
+  return tr;
+}
 function renderChips() {
-  const chips = $('#chips');
-  chips.innerHTML = '';
+  const chips = $('#chips'); chips.innerHTML = '';
   const mk = (id, label, count) => {
     const c = el('div', { className: 'chip' + (filterTeam === id ? ' active' : '') });
     const it = issuesByTeam[id] || {};
-    const dot = el('span', { className: 'dot' + (it.err ? ' err' : it.warn ? ' warn' : '') });
-    c.appendChild(dot);
+    c.appendChild(el('span', { className: 'dot' + (it.err ? ' err' : it.warn ? ' warn' : '') }));
     c.appendChild(el('span', { textContent: label }));
     if (count != null) c.appendChild(el('span', { className: 'ct', textContent: count }));
     c.addEventListener('click', () => { filterTeam = id; renderChips(); renderRows(); });
@@ -610,23 +691,20 @@ function renderChips() {
   };
   mk('ALL', 'All', roster.players.length);
   mk('FREE', 'Free agents', roster.players.filter(p => p.startingTeamId == null).length);
-  for (const tid of teamOrder)
-    mk(tid, teamLabel(tid), roster.players.filter(p => p.startingTeamId === tid).length);
-  // team-branding edit button
+  for (const tid of teamOrder) mk(tid, teamLabel(tid), roster.players.filter(p => p.startingTeamId === tid).length);
   const edit = el('div', { className: 'chip' });
   edit.appendChild(el('span', { textContent: '✎ Team names & colours' }));
   edit.addEventListener('click', openTeamEditor);
   chips.appendChild(edit);
 }
-
 function renderValbar() {
   const errs = issues.filter(i => i.sev === 'err').length;
   const warns = issues.filter(i => i.sev === 'warn').length;
   const badge = $('#valBadge'), sum = $('#valSummary');
   if (errs) {
     badge.className = 'badge err'; badge.textContent = `${errs} error${errs>1?'s':''}`;
-    sum.textContent = warns ? `${warns} warning${warns>1?'s':''} too. Errors must be fixed before this roster works in-game.` :
-      'Errors must be fixed before this roster works in-game.';
+    sum.textContent = warns ? `${warns} warning${warns>1?'s':''} too. Errors must be fixed before this roster works in-game.`
+      : 'Errors must be fixed before this roster works in-game.';
   } else if (warns) {
     badge.className = 'badge warn'; badge.textContent = `${warns} warning${warns>1?'s':''}`;
     sum.textContent = 'No blocking errors — warnings are safe to ignore.';
@@ -634,12 +712,10 @@ function renderValbar() {
     badge.className = 'badge ok'; badge.textContent = 'Roster OK';
     sum.textContent = 'No problems found. Ready to export.';
   }
-  // refresh list if open
   if (!$('#vallist').classList.contains('hidden')) renderValList();
 }
 function renderValList() {
-  const list = $('#vallist');
-  list.innerHTML = '';
+  const list = $('#vallist'); list.innerHTML = '';
   if (!issues.length) { list.appendChild(el('div', { className: 'v', textContent: 'No issues.' })); return; }
   const sorted = issues.slice().sort((a,b)=> (a.sev===b.sev?0:a.sev==='err'?-1:1));
   for (const i of sorted) {
@@ -652,19 +728,15 @@ function renderValList() {
 
 /* ---------- modals ---------- */
 function closeModal() { $('#modalRoot').innerHTML = ''; }
-function modal(titleText, bodyNode, footNodes) {
+function modal(titleText, bodyNode, footNodes, wide) {
   const scrim = el('div', { className: 'scrim' });
   scrim.addEventListener('click', e => { if (e.target === scrim) closeModal(); });
-  const m = el('div', { className: 'modal' });
+  const m = el('div', { className: 'modal' + (wide ? ' wide' : '') });
   m.appendChild(el('h2', { textContent: titleText }));
   const body = el('div', { className: 'body' }); body.appendChild(bodyNode); m.appendChild(body);
-  const foot = el('div', { className: 'foot' });
-  (footNodes || []).forEach(n => foot.appendChild(n));
-  m.appendChild(foot);
-  scrim.appendChild(m);
-  $('#modalRoot').appendChild(scrim);
+  const foot = el('div', { className: 'foot' }); (footNodes || []).forEach(n => foot.appendChild(n)); m.appendChild(foot);
+  scrim.appendChild(m); $('#modalRoot').appendChild(scrim);
 }
-
 function openTagPicker(p, key, labels, hideNone, onDone) {
   const body = el('div', { className: 'checklist' });
   labels.forEach((label, idx) => {
@@ -675,29 +747,19 @@ function openTagPicker(p, key, labels, hideNone, onDone) {
       if (cb.checked) { if (!p[key].includes(idx)) p[key].push(idx); }
       else p[key] = p[key].filter(x => x !== idx);
     });
-    lab.appendChild(cb); lab.appendChild(el('span', { textContent: label }));
-    body.appendChild(lab);
+    lab.appendChild(cb); lab.appendChild(el('span', { textContent: label })); body.appendChild(lab);
   });
   const done = el('button', { className: 'primary', textContent: 'Done' });
   done.addEventListener('click', () => { closeModal(); onDone(); validate(); });
   const titles = { weaknesses: 'Bowling weaknesses', strengths: 'Favourite shots (strengths)', shotWeaknesses: 'Shots they mishit' };
   modal(`${p.name} — ${titles[key]}`, body, [done]);
 }
-
 function openDetail(p) {
   const body = el('div');
-  const rowNum = (label, key, min, max, step) => {
-    const r = el('div', { className: 'row' });
-    r.appendChild(el('label', { textContent: label }));
-    const i = el('input', { type: 'number', value: p[key] });
-    if (min != null) i.min = min; if (max != null) i.max = max; if (step) i.step = step;
-    i.addEventListener('change', () => { let v = parseFloat(i.value); if (isNaN(v)) v = 0; p[key] = v; validate(); });
-    r.appendChild(i); body.appendChild(r);
-  };
-  const grid = el('div', { className: 'grid' });
-  body.appendChild(grid);
+  const grid = el('div', { className: 'grid' }); body.appendChild(grid);
   const gridNum = (label, key, min, max, step) => {
-    const r = el('div'); r.appendChild(el('label', { textContent: label, style: 'color:var(--muted);font-size:11px;display:block;margin-bottom:3px' }));
+    const r = el('div');
+    r.appendChild(el('label', { textContent: label, style: 'color:var(--muted);font-size:11px;display:block;margin-bottom:3px' }));
     const i = el('input', { type: 'number', value: p[key], style: 'background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 9px;width:100%' });
     if (min != null) i.min = min; if (max != null) i.max = max; if (step) i.step = step;
     i.addEventListener('change', () => { let v = parseFloat(i.value); if (isNaN(v)) v = 0; p[key] = v; validate(); });
@@ -715,22 +777,16 @@ function openDetail(p) {
   gridNum('Injured days', 'injuredDays', 0);
   gridNum('Base price (lakhs)', 'basePrice', 0);
   gridNum('Sold price (lakhs)', 'soldPrice', 0);
-
   const capRow = el('div', { className: 'row', style: 'margin-top:10px' });
   capRow.appendChild(el('label', { textContent: 'Captain' }));
   const cap = el('input', { type: 'checkbox', checked: p.isCaptain, style: 'flex:none;width:auto' });
   cap.addEventListener('change', () => { p.isCaptain = cap.checked; });
-  capRow.appendChild(cap);
-  capRow.appendChild(el('span', { className: 'note', textContent: 'one per squad recommended' }));
+  capRow.appendChild(cap); capRow.appendChild(el('span', { className: 'note', textContent: 'one per squad recommended' }));
   body.appendChild(capRow);
-
   body.appendChild(el('div', { className: 'note', style: 'margin-top:10px', textContent: `Internal id: ${p.id}${p.id >= CUSTOM_ID_BASE ? ' (created)' : ' (original)'}` }));
-
-  const done = el('button', { className: 'primary', textContent: 'Done' });
-  done.addEventListener('click', closeModal);
+  const done = el('button', { className: 'primary', textContent: 'Done' }); done.addEventListener('click', closeModal);
   modal(`${p.name} — career, form & prices`, body, [done]);
 }
-
 function openTeamEditor() {
   const body = el('div');
   body.appendChild(el('div', { className: 'note', style: 'margin-bottom:12px', textContent: 'Rebrand any franchise. The 10 teams and their internal ids are fixed; you can change names, nicknames, short codes and colours.' }));
@@ -738,11 +794,9 @@ function openTeamEditor() {
     const b = teamIndex[tid];
     const box = el('div', { style: 'border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px' });
     const mkField = (label, key, kind) => {
-      const r = el('div', { className: 'row' });
-      r.appendChild(el('label', { textContent: label }));
+      const r = el('div', { className: 'row' }); r.appendChild(el('label', { textContent: label }));
       if (kind === 'color') {
-        const argb = b[key] >>> 0;
-        const hex = '#' + (argb & 0xFFFFFF).toString(16).padStart(6, '0');
+        const argb = b[key] >>> 0; const hex = '#' + (argb & 0xFFFFFF).toString(16).padStart(6, '0');
         const i = el('input', { type: 'color', value: hex });
         i.addEventListener('change', () => { b[key] = (0xFF000000 | parseInt(i.value.slice(1), 16)) >>> 0; });
         r.appendChild(i);
@@ -754,18 +808,146 @@ function openTeamEditor() {
       box.appendChild(r);
     };
     box.appendChild(el('div', { style: 'font-weight:650;margin-bottom:6px', textContent: `${b.shortName} — ${b.name}` }));
-    mkField('Name', 'name');
-    mkField('Nickname', 'nickname');
-    mkField('Short code (2-4)', 'shortName');
-    mkField('Primary colour', 'primaryColor', 'color');
-    mkField('Secondary colour', 'secondaryColor', 'color');
+    mkField('Name', 'name'); mkField('Nickname', 'nickname'); mkField('Short code (2-4)', 'shortName');
+    mkField('Primary colour', 'primaryColor', 'color'); mkField('Secondary colour', 'secondaryColor', 'color');
     body.appendChild(box);
   }
-  const done = el('button', { className: 'primary', textContent: 'Done' });
-  done.addEventListener('click', closeModal);
+  const done = el('button', { className: 'primary', textContent: 'Done' }); done.addEventListener('click', closeModal);
   modal('Edit teams', body, [done]);
 }
 
+/* ---------- diff vs default ---------- */
+const PLAYER_FIELDS = [
+  ['name','Name', v=>v],
+  ['startingTeamId','Team', v=>v==null?'Free agent':(teamLabel(v))],
+  ['nationality','Nationality', v=>NATION_NAME[v]||v],
+  ['age','Age', v=>v],
+  ['role','Role', v=>ROLES[v]],
+  ['canKeep','Can keep', v=>v?'yes':'no'],
+  ['handedness','Bat hand', v=>HANDS[v]],
+  ['bowlerType','Bowler type', v=>BOWLER_TYPES[v]],
+  ['jersey','Jersey', v=>v],
+  ...ATTRS.map(([k,code,full]) => [k, `${code} (${full})`, v=>v]),
+  ['form','Form', v=>v],['morale','Morale', v=>v],['staminaPct','Stamina', v=>v],
+  ['fitness','Fitness', v=>v==null?'auto':v],
+  ['avgRuns','Avg runs', v=>v],['avgStrikeRate','Strike rate', v=>v],
+  ['avgEconomy','Economy', v=>v],['avgBowlAvg','Bowl avg', v=>v],['wickets','Wickets', v=>v],
+  ['isCaptain','Captain', v=>v?'yes':'no'],
+  ['basePrice','Base price', v=>v],['soldPrice','Sold price', v=>v],
+];
+const TAG_FIELDS = [
+  ['weaknesses','Weaknesses', WEAKNESSES],
+  ['strengths','Strengths', STRENGTHS],
+  ['shotWeaknesses','Mishit shots', STRENGTHS],
+];
+function tagSetStr(arr, labels) { return arr.map(i => labels[i]).join(', ') || '—'; }
+function computeDiff() {
+  const baseById = {}; for (const p of baseline.players) baseById[p.id] = p;
+  const curById = {}; for (const p of roster.players) curById[p.id] = p;
+  const modified = [], added = [], removed = [];
+  for (const p of roster.players) {
+    const b = baseById[p.id];
+    if (!b) { added.push(p); continue; }
+    const fields = [];
+    for (const [key, label, fmt] of PLAYER_FIELDS) {
+      const ov = b[key], nv = p[key];
+      if (ov !== nv) fields.push({ label, old: fmt(ov), new: fmt(nv) });
+    }
+    for (const [key, label, labels] of TAG_FIELDS) {
+      const os = tagSetStr(b[key], labels), ns = tagSetStr(p[key], labels);
+      if (os !== ns) fields.push({ label, old: os, new: ns });
+    }
+    if (fields.length) modified.push({ p, b, fields });
+  }
+  for (const p of baseline.players) if (!curById[p.id]) removed.push(p);
+  // team branding diffs
+  const teamDiffs = [];
+  for (const t of roster.teams) {
+    const bt = baseline.teams.find(x => x.id === t.id); if (!bt) continue;
+    const fields = [];
+    for (const [k, l] of [['name','Name'],['nickname','Nickname'],['shortName','Short code'],['icon','Icon']])
+      if (t[k] !== bt[k]) fields.push({ label: l, old: bt[k], new: t[k] });
+    for (const [k, l] of [['primaryColor','Primary colour'],['secondaryColor','Secondary colour']])
+      if ((t[k]>>>0) !== (bt[k]>>>0)) fields.push({ label: l, old: '#'+((bt[k]>>>0)&0xFFFFFF).toString(16).padStart(6,'0'), new: '#'+((t[k]>>>0)&0xFFFFFF).toString(16).padStart(6,'0') });
+    if (fields.length) teamDiffs.push({ t, fields });
+  }
+  return { modified, added, removed, teamDiffs };
+}
+function openDiff() {
+  const d = computeDiff();
+  const body = el('div');
+  body.appendChild(el('div', { className: 'note', style: 'margin-bottom:12px',
+    textContent: 'Everything this roster changes versus the default the game ships with. Use it to review exactly what would change if this roster became the new default.' }));
+  const sum = el('div', { className: 'diff-summary' });
+  const stat = (n, label, color) => {
+    const s = el('div', { className: 'diff-stat' });
+    s.appendChild(el('b', { textContent: n, style: color ? `color:${color}` : '' }));
+    s.appendChild(el('span', { textContent: label }));
+    sum.appendChild(s);
+  };
+  stat(d.modified.length, 'players edited', '#e3b341');
+  stat(d.added.length, 'players added', '#56d364');
+  stat(d.removed.length, 'players removed', '#ff7b72');
+  stat(d.teamDiffs.length, 'teams rebranded', '#4f9dff');
+  body.appendChild(sum);
+
+  if (!d.modified.length && !d.added.length && !d.removed.length && !d.teamDiffs.length) {
+    body.appendChild(el('div', { className: 'diff-none', textContent: 'No changes — this roster is identical to the default.' }));
+  }
+  const section = (title, nodes) => {
+    if (!nodes.length) return;
+    const sec = el('div', { className: 'diff-sec' });
+    sec.appendChild(el('h3', { textContent: `${title} (${nodes.length})` }));
+    nodes.forEach(n => sec.appendChild(n)); body.appendChild(sec);
+  };
+  const where = p => p.startingTeamId == null ? 'Free agent' : teamLabel(p.startingTeamId);
+
+  section('Players edited', d.modified.map(({ p, fields }) => {
+    const box = el('div', { className: 'diff-player' });
+    const h = el('div', { className: 'ph' });
+    h.appendChild(el('span', { textContent: p.name }));
+    h.appendChild(el('span', { className: 'where', textContent: where(p) }));
+    box.appendChild(h);
+    for (const f of fields) {
+      const row = el('div', { className: 'diff-field' });
+      row.innerHTML = `<span class="fk">${f.label}</span><span class="old">${escapeHtml(String(f.old))}</span><span class="arrowc">→</span><span class="new">${escapeHtml(String(f.new))}</span>`;
+      box.appendChild(row);
+    }
+    return box;
+  }));
+  section('Players added', d.added.map(p => {
+    const box = el('div', { className: 'diff-player' });
+    const h = el('div', { className: 'ph' });
+    h.appendChild(el('span', { className: 'badge-add', textContent: 'NEW' }));
+    h.appendChild(el('span', { textContent: p.name }));
+    h.appendChild(el('span', { className: 'where', textContent: `${where(p)} · ${ROLES[p.role]} · ${NATION_NAME[p.nationality]||p.nationality} · BAT ${p.batting} / BOWL ${p.bowling}` }));
+    box.appendChild(h); return box;
+  }));
+  section('Players removed', d.removed.map(p => {
+    const box = el('div', { className: 'diff-player' });
+    const h = el('div', { className: 'ph' });
+    h.appendChild(el('span', { className: 'badge-del', textContent: 'REMOVED' }));
+    h.appendChild(el('span', { textContent: p.name }));
+    h.appendChild(el('span', { className: 'where', textContent: `${p.startingTeamId == null ? 'Free agent' : teamLabel(p.startingTeamId)} · ${ROLES[p.role]} · ${NATION_NAME[p.nationality]||p.nationality}` }));
+    box.appendChild(h); return box;
+  }));
+  section('Teams rebranded', d.teamDiffs.map(({ t, fields }) => {
+    const box = el('div', { className: 'diff-player' });
+    box.appendChild(el('div', { className: 'ph', textContent: `${t.shortName} — ${t.name}` }));
+    for (const f of fields) {
+      const row = el('div', { className: 'diff-field' });
+      row.innerHTML = `<span class="fk">${f.label}</span><span class="old">${escapeHtml(String(f.old))}</span><span class="arrowc">→</span><span class="new">${escapeHtml(String(f.new))}</span>`;
+      box.appendChild(row);
+    }
+    return box;
+  }));
+
+  const close = el('button', { className: 'primary', textContent: 'Close' }); close.addEventListener('click', closeModal);
+  modal('Changes vs default roster', body, [close], true);
+}
+function escapeHtml(s) { return s.replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+
+/* ---------- add player ---------- */
 function addPlayer() {
   let nextId = CUSTOM_ID_BASE;
   for (const p of roster.players) if (p.id >= nextId) nextId = p.id + 1;
@@ -775,8 +957,7 @@ function addPlayer() {
     nationality: 'IND', startingTeamId: team, weaknesses: [], strengths: [], shotWeaknesses: [],
     evolving: { age: 24, batting: 50, power: 50, technique: 50, temperament: 50, aggression: 50,
       style: 50, running: 50, vsPace: 50, vsSpin: 50, bowling: 30, pace: 50, control: 50,
-      variation: 50, death: 50, composure: 50, catching: 50, fielding: 50, form: 60, morale: 7,
-      staminaPct: 100 },
+      variation: 50, death: 50, composure: 50, catching: 50, fielding: 50, form: 60, morale: 7, staminaPct: 100 },
   });
   roster.players.push(p);
   searchText = ''; $('#search').value = '';
@@ -789,8 +970,8 @@ function loadRoster(json) {
   roster = parsePreset(json);
   teamOrder = roster.teams.map(t => t.id);
   teamIndex = {}; for (const t of roster.teams) teamIndex[t.id] = t;
-  filterTeam = 'ALL';
-  buildHead(); renderChips(); renderRows(); validate();
+  filterTeam = 'ALL'; sortKey = null; sortDir = 0; colFilters = {};
+  buildColumns(); buildHead(); renderChips(); renderRows(); validate(); updateClearBtn();
 }
 function doExport() {
   const json = rosterToJson();
@@ -803,10 +984,8 @@ function doExport() {
 }
 function importFile(file) {
   const fr = new FileReader();
-  fr.onload = () => {
-    try { loadRoster(JSON.parse(fr.result)); toast('Roster loaded.'); }
-    catch (e) { alert('Could not load that file:\n' + e.message); }
-  };
+  fr.onload = () => { try { loadRoster(JSON.parse(fr.result)); toast('Roster loaded.'); }
+    catch (e) { alert('Could not load that file:\n' + e.message); } };
   fr.readAsText(file);
 }
 
@@ -814,10 +993,21 @@ function importFile(file) {
 $('#btnImport').addEventListener('click', () => $('#fileInput').click());
 $('#fileInput').addEventListener('change', e => { if (e.target.files[0]) importFile(e.target.files[0]); e.target.value = ''; });
 $('#btnExport').addEventListener('click', doExport);
+$('#btnDiff').addEventListener('click', () => { if (!roster || !baseline) return; openDiff(); });
 $('#btnAdd').addEventListener('click', addPlayer);
 $('#btnDefault').addEventListener('click', () => {
   if (roster && !confirm('Discard current edits and reload the default roster?')) return;
   loadDefault();
+});
+$('#btnFilters').addEventListener('click', () => {
+  filtersOn = !filtersOn;
+  $('#btnFilters').classList.toggle('on', filtersOn);
+  $('#thead').classList.toggle('nofilter', !filtersOn);
+  requestAnimationFrame(positionSticky);
+});
+$('#btnClear').addEventListener('click', () => {
+  colFilters = {}; sortKey = null; sortDir = 0;
+  buildHead(); renderRows(); updateClearBtn();
 });
 $('#search').addEventListener('input', e => { searchText = e.target.value.trim(); renderRows(); });
 $('#valbar').addEventListener('click', () => {
@@ -830,7 +1020,7 @@ window.addEventListener('resize', positionSticky);
 function loadDefault() {
   fetch('default_roster.json')
     .then(r => { if (!r.ok) throw new Error('default_roster.json not found'); return r.json(); })
-    .then(j => { loadRoster(j); })
+    .then(j => { baseline = parsePreset(j); loadRoster(j); })
     .catch(e => {
       $('#emptyState').querySelector('.big').textContent = 'Could not load the default roster.';
       $('#emptyState').querySelector('.note').textContent = e.message + ' — use “Import roster…” to open a file instead.';
