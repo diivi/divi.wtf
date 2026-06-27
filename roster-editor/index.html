@@ -319,6 +319,7 @@ function parsePlayer(j) {
     aggression: e.aggression||0, style: e.style||0, running: e.running||0, vsPace: e.vsPace||0, vsSpin: e.vsSpin||0,
     bowling: e.bowling||0, pace: e.pace||0, control: e.control||0, variation: e.variation||0, death: e.death||0,
     composure: e.composure||0, catching: e.catching||0, fielding: e.fielding||0,
+    preferredPos: e.preferredPos != null ? e.preferredPos : null,
     fitness: e.fitness != null ? e.fitness : null,
     form: e.form != null ? e.form : 60, morale: e.morale != null ? e.morale : 7,
     staminaPct: e.staminaPct != null ? e.staminaPct : 100, isCaptain: !!e.isCaptain,
@@ -346,6 +347,7 @@ function playerToJson(p) {
   if (p.basePrice) ev.basePrice = p.basePrice;
   if (p.soldPrice) ev.soldPrice = p.soldPrice;
   if (p.soldViaRtm) ev.soldViaRtm = true;
+  if (p.preferredPos != null) ev.preferredPos = p.preferredPos;
   const out = { id: p.id, name: p.name, jersey: p.jersey, role: p.role };
   if (p.canKeep) out.canKeep = true;
   if (p.excludeFromAuction) out.excludeFromAuction = true;
@@ -468,6 +470,11 @@ function buildColumns() {
     { key: 'handedness', label: 'Bat hand', kind: 'cat',
       sortVal: p => p.handedness, catVal: p => p.handedness,
       options: () => HANDS.map((l,i) => [i,l]), render: p => cell(selectInput(p,'handedness',HANDS)) },
+    { key: 'preferredPos', label: 'Bat pos', full: 'preferred batting position', kind: 'cat',
+      sortVal: p => p.preferredPos != null ? p.preferredPos : derivedPreferredPos(p),
+      catVal: p => p.preferredPos != null ? p.preferredPos : derivedPreferredPos(p),
+      options: () => Array.from({ length: 11 }, (_, i) => [i + 1, String(i + 1)]),
+      render: preferredPosCell },
     { key: 'bowlerType', label: 'Bowler type', kind: 'cat',
       sortVal: p => p.bowlerType, catVal: p => p.bowlerType,
       options: () => BOWLER_TYPES.map((l,i) => [i,l]), render: p => cell(selectInput(p,'bowlerType',BOWLER_TYPES)) },
@@ -569,6 +576,38 @@ function selectInput(p, key, options, onChange) {
   });
   s.addEventListener('change', () => { p[key] = parseInt(s.value); (onChange||(()=>{}))(); validate(); });
   return s;
+}
+// Role+rating default batting position — mirrors Player.defaultPreferredBattingPosition
+// in the app (lib/models/models.dart). p.role index = PlayerRole enum order.
+function derivedPreferredPos(p) {
+  const b = p.batting || 0;
+  switch (p.role) {
+    case 0: return 2;                                          // top-order bat
+    case 1: return 4;                                          // middle-order bat
+    case 2: return 6;                                          // finisher
+    case 3: return b >= 78 ? 4 : b >= 68 ? 6 : b >= 55 ? 7 : 8; // all-rounder
+    case 4: return b >= 72 ? 4 : 6;                            // wicket-keeper
+    case 5: case 6: return b >= 45 ? 9 : 10;                   // pace / spin bowler
+    default: return 7;
+  }
+}
+// Editable preferred batting position (1-11). Stores ONLY genuine overrides —
+// picking the role-derived default clears it, so the JSON stays lean and the app
+// derives it (matching toEvolvingJson's "preferredPos only when explicit").
+function preferredPosCell(p) {
+  const s = el('select');
+  const derived = derivedPreferredPos(p);
+  for (let i = 1; i <= 11; i++) {
+    const o = el('option', { value: i, textContent: i === derived ? `${i} (default)` : String(i) });
+    if ((p.preferredPos != null ? p.preferredPos : derived) === i) o.selected = true;
+    s.appendChild(o);
+  }
+  s.addEventListener('change', () => {
+    const v = parseInt(s.value, 10);
+    p.preferredPos = (v === derivedPreferredPos(p)) ? null : v;
+    validate();
+  });
+  return cell(s);
 }
 function tagCell(p, key, labels, hideNone) {
   const td = el('td');
