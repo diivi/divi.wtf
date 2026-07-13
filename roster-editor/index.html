@@ -564,9 +564,17 @@ function validate() {
       else if (keepers === 1) warn(`${nm} have only one wicket-keeper.`, tid);
       const bowlers = squad.filter(p => p.bowling >= 50).length;
       if (bowlers < 5) err(`${nm} have only ${bowlers} players who can bowl — need at least 5.`, tid);
-      const js = new Set(); let jtrouble = false;
-      for (const p of squad) { if (p.jersey < 1 || p.jersey > 99 || js.has(p.jersey)) jtrouble = true; js.add(p.jersey); }
-      if (jtrouble) warn(`${nm} have duplicate or out-of-range jersey numbers.`, tid);
+      const jFirst = {}; const offenders = new Set();
+      for (const p of squad) {
+        if (p.jersey < 1 || p.jersey > 99) offenders.add(p);
+        if (jFirst[p.jersey] !== undefined) { offenders.add(p); offenders.add(jFirst[p.jersey]); }
+        else jFirst[p.jersey] = p;
+      }
+      if (offenders.size) {
+        const who = [...offenders].sort((a, b) => a.jersey - b.jersey)
+          .map(p => `${p.name} (#${p.jersey})`).join(', ');
+        warn(`${nm} have duplicate or out-of-range jersey numbers: ${who}.`, tid);
+      }
     }
   }
   for (const code of CUP_NATIONS) {
@@ -1204,11 +1212,49 @@ function setActiveLeague(lid) {
   buildColumns(); buildHead(); renderChips(); renderRows(); validate(); updateClearBtn();
 }
 function renderLeagueSwitch() {
-  const sel = $('#leagueSwitch'); const leagues = customizedLeagues();
+  const sel = $('#leagueSwitch'); const custom = customizedLeagues();
   sel.innerHTML = '';
-  for (const lid of leagues) sel.appendChild(el('option', { value: lid, textContent: LEAGUES[lid].name }));
+  // Always show every league so the control is discoverable. A league the
+  // roster doesn't include yet is tagged "— add"; picking it seeds that league
+  // from the stock roster (mirrors the app's seedLeagueInto).
+  for (const lid of LEAGUE_ORDER)
+    sel.appendChild(el('option', { value: lid,
+      textContent: LEAGUES[lid].name + (custom.includes(lid) ? '' : ' — add') }));
   sel.value = activeLeague;
-  sel.classList.toggle('hidden', leagues.length <= 1);
+  sel.classList.remove('hidden');
+}
+// Seed a not-yet-customised league's teams + squad manifests + missing players
+// from the bundled all-leagues stock (cached). Shared stars already in the
+// roster keep the roster's edited version; only that league's own players are
+// pulled in. Mirrors seedLeagueInto in the app.
+let _stockAllCache = null;
+async function seedLeagueFromStock(lid) {
+  if (!_stockAllCache) {
+    const r = await fetch('roster_stock_all.json');
+    if (!r.ok) throw new Error('the stock roster (roster_stock_all.json) is not available');
+    _stockAllCache = parsePreset(await r.json());
+  }
+  const stock = _stockAllCache, cfg = LEAGUES[lid];
+  const have = new Set(roster.players.map(p => p.id));
+  const stockById = {}; for (const p of stock.players) stockById[p.id] = p;
+  const stockBrand = {}; for (const t of stock.teams) stockBrand[t.id] = t;
+  for (const tid of cfg.teamIds) {
+    if (!roster.teams.find(t => t.id === tid) && stockBrand[tid])
+      roster.teams.push(Object.assign({}, stockBrand[tid]));
+    const man = (stock.squads[tid] || []).slice();
+    roster.squads[tid] = man;
+    for (const id of man)
+      if (!have.has(id) && stockById[id]) { roster.players.push(clonePlayer(stockById[id])); have.add(id); }
+  }
+  if (!roster.customizedLeagues.includes(lid)) roster.customizedLeagues.push(lid);
+  teamIndex = {}; for (const t of roster.teams) teamIndex[t.id] = t;
+  rebuildPlayerIndex();
+}
+function clonePlayer(p) {
+  const c = Object.assign({}, p);
+  c.weaknesses = p.weaknesses.slice(); c.strengths = p.strengths.slice();
+  c.shotWeaknesses = p.shotWeaknesses.slice();
+  return c;
 }
 function fetchRoster(url) {
   fetch(url)
@@ -1259,7 +1305,15 @@ $('#rosterSource').addEventListener('change', e => {
   if (v === '__file__') return;   // the "Imported: …" pseudo-entry isn't fetchable
   loadSource(v);
 });
-$('#leagueSwitch').addEventListener('change', e => setActiveLeague(e.target.value));
+$('#leagueSwitch').addEventListener('change', async e => {
+  const lid = e.target.value;
+  if (customizedLeagues().includes(lid)) { setActiveLeague(lid); return; }
+  if (!confirm(`Add ${LEAGUES[lid].name} to this roster? Its teams and squads are seeded from the stock roster so you can edit them, then export it as a multi-league roster.`)) {
+    e.target.value = activeLeague; return;
+  }
+  try { await seedLeagueFromStock(lid); setActiveLeague(lid); toast(`${LEAGUES[lid].short} added — now editing it.`); }
+  catch (err) { alert('Could not add that league:\n' + err.message); e.target.value = activeLeague; }
+});
 $('#btnFilters').addEventListener('click', () => {
   filtersOn = !filtersOn;
   $('#btnFilters').classList.toggle('on', filtersOn);
