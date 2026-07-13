@@ -46,6 +46,18 @@
   button.toggle.on { background: var(--accent); border-color: var(--accent); color: #04101f; }
   button:disabled { opacity: .45; cursor: default; }
   input, select { font: inherit; color: var(--text); }
+  .hsel {
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 7px;
+    padding: 7px 10px; font-size: 12.5px; font-weight: 550; cursor: pointer;
+  }
+  .hsel:hover { border-color: var(--accent); }
+  /* crest thumbnails (custom logo) */
+  .crest { width: 20px; height: 20px; object-fit: contain; flex: none; }
+  .crest-lg { width: 56px; height: 56px; object-fit: contain; background: #0c1016; border-radius: 8px; padding: 4px; }
+  .logo-row { display: flex; align-items: center; gap: 12px; margin: 4px 0 10px; }
+  .logo-row .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .logo-slot { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+    background: #0c1016; border: 1px dashed var(--line); border-radius: 8px; color: #5c6675; font-size: 10px; text-align: center; }
   .toolbar2 {
     padding: 8px 14px; border-bottom: 1px solid var(--line);
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: var(--panel);
@@ -162,10 +174,15 @@
 <header>
   <h1>Cricket Coach Roster Editor <small>edit teams &amp; players, export your version</small></h1>
   <span class="grow"></span>
-  <input id="contributor" class="search" style="min-width:160px" placeholder="Your name (optional)" />
+  <select id="rosterSource" class="hsel" title="Load a bundled roster">
+    <option value="default_roster.json">Default Roster — Premier T20</option>
+    <option value="community_roster.json">Community Roster</option>
+    <option value="roster_stock_all.json">Stock — all leagues</option>
+  </select>
+  <select id="leagueSwitch" class="hsel hidden" title="League to edit"></select>
+  <input id="contributor" class="search" style="min-width:150px" placeholder="Your name (optional)" />
   <button id="btnDiff">Diff vs default</button>
   <button id="btnImport">Import roster…</button>
-  <button id="btnDefault">Load default</button>
   <button id="btnExport" class="primary">Export roster</button>
   <input id="fileInput" type="file" accept=".json,application/json" class="hidden" />
 </header>
@@ -214,12 +231,36 @@ const NATIONS = [
   ['IND','India'],['AUS','Australia'],['ENG','England'],['NZ','New Zealand'],
   ['SA','South Africa'],['WI','West Indies'],['SL','Sri Lanka'],['AFG','Afghanistan'],
   ['BAN','Bangladesh'],['PAK','Pakistan'],['USA','USA'],
+  // Real non-cup nations used by league (Super League / Power Bash) players —
+  // they field no national side but are legal player data (mirrors the app's
+  // validator, which accepts every nationality present in the stock pool).
+  ['ZIM','Zimbabwe'],['OMA','Oman'],
 ];
 const NATION_NAME = Object.fromEntries(NATIONS);
 const NATION_CODES = NATIONS.map(n => n[0]);
 const CUP_NATIONS = ['IND','AUS','ENG','NZ','SA','WI','SL','AFG','BAN','PAK'];
 const CUSTOM_ID_BASE = 500000;
-const MIN_SQUAD = 18, MAX_SQUAD = 25, MAX_OVERSEAS = 8;
+const MAX_SQUAD = 25;
+const CREST_PX = 300;   // custom-logo canvas size (mirrors crest_image.dart)
+
+/* ---------- leagues (mirror LeagueRegistry + DomesticRules in the app) ---------- */
+// The default league uses per-player startingTeamId for squad membership; the
+// others (PSL/BBL) use per-team `squads` manifests, so a star can turn out in
+// more than one league. minSquad: the app floors non-default leagues lower
+// (kLeagueMinSquadSize = 15) since they play ~15-16 man stock manifests.
+const LEAGUES = {
+  ipl: { id:'ipl', name:'Premier T20 (India)', short:'PT20', domestic:'IND',
+    maxOverseasSquad:8, maxOverseasXI:4, minLocalXI:0, minSquad:18,
+    teamIds:['mum','che','blr','kol','del','pun','raj','hyd','lko','guj'] },
+  psl: { id:'psl', name:'Super League (Pakistan)', short:'SL', domestic:'PAK',
+    maxOverseasSquad:8, maxOverseasXI:4, minLocalXI:7, minSquad:15,
+    teamIds:['psl_isb','psl_khi','psl_lhr','psl_mul','psl_pes','psl_qet','psl_hyd','psl_rwp'] },
+  bbl: { id:'bbl', name:'Power Bash (Australia)', short:'PB', domestic:'AUS',
+    maxOverseasSquad:6, maxOverseasXI:3, minLocalXI:0, minSquad:15,
+    teamIds:['bbl_ade','bbl_bri','bbl_hob','bbl_mlc','bbl_mlr','bbl_per','bbl_syl','bbl_sye'] },
+};
+const LEAGUE_ORDER = ['ipl','psl','bbl'];
+const ALL_KNOWN_TEAM_IDS = new Set(LEAGUE_ORDER.flatMap(id => LEAGUES[id].teamIds));
 
 const ATTRS = [
   ['batting','BAT','Batting'],['power','POW','Power'],['technique','TEC','Technique'],
@@ -233,8 +274,10 @@ const ATTRS = [
 /* ---------- state ---------- */
 let roster = null;
 let baseline = null;          // parsed default — never mutated; used by the diff view
-let teamIndex = {};
-let teamOrder = [];
+let teamIndex = {};           // ALL teams across every customised league
+let teamOrder = [];           // the ACTIVE league's team ids (chips / Team column)
+let activeLeague = 'ipl';     // the league currently being edited
+let playerById = {};          // id -> player, rebuilt on load / add / delete
 let filterTeam = 'ALL';
 let searchText = '';
 let issues = [];
@@ -262,6 +305,85 @@ function heat(v) {
   return `hsla(${hue}, 60%, 40%, ${0.10 + (v/100)*0.22})`;
 }
 
+/* ---------- league + squad-membership model ----------
+ * Membership is dual: the default league keeps it on each player
+ * (startingTeamId); the others carry per-team `squads` manifests so one star
+ * can appear in several leagues. A league "uses manifests" iff any of its
+ * teams has a squads entry — true for the seeded PSL/BBL, false for IPL. */
+function activeCfg() { return LEAGUES[activeLeague] || LEAGUES.ipl; }
+function customizedLeagues() {
+  const set = roster && roster.customizedLeagues && roster.customizedLeagues.length
+    ? roster.customizedLeagues : [roster ? roster.leagueId : 'ipl'];
+  return LEAGUE_ORDER.filter(id => set.includes(id));
+}
+function leagueUsesManifest(cfg) {
+  return cfg.teamIds.some(tid => Array.isArray(roster.squads[tid]));
+}
+function rebuildPlayerIndex() {
+  playerById = {}; for (const p of roster.players) playerById[p.id] = p;
+}
+// The active league's team for a player, or null (a free agent within it).
+function teamOfPlayer(p) {
+  const cfg = activeCfg();
+  if (leagueUsesManifest(cfg)) {
+    for (const tid of cfg.teamIds) {
+      const man = roster.squads[tid];
+      if (man && man.includes(p.id)) return tid;
+    }
+    return null;
+  }
+  return (p.startingTeamId && cfg.teamIds.includes(p.startingTeamId))
+    ? p.startingTeamId : null;
+}
+// Reassign a player within the active league (newTeamId null = free agent).
+function assignTeam(p, newTeamId) {
+  const cfg = activeCfg();
+  if (leagueUsesManifest(cfg)) {
+    for (const tid of cfg.teamIds)
+      if (roster.squads[tid]) roster.squads[tid] = roster.squads[tid].filter(id => id !== p.id);
+    if (newTeamId) (roster.squads[newTeamId] = roster.squads[newTeamId] || []).push(p.id);
+  } else {
+    p.startingTeamId = newTeamId;
+  }
+}
+function squadForTeam(teamId, cfg) {
+  const man = roster.squads[teamId];
+  if (man) return man.map(id => playerById[id]).filter(Boolean);
+  return roster.players.filter(p => p.startingTeamId === teamId);
+}
+function isOverseasIn(p, cfg) { return p.nationality !== cfg.domestic; }
+
+/* ---------- custom crest logos ----------
+ * Stored as RAW base64 PNG (no data: prefix) in team.iconImg, matching the
+ * app's TeamBrandingSpec 'iconImg' wire key. Uploads are aspect-fit into a
+ * 300x300 transparent canvas — same as services/crest_image.dart. */
+function crestSrc(b64) { return b64 ? 'data:image/png;base64,' + b64 : null; }
+function crestImg(b64, cls) {
+  const src = crestSrc(b64); if (!src) return null;
+  return el('img', { className: cls || 'crest', src });
+}
+function resizeToCrest(file) {
+  return new Promise((resolve, reject) => {
+    const fr = new FileReader();
+    fr.onerror = () => reject(new Error('could not read the file'));
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('that file is not a valid image'));
+      img.onload = () => {
+        const canvas = el('canvas'); canvas.width = CREST_PX; canvas.height = CREST_PX;
+        const ctx = canvas.getContext('2d');
+        const scale = Math.min(CREST_PX / img.width, CREST_PX / img.height);
+        const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, (CREST_PX - w) / 2, (CREST_PX - h) / 2, w, h);
+        resolve(canvas.toDataURL('image/png').split(',')[1]);   // raw base64
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+
 /* ---------- auction eligibility (mirrors the game) ---------- */
 const AUCTION_EXCLUDED_NATIONALITIES = ['PAK', 'BAN'];
 const OVERSEAS_AUCTION_OVERALL_FLOOR = 80;
@@ -287,15 +409,25 @@ function parsePreset(json) {
   const teams = (json.teams || []).map(t => ({
     id: t.id, name: t.name || '', nickname: t.nickname || '', shortName: t.shortName || '',
     icon: t.icon || 'shield', primaryColor: t.primaryColor || 0, secondaryColor: t.secondaryColor || 0,
+    iconImg: (typeof t.iconImg === 'string' && t.iconImg.length) ? t.iconImg : null,
   }));
   let nextCustom = json.nextCustomId || CUSTOM_ID_BASE;
   for (const p of players) if (p.id >= nextCustom) nextCustom = p.id + 1;
+  const leagueId = json.leagueId || 'ipl';
+  // Additive/null-safe multi-league keys — a pre-multi-league file has none, so
+  // customizedLeagues defaults to [leagueId] and squads/leagueNames stay empty.
+  const customLeagues = Array.isArray(json.customLeagues) && json.customLeagues.length
+    ? json.customLeagues.slice() : [leagueId];
+  const squads = {};
+  if (json.squads && typeof json.squads === 'object')
+    for (const k in json.squads) squads[k] = (json.squads[k] || []).slice();
+  const leagueNames = Object.assign({}, json.leagueNames || {});
   return {
     id: json.id || 'roster', name: json.name || 'Roster',
     createdAt: json.createdAt || new Date().toISOString(),
     updatedAt: json.updatedAt || new Date().toISOString(),
     nextCustomId: Math.max(CUSTOM_ID_BASE, nextCustom),
-    teams, players,
+    teams, players, leagueId, customizedLeagues: customLeagues, squads, leagueNames,
   };
 }
 function parsePlayer(j) {
@@ -368,16 +500,26 @@ function rosterToJson() {
     name = name.replace(/\s*\(edited by .*\)\s*$/, '');
     name = `${name} (edited by ${contributor})`;
   }
-  return {
+  const out = {
     schema: 1, kind: 'criccoach_roster', id: roster.id, name,
     createdAt: roster.createdAt, updatedAt: new Date().toISOString(),
     nextCustomId: nextCustom,
-    teams: roster.teams.map(t => ({
-      id: t.id, name: t.name, nickname: t.nickname, shortName: t.shortName,
-      icon: t.icon, primaryColor: t.primaryColor, secondaryColor: t.secondaryColor,
-    })),
-    players: roster.players.map(playerToJson),
+    leagueId: roster.leagueId || 'ipl',
+    // Mirror RosterPreset.toJson: always list customLeagues; squads/leagueNames
+    // only when non-empty (a single-league roster stays byte-compatible).
+    customLeagues: (roster.customizedLeagues || [roster.leagueId || 'ipl']).slice(),
   };
+  const squadKeys = Object.keys(roster.squads || {}).filter(k => (roster.squads[k] || []).length);
+  if (squadKeys.length) { out.squads = {}; for (const k of squadKeys) out.squads[k] = roster.squads[k].slice(); }
+  if (roster.leagueNames && Object.keys(roster.leagueNames).length) out.leagueNames = Object.assign({}, roster.leagueNames);
+  out.teams = roster.teams.map(t => {
+    const o = { id: t.id, name: t.name, nickname: t.nickname, shortName: t.shortName,
+      icon: t.icon, primaryColor: t.primaryColor, secondaryColor: t.secondaryColor };
+    if (t.iconImg) o.iconImg = t.iconImg;   // custom crest — only when set
+    return o;
+  });
+  out.players = roster.players.map(playerToJson);
+  return out;
 }
 
 /* ---------- validation (mirrors roster_validator.dart) ---------- */
@@ -391,7 +533,7 @@ function validate() {
     seen.add(p.id);
     if (!p.name.trim()) err(`A player (id ${p.id}) has no name.`);
     if (!NATION_CODES.includes(p.nationality)) err(`${p.name}: unknown nationality "${p.nationality}".`);
-    if (p.startingTeamId != null && !teamIndex[p.startingTeamId]) err(`${p.name}: assigned to a team that doesn't exist.`);
+    if (p.startingTeamId != null && !ALL_KNOWN_TEAM_IDS.has(p.startingTeamId)) err(`${p.name}: assigned to a team that doesn't exist.`);
     if (p.age < 14 || p.age > 45) err(`${p.name}: age ${p.age} must be 14–45.`);
     const bad = attrsOutOfRange(p);
     if (bad.length) err(`${p.name}: out of range — ${bad.join(', ')}.`);
@@ -399,26 +541,33 @@ function validate() {
   const nameCount = {};
   for (const p of roster.players) { const n = p.name.trim(); if (n) nameCount[n] = (nameCount[n]||0)+1; }
   for (const n in nameCount) if (nameCount[n] > 1) warn(`${nameCount[n]} players are named ${n}.`);
-  for (const tid of teamOrder) {
-    const b = teamIndex[tid];
-    const squad = roster.players.filter(p => p.startingTeamId === tid);
-    const nm = (b && b.name) || tid;
-    if (!b || !b.name.trim()) err(`A team is missing its name.`, tid);
-    if (b && !b.nickname.trim()) err(`${nm} needs a nickname.`, tid);
-    const code = (b && b.shortName || '').trim();
-    if (code.length < 2 || code.length > 4) err(`${nm} needs a 2–4 letter short code.`, tid);
-    if (squad.length < MIN_SQUAD || squad.length > MAX_SQUAD)
-      err(`${nm} carry ${squad.length} players — must be ${MIN_SQUAD}–${MAX_SQUAD}.`, tid);
-    const overseas = squad.filter(p => p.nationality !== 'IND').length;
-    if (overseas > MAX_OVERSEAS) err(`${nm} have ${overseas} overseas players — cap is ${MAX_OVERSEAS}.`, tid);
-    const keepers = squad.filter(p => p.role === 4 || p.canKeep).length;
-    if (keepers === 0) err(`${nm} have no wicket-keeper.`, tid);
-    else if (keepers === 1) warn(`${nm} have only one wicket-keeper.`, tid);
-    const bowlers = squad.filter(p => p.bowling >= 50).length;
-    if (bowlers < 5) err(`${nm} have only ${bowlers} players who can bowl — need at least 5.`, tid);
-    const js = new Set(); let jtrouble = false;
-    for (const p of squad) { if (p.jersey < 1 || p.jersey > 99 || js.has(p.jersey)) jtrouble = true; js.add(p.jersey); }
-    if (jtrouble) warn(`${nm} have duplicate or out-of-range jersey numbers.`, tid);
+
+  // Per-team rules, judged for EVERY customised league by its own domestic rules
+  // (domestic nationality, overseas caps, squad floor) — mirrors the app.
+  for (const lid of customizedLeagues()) {
+    const cfg = LEAGUES[lid]; if (!cfg) { err(`Roster customises an unknown league "${lid}".`); continue; }
+    for (const tid of cfg.teamIds) {
+      const b = teamIndex[tid];
+      const nm = (b && b.name) || tid;
+      const squad = squadForTeam(tid, cfg);
+      if (!b || !b.name.trim()) err(`A team is missing its name.`, tid);
+      if (b && !b.nickname.trim()) err(`${nm} needs a nickname.`, tid);
+      const code = (b && b.shortName || '').trim();
+      if (code.length < 2 || code.length > 4) err(`${nm} needs a 2–4 letter short code.`, tid);
+      if (squad.length < cfg.minSquad || squad.length > MAX_SQUAD)
+        err(`${nm} (${cfg.short}) carry ${squad.length} players — must be ${cfg.minSquad}–${MAX_SQUAD}.`, tid);
+      const overseas = squad.filter(p => isOverseasIn(p, cfg)).length;
+      if (overseas > cfg.maxOverseasSquad)
+        err(`${nm} have ${overseas} overseas players — the ${cfg.short} squad cap is ${cfg.maxOverseasSquad}.`, tid);
+      const keepers = squad.filter(p => p.role === 4 || p.canKeep).length;
+      if (keepers === 0) err(`${nm} have no wicket-keeper.`, tid);
+      else if (keepers === 1) warn(`${nm} have only one wicket-keeper.`, tid);
+      const bowlers = squad.filter(p => p.bowling >= 50).length;
+      if (bowlers < 5) err(`${nm} have only ${bowlers} players who can bowl — need at least 5.`, tid);
+      const js = new Set(); let jtrouble = false;
+      for (const p of squad) { if (p.jersey < 1 || p.jersey > 99 || js.has(p.jersey)) jtrouble = true; js.add(p.jersey); }
+      if (jtrouble) warn(`${nm} have duplicate or out-of-range jersey numbers.`, tid);
+    }
   }
   for (const code of CUP_NATIONS) {
     const n = roster.players.filter(p => p.nationality === code).length;
@@ -453,8 +602,8 @@ function buildColumns() {
     { key: 'name', label: 'Name', sticky: 'sticky2', kind: 'text',
       sortVal: p => p.name.toLowerCase(), render: nameCell },
     { key: 'startingTeamId', label: 'Team', kind: 'cat',
-      sortVal: p => teamLabel(p.startingTeamId || 'FREE'),
-      catVal: p => p.startingTeamId == null ? 'FREE' : p.startingTeamId,
+      sortVal: p => teamLabel(teamOfPlayer(p) || 'FREE'),
+      catVal: p => teamOfPlayer(p) || 'FREE',
       options: () => [['FREE','Free agent'], ...teamOrder.map(t => [t, teamLabel(t)])],
       render: teamCell },
     { key: 'nationality', label: 'Nat', kind: 'cat',
@@ -505,6 +654,8 @@ function toolsCell(p) {
   del.addEventListener('click', () => {
     if (!confirm(`Delete ${p.name}?`)) return;
     roster.players = roster.players.filter(x => x.id !== p.id);
+    for (const k in roster.squads) roster.squads[k] = roster.squads[k].filter(id => id !== p.id);
+    rebuildPlayerIndex();
     renderRows(); validate();
   });
   tools.appendChild(del);
@@ -519,9 +670,9 @@ function teamCell(p) {
   const s = el('select');
   s.appendChild(el('option', { value: 'FREE', textContent: 'Free agent' }));
   for (const tid of teamOrder) s.appendChild(el('option', { value: tid, textContent: teamLabel(tid) }));
-  s.value = p.startingTeamId == null ? 'FREE' : p.startingTeamId;
+  s.value = teamOfPlayer(p) || 'FREE';
   s.addEventListener('change', () => {
-    p.startingTeamId = s.value === 'FREE' ? null : s.value;
+    assignTeam(p, s.value === 'FREE' ? null : s.value);
     if (filterTeam !== 'ALL') renderRows();
     validate();
   });
@@ -651,8 +802,8 @@ function activeColumns() {
 }
 function visiblePlayers() {
   let list = roster.players;
-  if (filterTeam === 'FREE') list = list.filter(p => p.startingTeamId == null);
-  else if (filterTeam !== 'ALL') list = list.filter(p => p.startingTeamId === filterTeam);
+  if (filterTeam === 'FREE') list = list.filter(p => teamOfPlayer(p) == null);
+  else if (filterTeam !== 'ALL') list = list.filter(p => teamOfPlayer(p) === filterTeam);
   if (searchText) { const q = searchText.toLowerCase(); list = list.filter(p => p.name.toLowerCase().includes(q)); }
   list = list.filter(passesFilters);
   const col = sortKey ? COLS.find(c => c.key === sortKey) : null;
@@ -664,7 +815,7 @@ function visiblePlayers() {
     });
   } else {
     list = list.slice().sort((a, b) => {
-      const ta = a.startingTeamId || 'zzz', tb = b.startingTeamId || 'zzz';
+      const ta = teamOfPlayer(a) || 'zzz', tb = teamOfPlayer(b) || 'zzz';
       if (ta !== tb) return ta < tb ? -1 : 1;
       return (b.batting + b.bowling) - (a.batting + a.bowling);
     });
@@ -742,20 +893,23 @@ function buildRow(p) {
 }
 function renderChips() {
   const chips = $('#chips'); chips.innerHTML = '';
-  const mk = (id, label, count) => {
+  const mk = (id, label, count, logoB64) => {
     const c = el('div', { className: 'chip' + (filterTeam === id ? ' active' : '') });
     const it = issuesByTeam[id] || {};
     c.appendChild(el('span', { className: 'dot' + (it.err ? ' err' : it.warn ? ' warn' : '') }));
+    const img = logoB64 ? crestImg(logoB64) : null; if (img) c.appendChild(img);
     c.appendChild(el('span', { textContent: label }));
     if (count != null) c.appendChild(el('span', { className: 'ct', textContent: count }));
     c.addEventListener('click', () => { filterTeam = id; renderChips(); renderRows(); });
     chips.appendChild(c);
   };
+  const inLeague = roster.players.filter(p => teamOfPlayer(p) != null).length;
   mk('ALL', 'All', roster.players.length);
-  mk('FREE', 'Free agents', roster.players.filter(p => p.startingTeamId == null).length);
-  for (const tid of teamOrder) mk(tid, teamLabel(tid), roster.players.filter(p => p.startingTeamId === tid).length);
+  mk('FREE', 'Free agents', roster.players.length - inLeague);
+  for (const tid of teamOrder)
+    mk(tid, teamLabel(tid), roster.players.filter(p => teamOfPlayer(p) === tid).length, teamIndex[tid] && teamIndex[tid].iconImg);
   const edit = el('div', { className: 'chip' });
-  edit.appendChild(el('span', { textContent: '✎ Team names & colours' }));
+  edit.appendChild(el('span', { textContent: '✎ Teams, colours & logos' }));
   edit.addEventListener('click', openTeamEditor);
   chips.appendChild(edit);
 }
@@ -817,8 +971,10 @@ function openTagPicker(p, key, labels, hideNone, onDone) {
   modal(`${p.name} — ${titles[key]}`, body, [done]);
 }
 function openTeamEditor() {
+  const cfg = activeCfg();
   const body = el('div');
-  body.appendChild(el('div', { className: 'note', style: 'margin-bottom:12px', textContent: 'Rebrand any franchise. The 10 teams and their internal ids are fixed; you can change names, nicknames, short codes and colours.' }));
+  body.appendChild(el('div', { className: 'note', style: 'margin-bottom:12px',
+    innerHTML: `Rebrand any <b>${cfg.name}</b> franchise. The ${teamOrder.length} teams and their internal ids are fixed; you can change names, nicknames, short codes, colours and upload a custom logo (any image — it is resized to 300×300 and embedded in the exported roster).` }));
   for (const tid of teamOrder) {
     const b = teamIndex[tid];
     const box = el('div', { style: 'border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px' });
@@ -837,12 +993,48 @@ function openTeamEditor() {
       box.appendChild(r);
     };
     box.appendChild(el('div', { style: 'font-weight:650;margin-bottom:6px', textContent: `${b.shortName} — ${b.name}` }));
+    box.appendChild(logoRow(b));
     mkField('Name', 'name'); mkField('Nickname', 'nickname'); mkField('Short code (2-4)', 'shortName');
     mkField('Primary colour', 'primaryColor', 'color'); mkField('Secondary colour', 'secondaryColor', 'color');
     body.appendChild(box);
   }
   const done = el('button', { className: 'primary', textContent: 'Done' }); done.addEventListener('click', closeModal);
-  modal('Edit teams', body, [done]);
+  modal(`Edit teams — ${cfg.name}`, body, [done]);
+}
+// Custom-logo row inside the team editor: preview + upload/replace/remove.
+function logoRow(b) {
+  const row = el('div', { className: 'logo-row' });
+  const slot = el('div');
+  const refreshSlot = () => {
+    slot.innerHTML = '';
+    const img = crestImg(b.iconImg, 'crest-lg');
+    if (img) slot.appendChild(img);
+    else { const ph = el('div', { className: 'logo-slot', textContent: 'no logo' }); slot.appendChild(ph); }
+  };
+  refreshSlot();
+  const btns = el('div', { className: 'btns' });
+  const file = el('input', { type: 'file', accept: 'image/*', className: 'hidden' });
+  const up = el('button', { textContent: b.iconImg ? 'Replace logo' : 'Upload logo' });
+  up.addEventListener('click', () => file.click());
+  file.addEventListener('change', async () => {
+    const f = file.target ? file.target.files[0] : file.files[0]; file.value = '';
+    if (!f) return;
+    try {
+      b.iconImg = await resizeToCrest(f);
+      refreshSlot(); up.textContent = 'Replace logo'; rm.classList.remove('hidden');
+      renderChips(); toast('Logo set (300×300).');
+    } catch (e) { alert('Could not use that image:\n' + e.message); }
+  });
+  const rm = el('button', { className: 'danger' + (b.iconImg ? '' : ' hidden'), textContent: 'Remove' });
+  rm.addEventListener('click', () => {
+    b.iconImg = null; refreshSlot(); up.textContent = 'Upload logo'; rm.classList.add('hidden'); renderChips();
+  });
+  btns.appendChild(up); btns.appendChild(rm); btns.appendChild(file);
+  const wrap = el('div');
+  wrap.appendChild(btns);
+  wrap.appendChild(el('div', { className: 'note', style: 'margin-top:5px', textContent: 'Overrides the Material icon everywhere the crest shows.' }));
+  row.appendChild(slot); row.appendChild(wrap);
+  return row;
 }
 
 /* ---------- diff vs default ---------- */
@@ -892,6 +1084,8 @@ function computeDiff() {
     const fields = [];
     for (const [k, l] of [['name','Name'],['nickname','Nickname'],['shortName','Short code'],['icon','Icon']])
       if (t[k] !== bt[k]) fields.push({ label: l, old: bt[k], new: t[k] });
+    if ((t.iconImg || null) !== (bt.iconImg || null))
+      fields.push({ label: 'Custom logo', old: bt.iconImg ? 'set' : 'none', new: t.iconImg ? 'set' : 'none' });
     for (const [k, l] of [['primaryColor','Primary colour'],['secondaryColor','Secondary colour']])
       if ((t[k]>>>0) !== (bt[k]>>>0)) fields.push({ label: l, old: '#'+((bt[k]>>>0)&0xFFFFFF).toString(16).padStart(6,'0'), new: '#'+((t[k]>>>0)&0xFFFFFF).toString(16).padStart(6,'0') });
     if (fields.length) teamDiffs.push({ t, fields });
@@ -977,26 +1171,59 @@ function addPlayer() {
   let nextId = CUSTOM_ID_BASE;
   for (const p of roster.players) if (p.id >= nextId) nextId = p.id + 1;
   const team = (filterTeam === 'ALL' || filterTeam === 'FREE') ? null : filterTeam;
+  const cfg = activeCfg();
   const p = parsePlayer({
     id: nextId, name: 'New Player', jersey: 1, role: 1, bowlerType: 0, handedness: 0,
-    nationality: 'IND', startingTeamId: team, weaknesses: [], strengths: [], shotWeaknesses: [],
+    nationality: cfg.domestic, startingTeamId: null, weaknesses: [], strengths: [], shotWeaknesses: [],
     evolving: { age: 24, batting: 50, power: 50, technique: 50, temperament: 50, aggression: 50,
       style: 50, running: 50, vsPace: 50, vsSpin: 50, bowling: 30, pace: 50, control: 50,
       variation: 50, death: 50, composure: 50, catching: 50, fielding: 50, form: 60, morale: 7, staminaPct: 100 },
   });
   roster.players.push(p);
+  rebuildPlayerIndex();
+  if (team) assignTeam(p, team);   // honours the active league's manifest/startingTeamId model
   searchText = ''; $('#search').value = '';
   renderRows(); validate();
   toast(`Added player (id ${p.id})`);
 }
 
 /* ---------- file I/O ---------- */
+let loadedSource = 'default_roster.json';
 function loadRoster(json) {
   roster = parsePreset(json);
-  teamOrder = roster.teams.map(t => t.id);
   teamIndex = {}; for (const t of roster.teams) teamIndex[t.id] = t;
+  rebuildPlayerIndex();
+  const leagues = customizedLeagues();
+  setActiveLeague(leagues.includes(roster.leagueId) ? roster.leagueId : leagues[0]);
+}
+function setActiveLeague(lid) {
+  activeLeague = lid;
+  teamOrder = activeCfg().teamIds.filter(t => teamIndex[t]);
   filterTeam = 'ALL'; sortKey = null; sortDir = 0; colFilters = {};
+  renderLeagueSwitch();
   buildColumns(); buildHead(); renderChips(); renderRows(); validate(); updateClearBtn();
+}
+function renderLeagueSwitch() {
+  const sel = $('#leagueSwitch'); const leagues = customizedLeagues();
+  sel.innerHTML = '';
+  for (const lid of leagues) sel.appendChild(el('option', { value: lid, textContent: LEAGUES[lid].name }));
+  sel.value = activeLeague;
+  sel.classList.toggle('hidden', leagues.length <= 1);
+}
+function fetchRoster(url) {
+  fetch(url)
+    .then(r => { if (!r.ok) throw new Error(url + ' not found'); return r.json(); })
+    .then(j => { loadRoster(j); loadedSource = url; $('#rosterSource').value = url; toast('Roster loaded.'); })
+    .catch(e => {
+      $('#emptyState').querySelector('.big').textContent = 'Could not load that roster.';
+      $('#emptyState').querySelector('.note').textContent = e.message + ' — use “Import roster…” to open a file instead.';
+    });
+}
+function loadSource(url) {
+  if (roster && !confirm('Discard current edits and load this roster?')) {
+    $('#rosterSource').value = loadedSource; return;
+  }
+  fetchRoster(url);
 }
 function doExport() {
   const json = rosterToJson();
@@ -1009,9 +1236,16 @@ function doExport() {
 }
 function importFile(file) {
   const fr = new FileReader();
-  fr.onload = () => { try { loadRoster(JSON.parse(fr.result)); toast('Roster loaded.'); }
+  fr.onload = () => { try { loadRoster(JSON.parse(fr.result)); markImportedSource(file.name); toast('Roster loaded.'); }
     catch (e) { alert('Could not load that file:\n' + e.message); } };
   fr.readAsText(file);
+}
+function markImportedSource(fname) {
+  const sel = $('#rosterSource');
+  let opt = sel.querySelector('option[value="__file__"]');
+  if (!opt) { opt = el('option', { value: '__file__' }); sel.appendChild(opt); }
+  opt.textContent = 'Imported: ' + (fname || 'file');
+  sel.value = '__file__'; loadedSource = '__file__';
 }
 
 /* ---------- wiring ---------- */
@@ -1020,10 +1254,12 @@ $('#fileInput').addEventListener('change', e => { if (e.target.files[0]) importF
 $('#btnExport').addEventListener('click', doExport);
 $('#btnDiff').addEventListener('click', () => { if (!roster || !baseline) return; openDiff(); });
 $('#btnAdd').addEventListener('click', addPlayer);
-$('#btnDefault').addEventListener('click', () => {
-  if (roster && !confirm('Discard current edits and reload the default roster?')) return;
-  loadDefault();
+$('#rosterSource').addEventListener('change', e => {
+  const v = e.target.value;
+  if (v === '__file__') return;   // the "Imported: …" pseudo-entry isn't fetchable
+  loadSource(v);
 });
+$('#leagueSwitch').addEventListener('change', e => setActiveLeague(e.target.value));
 $('#btnFilters').addEventListener('click', () => {
   filtersOn = !filtersOn;
   $('#btnFilters').classList.toggle('on', filtersOn);
@@ -1042,16 +1278,30 @@ $('#valbar').addEventListener('click', () => {
 window.addEventListener('beforeunload', e => { if (roster) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('resize', positionSticky);
 
-function loadDefault() {
+function boot() {
+  // The diff view always compares against the default roster, so load it as the
+  // baseline once at startup. ?roster= / ?league= pick the initial view (a
+  // shareable deep-link, e.g. ?roster=roster_stock_all.json&league=psl).
+  const params = new URLSearchParams(location.search);
+  const wantSources = ['default_roster.json','community_roster.json','roster_stock_all.json'];
+  const src = wantSources.includes(params.get('roster')) ? params.get('roster') : 'default_roster.json';
+  const wantLeague = params.get('league');
   fetch('default_roster.json')
     .then(r => { if (!r.ok) throw new Error('default_roster.json not found'); return r.json(); })
-    .then(j => { baseline = parsePreset(j); loadRoster(j); })
-    .catch(e => {
-      $('#emptyState').querySelector('.big').textContent = 'Could not load the default roster.';
-      $('#emptyState').querySelector('.note').textContent = e.message + ' — use “Import roster…” to open a file instead.';
-    });
+    .then(j => baseline = parsePreset(j))
+    .catch(() => { baseline = null; })
+    .finally(() => fetch(src)
+      .then(r => { if (!r.ok) throw new Error(src + ' not found'); return r.json(); })
+      .then(j => {
+        loadRoster(j); loadedSource = src; $('#rosterSource').value = src;
+        if (wantLeague && customizedLeagues().includes(wantLeague)) setActiveLeague(wantLeague);
+      })
+      .catch(e => {
+        $('#emptyState').querySelector('.big').textContent = 'Could not load the roster.';
+        $('#emptyState').querySelector('.note').textContent = e.message + ' — use “Import roster…” to open a file instead.';
+      }));
 }
-loadDefault();
+boot();
 </script>
 </body>
 </html>
