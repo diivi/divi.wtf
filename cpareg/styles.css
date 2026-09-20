@@ -589,3 +589,6 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   .result-row .review-btn { grid-column: 3; }
   .session-header .counter { font-size: 1.15rem; }
 }
+
+/* Partial re-renders (unit/scope toggles) keep the page still: no replayed entrance animations. */
+.no-anim, .no-anim * { animation: none !important; transition: none !important; }

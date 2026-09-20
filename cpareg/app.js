@@ -538,15 +538,18 @@
   function closeModal() { var m = $("#modal"); if (m) { m.remove(); document.body.classList.remove("modal-open"); } }
 
   /* ---------- Home ---------- */
-  function renderHome() {
+  function renderHome(opts) {
+    opts = opts || {};
+    var keepY = opts.keepScroll ? window.scrollY : null;
     Timer.stopTicking();
     state.session = null; state.review = null;
     var root = views.home;
     var active = getActive();
     var sessions = getSessions();
-    var bank = pool();
+    var bank = pool();               // scope ∩ selected units → what a session draws from
+    var scoped = scopedBank();       // scope only → what progress stats describe
     var history = getHistory();
-    var st = computeStats(bank);
+    var st = computeStats(scoped);
     var t = st.totals;
     var scope = Scope.get();
     var html = "";
@@ -570,15 +573,15 @@
         '<div id="discard-confirm" style="flex-basis:100%"></div></div>';
     }
 
-    var completion = bank.length ? t.seen / bank.length : 0;
+    var completion = scoped.length ? t.seen / scoped.length : 0;
     html += '<div class="hero"><div><h1>Practice REG</h1><p class="sub">Timed multiple-choice drills for the CPA Regulation exam.</p></div>' +
       '<div class="ring-wrap">' + ring(completion, Math.round(completion * 100) + "%", "of bank seen") +
       '<div class="ring-meta"><b>' + pct(t.accuracy) + "</b>accuracy<br><b>" + t.attempts + "</b>attempts</div></div></div>";
 
     html += '<div class="stat-grid">' +
-      stat("Bank size", bank.length, "bank", "") +
+      stat("Bank size", scoped.length, "bank", "") +
       stat("Seen", t.seen, "eye", "teal") +
-      stat("Unseen", bank.length - t.seen, "sparkle", "violet") +
+      stat("Unseen", scoped.length - t.seen, "sparkle", "violet") +
       stat("Accuracy", pct(t.accuracy), "target", "green", "grad-text") +
       stat("Time studied", fmtTime(t.totalMs), "clock", "amber") +
       "</div>";
@@ -586,7 +589,7 @@
     html += '<div class="card"><div class="card-head"><h2>By area</h2><span class="eyebrow">coverage · accuracy</span></div><div class="area-list">';
     var areaKeys = AREA_ORDER.concat(Object.keys(AREA_NAMES).filter(function (a) { return AREA_ORDER.indexOf(a) < 0; }));
     var bankCount = {}, seenCount = {};
-    bank.forEach(function (q) {
+    scoped.forEach(function (q) {
       bankCount[q.area] = (bankCount[q.area] || 0) + 1;
       if (history[q.id] && history[q.id].seen > 0) seenCount[q.area] = (seenCount[q.area] || 0) + 1;
     });
@@ -597,7 +600,7 @@
     html += "</div></div>";
 
     var def = Math.min(20, bank.length);
-    var scoped = scopedBank(), selUnits = Units.get();
+    var selUnits = Units.get();
     html += '<div class="card card-lg"><div class="card-head"><h2>New session</h2><span class="eyebrow">~5% repeats, wrong ones first</span></div>' +
       (EXTRA_COUNT ? '<div class="scope-row"><div class="seg" role="group" aria-label="Question scope">' +
         '<button type="button" data-scope="reg" aria-pressed="' + (scope === "reg") + '">2026 REG scope only</button>' +
@@ -629,16 +632,21 @@
     // hint under the chips: what the current pool is
     html = html.replace('<label for="batch-size"', '<p class="muted small unit-hint" style="margin:-8px 0 12px">' + bank.length + " questions in the current pool.</p>" + '<label for="batch-size"');
 
+    if (keepY != null) root.classList.add("no-anim");
     root.innerHTML = html;
     showView("home");
+    if (keepY != null) {
+      window.scrollTo(0, keepY);
+      setTimeout(function () { root.classList.remove("no-anim"); }, 60);
+    }
 
     var input = $("#batch-size", root);
     $all("[data-unit]", root).forEach(function (b) {
-      b.addEventListener("click", function () { if (Units.toggle(b.getAttribute("data-unit"))) renderHome(); });
+      b.addEventListener("click", function () { if (Units.toggle(b.getAttribute("data-unit"))) renderHome({ keepScroll: true }); });
     });
     var clamp = function (n) { n = parseInt(n, 10); if (!n || n < 1) n = 1; if (n > bank.length) n = bank.length; return n; };
     $all("[data-scope]", root).forEach(function (b) {
-      b.addEventListener("click", function () { Scope.set(b.getAttribute("data-scope")); renderHome(); });
+      b.addEventListener("click", function () { Scope.set(b.getAttribute("data-scope")); renderHome({ keepScroll: true }); });
     });
     var syncChips = function () {
       $all("[data-pick]", root).forEach(function (c) { c.classList.toggle("active", parseInt(c.getAttribute("data-pick"), 10) === clamp(input.value)); });
