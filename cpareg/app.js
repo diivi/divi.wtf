@@ -187,6 +187,11 @@
     history: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
     trash: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',
     play: '<path d="M6 4l14 8-14 8z"/>',
+    "tri-left": '<path d="M16 4L6 12l10 8z" fill="currentColor" stroke="none"/>',
+    "tri-right": '<path d="M8 4l10 8-10 8z" fill="currentColor" stroke="none"/>',
+    "flag-solid": '<path d="M4 22V3h12l-1.5 4L16 11H4" fill="currentColor"/>',
+    calc: '<rect x="5" y="2" width="14" height="20" rx="2"/><rect x="8" y="5" width="8" height="4" rx="0.5" fill="currentColor"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01" stroke-width="2.5"/>',
+    help: '<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
     left: '<path d="M15 18l-6-6 6-6"/>',
     right: '<path d="M9 18l6-6-6-6"/>',
     check: '<path d="M20 6L9 17l-5-5"/>',
@@ -449,6 +454,7 @@
   function showView(name) {
     state.view = name;
     Object.keys(views).forEach(function (k) { views[k].hidden = k !== name; });
+    document.body.classList.toggle("exam-mode", name === "session");
     window.scrollTo(0, 0);
   }
 
@@ -776,8 +782,8 @@
   }
 
   /**
-   * Render the Session view. Used both for the live session (state.session)
-   * and for read-only review of a finished session (state.review).
+   * Render the Session view (exam-style). Used both for the live session
+   * (state.session) and for read-only review of a finished session (state.review).
    */
   function renderSession() {
     var root = views.session;
@@ -791,94 +797,150 @@
     var q = BY_ID[id];
     var ans = review ? reviewAnswer(s.results[cursor]) : s.answers[id];
     var isRepeat = !review && s.repeatIds.indexOf(id) >= 0;
-    var answeredCount = review ? ids.length : Object.keys(s.answers).length;
     var reveal = !review && state.justAnswered === id;
     state.justAnswered = null;
     var showTimers = Prefs.showTimers.get();
+    var flags = (!review && s.flags) || {};
+    var flagged = !!flags[id];
+    var qElapsed = review ? (s.results[cursor].ms || 0) : Timer.elapsed(s, id);
+    var clockOn = review || showTimers;
 
-    var html = '<div class="progress"><span style="--w:' + Math.round(100 * answeredCount / ids.length) + '%"></span></div>';
-    html += '<div class="session-header">' +
-      '<div class="counter">Question ' + (cursor + 1) + ' <span class="muted" style="font-weight:500">of ' + ids.length + "</span>" +
-      (review ? '<span class="badge badge-review">' + icon("eye", 12) + "Review</span>" : "") + "</div>" +
-      (!review && showTimers
-        ? '<div class="timers"><span class="tpill">Session <b id="t-session">' + fmtTime(sessionElapsed(s)) + "</b></span>" +
-          '<span class="tpill' + (ans ? "" : " running") + '"><span class="dot"></span>Question <b id="t-question">' + fmtTime(Timer.elapsed(s, id)) + "</b></span></div>"
-        : "") +
+    // ---- Top: tab bar
+    var html = '<div class="exam">' +
+      '<div class="exam-tabs">' +
+        '<button type="button" class="exam-tab exam-tab-home" id="exam-home" title="Back to Home (your session is saved)">Practice Test</button>' +
+        '<span class="exam-tab exam-tab-static">REG</span>' +
+        '<span class="exam-tab exam-tab-active">' + (review ? "REVIEW" : "TESTLET 1") + "</span>" +
+        '<span class="exam-tab exam-tab-dim">' + escapeHtml(unitLabel(q ? q.area : "").toUpperCase()) + "</span>" +
       "</div>";
 
-    if (!q) {
-      html += '<div class="card"><p class="notice">Question ' + escapeHtml(id) + " is no longer in the bank.</p></div>";
-    } else {
-      html += '<div class="chips-row">' +
-        '<span class="badge badge-area">' + escapeHtml(unitLabel(q.area)) + " · " + escapeHtml(UNIT_SHORT[q.area] || q.areaName || "") + "</span>" +
-        '<span class="badge">' + escapeHtml(q.topic) + "</span>" +
-        (review ? '<span class="badge badge-time">' + icon("clock", 12) + fmtTime(s.results[cursor].ms) + "</span>" : "") +
-        '<span class="badge">' + escapeHtml(q.skill) + " · " + difficultyLabel(q.difficulty) + "</span>" +
-        (isRepeat ? '<span class="badge badge-repeat">' + icon("history", 12) + "Repeat</span>" : "") +
-        (isExtra(q) ? '<span class="badge badge-tcp" title="Topic moved to the TCP discipline in the 2026 Blueprint">TCP</span>' : "") +
-        '<span class="badge">' + escapeHtml(q.id) + "</span>" +
-        "</div>";
+    // ---- Toolbar: clock, tools, end test
+    html += '<div class="exam-toolbar">' +
+      '<div class="exam-clock' + (clockOn ? " on" : "") + '">' +
+        '<span class="exam-play" aria-hidden="true">' + icon("play", 22) + "</span>" +
+        '<span class="exam-digits" id="t-question">' + fmtClock(clockOn ? qElapsed : 0) + "</span>" +
+        '<span class="exam-clock-label">QUESTION<br>TIME ELAPSED <span class="exam-info" title="' +
+          (clockOn ? "Time spent on this question. The clock runs only while the question is on screen and unanswered." : "Clock hidden while solving. Turn on “Show timers” on Home to see it.") +
+        '">i</span></span>' +
+      "</div>" +
+      '<div class="exam-tools">' +
+        '<button type="button" class="exam-tool" id="tool-calc">' + icon("calc", 30) + "<span>CALC.</span></button>" +
+        '<button type="button" class="exam-tool" id="tool-overview">' + icon("list", 30) + "<span>OVERVIEW</span></button>" +
+        '<button type="button" class="exam-tool" id="tool-help">' + icon("help", 30) + "<span>HELP</span></button>" +
+      "</div>" +
+      (review
+        ? '<button type="button" class="exam-end" id="btn-back-summary">BACK TO SUMMARY</button>'
+        : '<button type="button" class="exam-end" id="btn-finish">END TEST</button>') +
+      "</div>";
 
-      html += '<div class="card qcard">' +
-        '<div class="stem md">' + renderMd(q.stem) + "</div>";
-      if (q.reference && String(q.reference).trim()) {
-        html += '<details class="reference" open><summary>' + icon("book", 14) + '<span class="eyebrow">Reference</span></summary><div class="md">' + renderMd(q.reference) + "</div></details>";
-      }
-      html += '<div class="options' + (reveal ? " reveal" : "") + '">';
-      (q.options || []).forEach(function (o) {
-        var cls = "option";
-        var tag = "";
-        if (ans) {
-          cls += " locked";
-          if (o.key === q.answer) { cls += " is-correct"; tag = icon("check", 13) + "Correct answer"; }
-          else if (ans.chosen === o.key) { cls += " is-wrong"; tag = icon("x", 13) + "Your answer"; }
-          else cls += " is-dim";
-          if (ans.chosen == null && o.key === q.answer) tag = icon("check", 13) + "Correct answer (you skipped this)";
-        }
-        html += '<div class="' + cls + '">' +
-          '<button type="button" class="option-btn" data-key="' + escapeHtml(o.key) + '"' + (ans ? ' aria-disabled="true"' : "") + ">" +
-          '<span class="key">' + escapeHtml(o.key) + '</span><span class="md">' + renderMd(o.text) + "</span></button>";
-        if (ans) {
-          html += '<div class="explanation">' + (tag ? '<div class="option-tag">' + tag + "</div>" : "") +
-            '<div class="md">' + renderMd(q.explanations && q.explanations[o.key]) + "</div></div>";
-        }
-        html += "</div>";
-      });
-      html += "</div>";
-      if (!ans && !review) html += '<div class="kbd-hint"><kbd>A</kbd>–<kbd>D</kbd> or <kbd>1</kbd>–<kbd>4</kbd> to answer · <kbd>←</kbd> <kbd>→</kbd> to move</div>';
-      html += "</div>";
-    }
-
-    // Bottom navigation bar
-    html += '<div class="qnav">' +
-      '<button type="button" class="btn-ghost btn-icon" id="btn-prev" aria-label="Previous"' + (cursor === 0 ? " disabled" : "") + ">" + icon("left", 18) + "</button>" +
-      '<button type="button" class="btn-ghost btn-icon" id="btn-next" aria-label="Next"' + (cursor === ids.length - 1 ? " disabled" : "") + ">" + icon("right", 18) + "</button>" +
-      '<div class="strip">';
+    // ---- Number strip
+    html += '<div class="exam-strip" role="navigation" aria-label="Questions">';
     ids.forEach(function (qid, i) {
       var a = review ? reviewAnswer(s.results[i]) : s.answers[qid];
       var cls = a ? (a.chosen == null ? "skipped" : a.correct ? "correct" : "wrong") : "";
       if (i === cursor) cls += " current";
+      if (!review && flags[qid]) cls += " flagged";
       html += '<button type="button" class="' + cls + '" data-jump="' + i + '" title="' + escapeHtml(qid) + '">' + (i + 1) + "</button>";
     });
-    html += "</div>" +
-      (review
-        ? '<button type="button" class="btn-ghost" id="btn-back-summary">' + icon("left") + "Summary</button>"
-        : '<button type="button" class="btn-primary" id="btn-finish">' + icon("flag") + "Finish</button>") +
-      '<div id="finish-confirm" style="flex-basis:100%"></div></div>';
+    html += "</div>";
+
+    // ---- Question card
+    html += '<div class="exam-card">' +
+      '<div class="exam-qhead">' +
+        '<div class="exam-qnav">' +
+          '<button type="button" class="exam-arrow" id="btn-prev" aria-label="Previous"' + (cursor === 0 ? " disabled" : "") + ">" + icon("tri-left", 18) + "</button>" +
+          '<span class="exam-qnum">' + (cursor + 1) +
+            (review ? "" : '<button type="button" class="exam-flag' + (flagged ? " on" : "") + '" id="btn-flag" title="' + (flagged ? "Remove flag" : "Flag for review") + '" aria-pressed="' + flagged + '">' + icon("flag-solid", 16) + "</button>") +
+          "</span>" +
+          '<button type="button" class="exam-arrow" id="btn-next" aria-label="Next"' + (cursor === ids.length - 1 ? " disabled" : "") + ">" + icon("tri-right", 18) + "</button>" +
+          '<span class="exam-qid">' + escapeHtml(id) + '</span>' +
+          '<span class="exam-qmeta">' + (cursor + 1) + " of " + ids.length + "</span>" +
+        "</div>" +
+        '<div class="exam-pills">' +
+          (isRepeat ? '<span class="exam-pill pill-repeat">Repeat</span>' : "") +
+          (isExtra(q) ? '<span class="exam-pill pill-tcp" title="Topic moved to the TCP discipline in the 2026 Blueprint">Beyond 2026 REG</span>' : "") +
+          (review ? '<span class="exam-pill pill-time">' + fmtTime(s.results[cursor].ms) + "</span>" : "") +
+          (q ? '<span class="exam-pill">' + escapeHtml(q.skill) + "</span>" : "") +
+          (q ? '<span class="exam-pill pill-topic" title="' + escapeHtml(q.topic) + '">' + escapeHtml(UNIT_SHORT[q.area] || q.areaName || "") + "</span>" : "") +
+        "</div>" +
+      "</div>";
+
+    html += '<div class="exam-body">';
+    if (!q) {
+      html += '<p class="notice">Question ' + escapeHtml(id) + " is no longer in the bank.</p>";
+    } else {
+      html += '<div class="exam-stem md">' + renderMd(q.stem) + "</div>";
+      if (q.reference && String(q.reference).trim()) {
+        html += '<details class="exam-ref" open><summary>' + icon("book", 14) + "<span>Reference</span></summary><div class=\"md\">" + renderMd(q.reference) + "</div></details>";
+      }
+      html += '<div class="exam-options' + (ans ? " locked" : "") + '" role="radiogroup">';
+      (q.options || []).forEach(function (o) {
+        var cls = "exam-option";
+        var chosen = !!ans && ans.chosen === o.key;
+        if (ans) {
+          if (chosen) cls += ans.correct ? " chosen-correct" : " chosen-wrong";
+          else if (o.key === q.answer) cls += " is-answer";
+        }
+        html += '<button type="button" class="' + cls + '" data-key="' + escapeHtml(o.key) + '" role="radio" aria-checked="' + chosen + '"' + (ans ? ' aria-disabled="true"' : "") + ">" +
+          '<span class="exam-radio" aria-hidden="true"></span>' +
+          '<span class="exam-letter">' + escapeHtml(o.key) + ".</span>" +
+          '<span class="exam-otext md">' + renderMd(o.text) + "</span></button>";
+      });
+      html += "</div>";
+
+      if (ans) {
+        var skipped = ans.chosen == null;
+        html += '<div class="exam-result ' + (ans.correct ? "ok" : "bad") + (reveal ? " reveal" : "") + '">' +
+          '<span class="exam-result-ico">' + icon(ans.correct ? "check" : "x", 14) + "</span>" +
+          (ans.correct ? "Your answer is correct!" : skipped ? "You skipped this question, the correct answer is " + escapeHtml(q.answer) + "." : "Your answer is incorrect, the correct answer is " + escapeHtml(q.answer) + ".") +
+          "</div>";
+
+        html += '<div class="exam-expl' + (reveal ? " reveal" : "") + '"><h3>Explanation</h3>';
+        var ex = q.explanations || {};
+        var keys = (q.options || []).map(function (o) { return o.key; });
+        html += '<p><b>Choice "' + escapeHtml(q.answer) + '" is correct.</b> ' + renderInline(ex[q.answer]) + "</p>";
+        keys.forEach(function (k) {
+          if (k === q.answer) return;
+          html += '<p><b>Choice "' + escapeHtml(k) + '" is incorrect.</b> ' + renderInline(ex[k]) + "</p>";
+        });
+        html += "</div>";
+      } else if (!review) {
+        html += '<div class="exam-hint"><kbd>A</kbd>–<kbd>D</kbd> or <kbd>1</kbd>–<kbd>4</kbd> to answer · <kbd>←</kbd> <kbd>→</kbd> to move · <kbd>F</kbd> to flag</div>';
+      }
+    }
+    html += "</div>"; // exam-body
+
+    html += '<div class="exam-foot">' +
+      '<button type="button" class="exam-arrow lg" id="btn-prev2" aria-label="Previous"' + (cursor === 0 ? " disabled" : "") + ">" + icon("tri-left", 26) + "</button>" +
+      '<button type="button" class="exam-arrow lg" id="btn-next2" aria-label="Next"' + (cursor === ids.length - 1 ? " disabled" : "") + ">" + icon("tri-right", 26) + "</button>" +
+      "</div>";
+    html += "</div>"; // exam-card
+    html += '<div id="finish-confirm"></div>';
+    html += "</div>"; // exam
 
     root.innerHTML = html;
     showView("session");
 
-    // Wire up
-    $("#btn-prev", root).addEventListener("click", function () { navigate(cursor - 1); });
-    $("#btn-next", root).addEventListener("click", function () { navigate(cursor + 1); });
+    // ---- Wire up
+    ["#btn-prev", "#btn-prev2"].forEach(function (sel) { $(sel, root).addEventListener("click", function () { navigate(cursor - 1); }); });
+    ["#btn-next", "#btn-next2"].forEach(function (sel) { $(sel, root).addEventListener("click", function () { navigate(cursor + 1); }); });
     $all("[data-jump]", root).forEach(function (b) {
       b.addEventListener("click", function () { navigate(parseInt(b.getAttribute("data-jump"), 10)); });
     });
+    $("#exam-home", root).addEventListener("click", function () {
+      if (!review) { Timer.pause(s); persistSession(); Timer.stopTicking(); }
+      renderHome();
+    });
+    $("#tool-calc", root).addEventListener("click", openCalculator);
+    $("#tool-overview", root).addEventListener("click", function () { openOverview(ids, s, review, cursor, navigate); });
+    $("#tool-help", root).addEventListener("click", openHelp);
     if (!ans && !review) {
-      $all(".option-btn", root).forEach(function (b) {
+      $all(".exam-option", root).forEach(function (b) {
         b.addEventListener("click", function () { answerQuestion(b.getAttribute("data-key")); });
       });
+    }
+    if (!review) {
+      $("#btn-flag", root).addEventListener("click", function () { toggleFlag(); });
     }
     if (review) {
       $("#btn-back-summary", root).addEventListener("click", function () { renderSummary(s); });
@@ -893,6 +955,135 @@
       if (review) { review.index = Math.max(0, Math.min(i, ids.length - 1)); renderSession(); }
       else gotoQuestion(i);
     }
+  }
+
+  /** Inline markdown (bold only), for explanation paragraphs. */
+  function renderInline(text) {
+    text = text == null ? "" : String(text).replace(/^\s*(correct|incorrect)\.?\s*/i, ""); // the bold "Choice X is ..." prefix already says it
+    return escapeHtml(text).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\n+/g, " ");
+  }
+
+  /** mm:ss (hours roll into minutes) for the exam clock. */
+  function fmtClock(ms) {
+    var t = Math.max(0, Math.floor((ms || 0) / 1000));
+    var m = Math.floor(t / 60), sec = t % 60;
+    return (m < 10 ? "0" : "") + m + ":" + (sec < 10 ? "0" : "") + sec;
+  }
+
+  function toggleFlag() {
+    var s = state.session;
+    if (!s) return;
+    var id = s.questionIds[s.cursor];
+    s.flags = s.flags || {};
+    if (s.flags[id]) delete s.flags[id]; else s.flags[id] = true;
+    persistSession();
+    var btn = $("#btn-flag", views.session), strip = $('.exam-strip [data-jump="' + s.cursor + '"]', views.session);
+    if (btn) { btn.classList.toggle("on", !!s.flags[id]); btn.setAttribute("aria-pressed", String(!!s.flags[id])); btn.title = s.flags[id] ? "Remove flag" : "Flag for review"; }
+    if (strip) strip.classList.toggle("flagged", !!s.flags[id]);
+  }
+
+  /** Generic overlay panel (title + arbitrary HTML). Returns close(). */
+  function openPanel(title, bodyHtml, cls) {
+    closeModal();
+    var prev = document.activeElement;
+    var wrap = document.createElement("div");
+    wrap.className = "modal-backdrop"; wrap.id = "modal";
+    wrap.innerHTML = '<div class="modal panel ' + (cls || "") + '" role="dialog" aria-modal="true" aria-labelledby="modal-title">' +
+      '<div class="panel-head"><h2 id="modal-title">' + escapeHtml(title) + '</h2><button type="button" class="panel-close" aria-label="Close">' + icon("x", 16) + "</button></div>" +
+      '<div class="panel-body">' + bodyHtml + "</div></div>";
+    document.body.appendChild(wrap);
+    document.body.classList.add("modal-open");
+    function close() {
+      if (!wrap.parentNode) return;
+      wrap.remove(); document.body.classList.remove("modal-open");
+      document.removeEventListener("keydown", onKey, true);
+      if (prev && prev.focus) prev.focus();
+    }
+    function onKey(e) { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); } }
+    document.addEventListener("keydown", onKey, true);
+    wrap.addEventListener("click", function (e) { if (e.target === wrap) close(); });
+    $(".panel-close", wrap).addEventListener("click", close);
+    return { el: wrap, close: close };
+  }
+
+  function openOverview(ids, s, review, cursor, navigate) {
+    var flags = (!review && s.flags) || {};
+    var rows = ids.map(function (qid, i) {
+      var a = review ? reviewAnswer(s.results[i]) : s.answers[qid];
+      var st = a ? (a.chosen == null ? "Skipped" : a.correct ? "Correct" : "Incorrect") : (review ? "Skipped" : "Unanswered");
+      var cls = a ? (a.chosen == null ? "skipped" : a.correct ? "correct" : "wrong") : "";
+      var qq = BY_ID[qid];
+      return '<button type="button" class="ov-row' + (i === cursor ? " current" : "") + '" data-ov="' + i + '">' +
+        '<span class="ov-num">' + (i + 1) + "</span>" +
+        '<span class="ov-topic">' + escapeHtml(qq ? qq.topic : qid) + "</span>" +
+        (flags[qid] ? '<span class="ov-flag" title="Flagged">' + icon("flag-solid", 12) + "</span>" : "") +
+        '<span class="ov-status ' + cls + '">' + st + "</span></button>";
+    }).join("");
+    var answered = ids.filter(function (qid, i) { return review ? true : !!s.answers[qid]; }).length;
+    var p = openPanel("Overview", '<p class="ov-sum">' + answered + " of " + ids.length + " answered" + (Object.keys(flags).length ? " · " + Object.keys(flags).length + " flagged" : "") + "</p>" +
+      '<div class="ov-list">' + rows + "</div>", "panel-wide");
+    $all("[data-ov]", p.el).forEach(function (b) {
+      b.addEventListener("click", function () { p.close(); navigate(parseInt(b.getAttribute("data-ov"), 10)); });
+    });
+  }
+
+  function openHelp() {
+    openPanel("Help", '<ul class="help-list">' +
+      "<li><b>Answer</b>: click a choice, or press <kbd>A</kbd>–<kbd>D</kbd> / <kbd>1</kbd>–<kbd>4</kbd>. Feedback and the explanation appear immediately.</li>" +
+      "<li><b>Move</b>: the arrows, <kbd>←</kbd> <kbd>→</kbd>, or the numbers above the question.</li>" +
+      "<li><b>Flag</b>: the flag next to the question number, or <kbd>F</kbd>. Flags show in the number strip and Overview.</li>" +
+      "<li><b>Overview</b>: lists every question with its status; click one to jump.</li>" +
+      "<li><b>Calc.</b>: a basic calculator, as on the real exam.</li>" +
+      "<li><b>End Test</b>: records unanswered questions as skipped and shows your summary.</li>" +
+      "<li><b>Practice Test</b> (top left) returns Home; the session is saved and can be resumed.</li>" +
+      "</ul>");
+  }
+
+  /* ---------- Calculator ---------- */
+  var calc = { display: "0", acc: null, op: null, fresh: true };
+  function calcApply(a, op, b) {
+    if (op === "+") return a + b; if (op === "-") return a - b; if (op === "*") return a * b;
+    if (op === "/") return b === 0 ? NaN : a / b; return b;
+  }
+  function calcFormat(n) {
+    if (!isFinite(n)) return "Error";
+    var s = String(+n.toPrecision(12));
+    return s.length > 16 ? n.toExponential(8) : s;
+  }
+  function calcPress(k) {
+    var c = calc;
+    if (k === "C") { c.display = "0"; c.acc = null; c.op = null; c.fresh = true; return; }
+    if (k === "⌫") { if (c.fresh) return; c.display = c.display.length > 1 ? c.display.slice(0, -1) : "0"; return; }
+    if (k === "±") { if (c.display !== "0") c.display = c.display.charAt(0) === "-" ? c.display.slice(1) : "-" + c.display; return; }
+    if (k === "%") { c.display = calcFormat(parseFloat(c.display) / 100); c.fresh = true; return; }
+    if (k === ".") { if (c.fresh) { c.display = "0."; c.fresh = false; } else if (c.display.indexOf(".") < 0) c.display += "."; return; }
+    if (/^[0-9]$/.test(k)) { if (c.fresh || c.display === "0") { c.display = k; c.fresh = false; } else if (c.display.length < 16) c.display += k; return; }
+    var cur = parseFloat(c.display);
+    if (k === "=") {
+      if (c.op != null && c.acc != null) { c.display = calcFormat(calcApply(c.acc, c.op, cur)); c.acc = null; c.op = null; }
+      c.fresh = true; return;
+    }
+    // operator
+    if (c.op != null && c.acc != null && !c.fresh) { c.acc = calcApply(c.acc, c.op, cur); c.display = calcFormat(c.acc); }
+    else c.acc = cur;
+    c.op = k; c.fresh = true;
+  }
+  function openCalculator() {
+    var keys = ["C", "⌫", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "±", "0", ".", "="];
+    var labels = { "/": "÷", "*": "×", "-": "−" };
+    var p = openPanel("Calculator", '<div class="calc"><div class="calc-display" id="calc-display">' + escapeHtml(calc.display) + '</div><div class="calc-keys">' +
+      keys.map(function (k) { return '<button type="button" class="calc-key' + (/[0-9.]/.test(k) ? "" : k === "=" ? " eq" : " op") + '" data-ck="' + escapeHtml(k) + '">' + escapeHtml(labels[k] || k) + "</button>"; }).join("") +
+      "</div></div>", "panel-calc");
+    function refresh() { $("#calc-display", p.el).textContent = calc.display; }
+    $all("[data-ck]", p.el).forEach(function (b) { b.addEventListener("click", function () { calcPress(b.getAttribute("data-ck")); refresh(); }); });
+    var map = { Enter: "=", Backspace: "⌫", Delete: "C", Escape: null, x: "*", X: "*" };
+    function onKey(e) {
+      if (e.key === "Escape") return;
+      var k = map.hasOwnProperty(e.key) ? map[e.key] : e.key;
+      if (k && (/^[0-9.]$/.test(k) || "+-*/=%".indexOf(k) >= 0 || k === "⌫" || k === "C")) { e.preventDefault(); e.stopPropagation(); calcPress(k); refresh(); }
+    }
+    p.el.addEventListener("keydown", onKey);
+    var first = $('[data-ck="7"]', p.el); if (first) first.focus();
   }
 
   function reviewAnswer(r) {
@@ -914,9 +1105,8 @@
   function tick() {
     var s = state.session;
     if (!s || state.view !== "session") return;
-    var ts = $("#t-session"), tq = $("#t-question");
-    if (ts) ts.textContent = fmtTime(sessionElapsed(s));
-    if (tq) tq.textContent = fmtTime(Timer.elapsed(s, s.questionIds[s.cursor]));
+    var tq = $("#t-question");
+    if (tq) tq.textContent = fmtClock(Timer.elapsed(s, s.questionIds[s.cursor]));
   }
 
   function requestFinish() {
@@ -924,9 +1114,15 @@
     if (!s) return;
     var unanswered = s.questionIds.filter(function (id) { return !s.answers[id]; }).length;
     if (unanswered === 0) { finishSession(); return; }
-    inlineConfirm($("#finish-confirm", views.session),
-      unanswered + " unanswered question" + (unanswered === 1 ? "" : "s") + " will be recorded as skipped. Finish anyway?",
-      finishSession);
+    openModal({
+      title: "End test?",
+      body: unanswered + " unanswered question" + (unanswered === 1 ? "" : "s") + " will be recorded as skipped. You cannot return to this testlet.",
+      buttons: [
+        { label: "Keep going", cls: "btn-ghost" },
+        { label: "End test", cls: "btn-danger", icon: "flag", onClick: function () { finishSession(); } }
+      ],
+      focus: 0
+    });
   }
 
   /** Build results, merge into history, archive the session, show summary. */
@@ -1039,8 +1235,10 @@
     if (state.view !== "session") return;
     var tag = (e.target && e.target.tagName) || "";
     if (tag === "INPUT" || tag === "TEXTAREA" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if ($("#modal")) return; // calculator / overview / confirm open
     var review = state.review, s = review ? review.session : state.session;
     if (!s) return;
+    if (!review && (e.key === "f" || e.key === "F")) { e.preventDefault(); toggleFlag(); return; }
     var len = review ? s.results.length : s.questionIds.length;
     var cursor = review ? review.index : s.cursor;
     if (e.key === "ArrowLeft") {
