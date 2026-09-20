@@ -40,7 +40,7 @@
       var doomed = [];
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf(PREFIX) === 0 && k !== PREFIX + "theme" && k !== PREFIX + "scope" && k !== PREFIX + "units") doomed.push(k); // keep theme/scope/units preferences
+        if (k && k.indexOf(PREFIX) === 0 && k !== PREFIX + "theme" && k !== PREFIX + "scope" && k !== PREFIX + "units" && k !== PREFIX + "showTimers") doomed.push(k); // keep theme/scope/units/showTimers preferences
       }
       doomed.forEach(function (k) { localStorage.removeItem(k); });
     } catch (e) {}
@@ -65,6 +65,13 @@
   var EXTRA_TAG = "beyond-2026-REG-blueprint";
   function isExtra(q) { return !!(q && Array.isArray(q.tags) && q.tags.indexOf(EXTRA_TAG) >= 0); }
   var EXTRA_COUNT = BANK.filter(isExtra).length;
+  /** Misc preferences. showTimers: "1" when the session clocks should be visible (default off). */
+  var Prefs = {
+    showTimers: {
+      get: function () { return load("showTimers", null) === "1"; },
+      set: function (on) { if (on) save("showTimers", "1"); else remove("showTimers"); }
+    }
+  };
   var Scope = {
     get: function () { return load("scope", "reg") === "all" ? "all" : "reg"; },
     set: function (v) { save("scope", v === "all" ? "all" : "reg"); }
@@ -418,9 +425,9 @@
       if (session.timerStartedAt && session.questionIds[session.cursor] === id) ms += Date.now() - session.timerStartedAt;
       return ms;
     },
-    startTicking: function (fn) {
+    startTicking: function (fn, ms) {
       Timer.stopTicking();
-      Timer.interval = setInterval(fn, 500);
+      Timer.interval = setInterval(fn, ms || 1000);
     },
     stopTicking: function () {
       if (Timer.interval) { clearInterval(Timer.interval); Timer.interval = null; }
@@ -618,6 +625,8 @@
       '<input type="number" id="batch-size" min="1" max="' + bank.length + '" value="' + def + '">' +
       '<button type="button" data-step="1" aria-label="More">+</button></div>' +
       '<button type="button" class="btn-primary btn-lg" id="btn-start">' + icon("play", 18) + "Start session</button></div>" +
+      '<label class="switch-row" for="show-timers"><span class="switch"><input type="checkbox" id="show-timers" role="switch"' + (Prefs.showTimers.get() ? " checked" : "") + '><span class="knob"></span></span>' +
+      '<span><span class="switch-label">Show timers while answering</span><span class="muted small switch-hint">Off keeps the pressure away; times are always shown in the summary.</span></span></label>' +
       '<div class="chips">' + [10, 20, 30, 50].filter(function (n) { return n < bank.length; }).map(function (n) {
         return '<button type="button" class="chip" data-pick="' + n + '">' + n + "</button>";
       }).join("") + '<button type="button" class="chip" data-pick="' + bank.length + '">All ' + bank.length + "</button></div>" +
@@ -641,6 +650,7 @@
     }
 
     var input = $("#batch-size", root);
+    $("#show-timers", root).addEventListener("change", function (e) { Prefs.showTimers.set(!!e.target.checked); }); // pref only, no rebuild
     $all("[data-unit]", root).forEach(function (b) {
       b.addEventListener("click", function () { if (Units.toggle(b.getAttribute("data-unit"))) renderHome({ keepScroll: true }); });
     });
@@ -784,11 +794,16 @@
     var answeredCount = review ? ids.length : Object.keys(s.answers).length;
     var reveal = !review && state.justAnswered === id;
     state.justAnswered = null;
+    var showTimers = Prefs.showTimers.get();
 
     var html = '<div class="progress"><span style="--w:' + Math.round(100 * answeredCount / ids.length) + '%"></span></div>';
     html += '<div class="session-header">' +
       '<div class="counter">Question ' + (cursor + 1) + ' <span class="muted" style="font-weight:500">of ' + ids.length + "</span>" +
       (review ? '<span class="badge badge-review">' + icon("eye", 12) + "Review</span>" : "") + "</div>" +
+      (!review && showTimers
+        ? '<div class="timers"><span class="tpill">Session <b id="t-session">' + fmtTime(sessionElapsed(s)) + "</b></span>" +
+          '<span class="tpill' + (ans ? "" : " running") + '"><span class="dot"></span>Question <b id="t-question">' + fmtTime(Timer.elapsed(s, id)) + "</b></span></div>"
+        : "") +
       "</div>";
 
     if (!q) {
@@ -870,7 +885,8 @@
       Timer.stopTicking();
     } else {
       $("#btn-finish", root).addEventListener("click", function () { requestFinish(); });
-      Timer.stopTicking(); // clocks are not shown while solving; accumulation still runs via Timer.start/pause
+      // Clocks are optional; accumulation always runs via Timer.start/pause.
+      if (showTimers) Timer.startTicking(tick, 1000); else Timer.stopTicking();
     }
 
     function navigate(i) {
@@ -893,6 +909,15 @@
     return total;
   }
 
+
+  /** Update the header clocks (only rendered when Prefs.showTimers is on). */
+  function tick() {
+    var s = state.session;
+    if (!s || state.view !== "session") return;
+    var ts = $("#t-session"), tq = $("#t-question");
+    if (ts) ts.textContent = fmtTime(sessionElapsed(s));
+    if (tq) tq.textContent = fmtTime(Timer.elapsed(s, s.questionIds[s.cursor]));
+  }
 
   function requestFinish() {
     var s = state.session;
@@ -1090,7 +1115,7 @@
   Theme.apply(Theme.get());
 
   // Expose a few internals for testing / debugging in the console.
-  window.CPAREG = { selectBatch: selectBatch, renderMd: renderMd, buildExport: buildExport, fmtTime: fmtTime, computeStats: computeStats, Theme: Theme, Scope: Scope, Units: Units, pool: pool, UNIT_ORDER: UNIT_ORDER, UNIT_NUMBER: UNIT_NUMBER };
+  window.CPAREG = { selectBatch: selectBatch, renderMd: renderMd, buildExport: buildExport, fmtTime: fmtTime, computeStats: computeStats, Theme: Theme, Scope: Scope, Units: Units, Prefs: Prefs, pool: pool, UNIT_ORDER: UNIT_ORDER, UNIT_NUMBER: UNIT_NUMBER };
 
   renderHome();
 })();
