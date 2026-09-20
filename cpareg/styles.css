@@ -296,6 +296,31 @@ input[type="number"]:focus-visible { outline: none; box-shadow: var(--focus-ring
 .seg button[aria-pressed="true"] { background: var(--surface-solid); color: var(--text); box-shadow: var(--shadow); }
 .badge-tcp { background: rgba(20, 184, 166, 0.14); color: var(--accent-3); border-color: transparent; }
 
+/* Unit chips */
+.unit-chip { gap: 4px; }
+.unit-chip .unit-n { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 6px; background: var(--surface-3); font-size: 0.7rem; }
+.unit-chip.active .unit-n { background: var(--accent); color: var(--on-accent); }
+.badge-time { font-family: var(--mono); }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: var(--s4);
+  background: rgba(0, 0, 0, 0.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  animation: fade 0.16s var(--ease);
+}
+@keyframes fade { from { opacity: 0; } }
+.modal {
+  width: min(480px, 100%); background: var(--surface-solid); border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl); padding: var(--s6); box-shadow: var(--shadow-lg), inset 0 1px 0 var(--inner-highlight);
+  animation: rise 0.2s var(--ease);
+}
+.modal h2 { margin-bottom: var(--s2); font-size: 1.3rem; }
+.modal p { color: var(--text-2); margin-bottom: var(--s5); }
+.modal-actions { justify-content: flex-end; }
+.btn-danger.btn-solid { background: var(--danger-2); color: var(--on-accent); border-color: transparent; }
+.btn-danger.btn-solid:hover { background: var(--danger-2); filter: brightness(1.1); }
+body.modal-open { overflow: hidden; }
+
 /* ---------- Home hero ---------- */
 .hero { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); margin-bottom: var(--s5); }
 .hero .sub { color: var(--text-muted); margin: var(--s2) 0 0; font-size: 1rem; }

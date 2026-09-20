@@ -40,7 +40,7 @@
       var doomed = [];
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf(PREFIX) === 0 && k !== PREFIX + "theme" && k !== PREFIX + "scope") doomed.push(k); // keep theme + scope preferences
+        if (k && k.indexOf(PREFIX) === 0 && k !== PREFIX + "theme" && k !== PREFIX + "scope" && k !== PREFIX + "units") doomed.push(k); // keep theme/scope/units preferences
       }
       doomed.forEach(function (k) { localStorage.removeItem(k); });
     } catch (e) {}
@@ -69,10 +69,38 @@
     get: function () { return load("scope", "reg") === "all" ? "all" : "reg"; },
     set: function (v) { save("scope", v === "all" ? "all" : "reg"); }
   };
-  /** The bank as currently scoped (used by selection and Home stats). */
-  function pool() { return Scope.get() === "all" ? BANK : BANK.filter(function (q) { return !isExtra(q); }); }
+  /* Study units: the user's own order and numbering for the Blueprint areas.
+   * Internal `area` codes stay I–V; these only affect display and ordering. */
+  var UNIT_ORDER = ["IV", "III", "V", "I", "II"];
+  var UNIT_NUMBER = { IV: 1, III: 2, V: 3, I: 4, II: 5 };
+  var UNIT_SHORT = { IV: "Individuals", III: "Property Transactions", V: "Entities", I: "Ethics & Procedures", II: "Business Law" };
+  var AREA_ORDER = UNIT_ORDER;
+  function unitLabel(a) { return UNIT_NUMBER[a] ? "Unit " + UNIT_NUMBER[a] : "Area " + a; }
+  function unitNum(a) { return UNIT_NUMBER[a] ? String(UNIT_NUMBER[a]) : String(a); }
 
-  var AREA_ORDER = ["I", "II", "III", "IV", "V"];
+  /** Selected units, stored as area codes in cpareg.units (all when unset). */
+  var Units = {
+    get: function () {
+      var v = load("units", null);
+      if (!Array.isArray(v)) return UNIT_ORDER.slice();
+      var sel = v.filter(function (a) { return UNIT_ORDER.indexOf(a) >= 0; });
+      return sel.length ? sel : UNIT_ORDER.slice();
+    },
+    set: function (arr) { save("units", arr); },
+    toggle: function (a) {
+      var sel = Units.get();
+      var i = sel.indexOf(a);
+      if (i >= 0) { if (sel.length === 1) return false; sel.splice(i, 1); } else sel.push(a);
+      Units.set(sel); return true;
+    }
+  };
+  /** The bank after the scope filter (no units). */
+  function scopedBank() { return Scope.get() === "all" ? BANK : BANK.filter(function (q) { return !isExtra(q); }); }
+  /** The bank as currently scoped AND unit-filtered (used by selection and Home stats). */
+  function pool() {
+    var sel = Units.get();
+    return scopedBank().filter(function (q) { return sel.indexOf(q.area) >= 0; });
+  }
   var AREA_NAMES = {};
   BANK.forEach(function (q) { if (q.area && q.areaName && !AREA_NAMES[q.area]) AREA_NAMES[q.area] = q.areaName; });
 
@@ -310,7 +338,7 @@
       return ax - ay || y.attempts - x.attempts;
     });
     var strip = function (obj) { var o = Object.assign({}, obj); delete o.totalMs; return o; };
-    var byArea = {}; Object.keys(st.byArea).forEach(function (k) { byArea[k] = strip(st.byArea[k]); });
+    var byArea = {}; Object.keys(st.byArea).forEach(function (k) { byArea[k] = Object.assign({ unit: UNIT_NUMBER[k] || null }, strip(st.byArea[k])); });
     var byTopic = {}; Object.keys(st.byTopic).forEach(function (k) { byTopic[k] = strip(st.byTopic[k]); });
     return {
       exportedAt: new Date().toISOString(),
@@ -449,7 +477,7 @@
     var right = cover
       ? cover.seen + " / " + cover.total + " seen · " + s.attempts + (s.attempts === 1 ? " attempt" : " attempts") + (s.attempts ? " · avg " + fmtTime(s.avgMs) : "")
       : (extraRight || "") + s.attempts + (s.attempts === 1 ? " attempt" : " attempts") + (s.attempts ? " · avg " + fmtTime(s.avgMs) : "");
-    return '<div class="area-row"><div class="area-chip">' + escapeHtml(a) + '</div>' +
+    return '<div class="area-row"><div class="area-chip" title="Blueprint area ' + escapeHtml(a) + '">' + escapeHtml(unitNum(a)) + '</div>' +
       '<div class="area-main"><div class="area-name">' + escapeHtml(AREA_NAMES[a] || "") + "</div>" +
       '<div class="bar"><div class="bar-fill ' + cls + '" style="--w:' + barW + '%"></div></div></div>' +
       '<div class="area-side"><b>' + pct(acc) + (cover ? '</b> <span class="muted">accuracy</span><br>' : "</b><br>") + right + "</div></div>";
@@ -463,6 +491,51 @@
     $("[data-no]", host).addEventListener("click", function () { host.innerHTML = ""; });
     $("[data-yes]", host).focus();
   }
+
+  /**
+   * Modal dialog: centred card over a blurred backdrop, focus trapped, Esc or
+   * backdrop click closes. `buttons` = [{label, cls, onClick(close), keepOpen}].
+   */
+  function openModal(opts) {
+    closeModal();
+    var prev = document.activeElement;
+    var wrap = document.createElement("div");
+    wrap.className = "modal-backdrop"; wrap.id = "modal";
+    wrap.innerHTML = '<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">' +
+      '<h2 id="modal-title">' + escapeHtml(opts.title) + "</h2><p>" + escapeHtml(opts.body) + '</p><div class="btn-row modal-actions">' +
+      opts.buttons.map(function (b, i) { return '<button type="button" class="' + (b.cls || "btn-ghost") + '" data-modal-btn="' + i + '">' + (b.icon ? icon(b.icon) : "") + escapeHtml(b.label) + "</button>"; }).join("") +
+      "</div></div>";
+    document.body.appendChild(wrap);
+    document.body.classList.add("modal-open");
+    function close() {
+      if (!wrap.parentNode) return;
+      wrap.remove(); document.body.classList.remove("modal-open");
+      document.removeEventListener("keydown", onKey, true);
+      if (prev && prev.focus) prev.focus();
+    }
+    function onKey(e) {
+      if (e.key === "Escape") { e.preventDefault(); close(); return; }
+      if (e.key === "Tab") { // trap focus inside the dialog
+        var f = $all("button", wrap); if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+    document.addEventListener("keydown", onKey, true);
+    wrap.addEventListener("click", function (e) { if (e.target === wrap) close(); });
+    $all("[data-modal-btn]", wrap).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var o = opts.buttons[parseInt(b.getAttribute("data-modal-btn"), 10)];
+        if (o.onClick) o.onClick(close);
+        if (!o.keepOpen) close();
+      });
+    });
+    var focusIdx = opts.focus == null ? opts.buttons.length - 1 : opts.focus;
+    $all("[data-modal-btn]", wrap)[focusIdx].focus();
+    return close;
+  }
+  function closeModal() { var m = $("#modal"); if (m) { m.remove(); document.body.classList.remove("modal-open"); } }
 
   /* ---------- Home ---------- */
   function renderHome() {
@@ -524,11 +597,19 @@
     html += "</div></div>";
 
     var def = Math.min(20, bank.length);
+    var scoped = scopedBank(), selUnits = Units.get();
     html += '<div class="card card-lg"><div class="card-head"><h2>New session</h2><span class="eyebrow">~5% repeats, wrong ones first</span></div>' +
       (EXTRA_COUNT ? '<div class="scope-row"><div class="seg" role="group" aria-label="Question scope">' +
         '<button type="button" data-scope="reg" aria-pressed="' + (scope === "reg") + '">2026 REG scope only</button>' +
         '<button type="button" data-scope="all" aria-pressed="' + (scope === "all") + '">Include TCP-scope extras</button></div>' +
         '<span class="muted small">' + EXTRA_COUNT + " questions cover topics the 2026 Blueprint moved to the TCP discipline.</span></div>" : "") +
+      '<div class="small muted" style="margin-bottom:8px">Units</div><div class="chips unit-chips" style="margin:0 0 16px">' +
+      UNIT_ORDER.map(function (a) {
+        var n = 0; scoped.forEach(function (q) { if (q.area === a) n++; });
+        var on = selUnits.indexOf(a) >= 0;
+        return '<button type="button" class="chip unit-chip' + (on ? " active" : "") + '" data-unit="' + a + '" aria-pressed="' + on + '">' +
+          '<span class="unit-n">' + UNIT_NUMBER[a] + "</span> · " + escapeHtml(UNIT_SHORT[a]) + ' <span class="muted">(' + n + ")</span></button>";
+      }).join("") + "</div>" +
       '<label for="batch-size" class="small muted" style="display:block;margin-bottom:8px">How many questions this session?</label>' +
       '<div class="joined"><div class="stepper"><button type="button" data-step="-1" aria-label="Fewer">−</button>' +
       '<input type="number" id="batch-size" min="1" max="' + bank.length + '" value="' + def + '">' +
@@ -541,16 +622,20 @@
       '<button type="button" class="btn-ghost btn-sm" id="btn-export">' + icon("download") + "Export results</button>" +
       '<button type="button" class="btn-ghost btn-sm" id="btn-copy">' + icon("copy") + "Copy JSON</button>" +
       (sessions.length ? '<button type="button" class="btn-ghost btn-sm" id="btn-last">' + icon("history") + "View last session</button>" : "") +
-      '<button type="button" class="btn-danger btn-sm" id="btn-reset">' + icon("trash") + "Reset progress</button>" +
+      '<button type="button" class="btn-danger btn-sm" id="btn-reset">' + icon("trash") + "Reset data</button>" +
       '<span id="copy-status" class="muted small"></span></div>' +
-      '<div id="reset-confirm"></div>' +
       '<p class="muted small" style="margin:16px 0 0">' + sessions.length + (sessions.length === 1 ? " session" : " sessions") + " completed · export the JSON and paste it to Claude for a study plan.</p>" +
       "</div>";
+    // hint under the chips: what the current pool is
+    html = html.replace('<label for="batch-size"', '<p class="muted small unit-hint" style="margin:-8px 0 12px">' + bank.length + " questions in the current pool.</p>" + '<label for="batch-size"');
 
     root.innerHTML = html;
     showView("home");
 
     var input = $("#batch-size", root);
+    $all("[data-unit]", root).forEach(function (b) {
+      b.addEventListener("click", function () { if (Units.toggle(b.getAttribute("data-unit"))) renderHome(); });
+    });
     var clamp = function (n) { n = parseInt(n, 10); if (!n || n < 1) n = 1; if (n > bank.length) n = bank.length; return n; };
     $all("[data-scope]", root).forEach(function (b) {
       b.addEventListener("click", function () { Scope.set(b.getAttribute("data-scope")); renderHome(); });
@@ -599,8 +684,15 @@
       $("#btn-last", root).addEventListener("click", function () { renderSummary(sessions[sessions.length - 1]); });
     }
     $("#btn-reset", root).addEventListener("click", function () {
-      inlineConfirm($("#reset-confirm", root), "Reset ALL progress (history, sessions, in-progress session)? This cannot be undone.", function () {
-        clearAll(); renderHome();
+      openModal({
+        title: "Erase all data?",
+        body: "This permanently deletes your history, sessions and any session in progress. Export your results first if you want to keep them.",
+        focus: 1,
+        buttons: [
+          { label: "Export first", cls: "btn-ghost", icon: "download", keepOpen: true, onClick: function () { downloadJson("cpareg-results-" + dateStamp() + ".json", buildExport()); } },
+          { label: "Cancel", cls: "btn-ghost" },
+          { label: "Erase everything", cls: "btn-danger btn-solid", icon: "trash", onClick: function () { clearAll(); renderHome(); } }
+        ]
       });
     });
   }
@@ -689,18 +781,15 @@
     html += '<div class="session-header">' +
       '<div class="counter">Question ' + (cursor + 1) + ' <span class="muted" style="font-weight:500">of ' + ids.length + "</span>" +
       (review ? '<span class="badge badge-review">' + icon("eye", 12) + "Review</span>" : "") + "</div>" +
-      (review
-        ? '<div class="timers"><span class="tpill">' + icon("clock", 13) + "<b>" + fmtTime(s.results[cursor].ms) + "</b></span></div>"
-        : '<div class="timers"><span class="tpill">Session <b id="t-session">' + fmtTime(sessionElapsed(s)) + "</b></span>" +
-          '<span class="tpill' + (ans ? "" : " running") + '"><span class="dot"></span>Question <b id="t-question">' + fmtTime(Timer.elapsed(s, id)) + "</b></span></div>") +
       "</div>";
 
     if (!q) {
       html += '<div class="card"><p class="notice">Question ' + escapeHtml(id) + " is no longer in the bank.</p></div>";
     } else {
       html += '<div class="chips-row">' +
-        '<span class="badge badge-area">Area ' + escapeHtml(q.area) + "</span>" +
+        '<span class="badge badge-area">' + escapeHtml(unitLabel(q.area)) + " · " + escapeHtml(UNIT_SHORT[q.area] || q.areaName || "") + "</span>" +
         '<span class="badge">' + escapeHtml(q.topic) + "</span>" +
+        (review ? '<span class="badge badge-time">' + icon("clock", 12) + fmtTime(s.results[cursor].ms) + "</span>" : "") +
         '<span class="badge">' + escapeHtml(q.skill) + " · " + difficultyLabel(q.difficulty) + "</span>" +
         (isRepeat ? '<span class="badge badge-repeat">' + icon("history", 12) + "Repeat</span>" : "") +
         (isExtra(q) ? '<span class="badge badge-tcp" title="Topic moved to the TCP discipline in the 2026 Blueprint">TCP</span>' : "") +
@@ -773,7 +862,7 @@
       Timer.stopTicking();
     } else {
       $("#btn-finish", root).addEventListener("click", function () { requestFinish(); });
-      Timer.startTicking(tick);
+      Timer.stopTicking(); // clocks are not shown while solving; accumulation still runs via Timer.start/pause
     }
 
     function navigate(i) {
@@ -796,14 +885,6 @@
     return total;
   }
 
-  /** Update live clocks without re-rendering the whole view. */
-  function tick() {
-    var s = state.session;
-    if (!s || state.view !== "session") return;
-    var ts = $("#t-session"), tq = $("#t-question");
-    if (ts) ts.textContent = fmtTime(sessionElapsed(s));
-    if (tq) tq.textContent = fmtTime(Timer.elapsed(s, s.questionIds[s.cursor]));
-  }
 
   function requestFinish() {
     var s = state.session;
@@ -894,7 +975,7 @@
         : r.correct ? '<span class="rbadge correct">' + icon("check", 12) + "Correct</span>"
         : '<span class="rbadge wrong">' + icon("x", 12) + "Wrong · " + escapeHtml(r.chosen) + "</span>";
       html += '<div class="result-row"><div class="idx">' + (i + 1) + "</div>" +
-        '<div><div class="rtopic">' + escapeHtml(r.topic || r.id) + '</div><div class="rmeta">Area ' + escapeHtml(r.area) + " · <code>" + escapeHtml(r.id) + "</code></div></div>" +
+        '<div><div class="rtopic">' + escapeHtml(r.topic || r.id) + '</div><div class="rmeta">' + escapeHtml(unitLabel(r.area)) + " · " + escapeHtml(UNIT_SHORT[r.area] || "") + " · <code>" + escapeHtml(r.id) + "</code></div></div>" +
         badge + '<div class="rtime">' + fmtTime(r.ms) + "</div>" +
         '<button type="button" class="btn-ghost btn-sm review-btn" data-review="' + i + '"' + (BY_ID[r.id] ? "" : " disabled") + ">Review</button></div>";
     });
@@ -1001,7 +1082,7 @@
   Theme.apply(Theme.get());
 
   // Expose a few internals for testing / debugging in the console.
-  window.CPAREG = { selectBatch: selectBatch, renderMd: renderMd, buildExport: buildExport, fmtTime: fmtTime, computeStats: computeStats, Theme: Theme, Scope: Scope, pool: pool };
+  window.CPAREG = { selectBatch: selectBatch, renderMd: renderMd, buildExport: buildExport, fmtTime: fmtTime, computeStats: computeStats, Theme: Theme, Scope: Scope, Units: Units, pool: pool, UNIT_ORDER: UNIT_ORDER, UNIT_NUMBER: UNIT_NUMBER };
 
   renderHome();
 })();
