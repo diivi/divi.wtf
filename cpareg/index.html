@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CPA REG Practice</title>
+  <!--
+    Theme bootstrap: runs before the stylesheet loads so the page paints in the
+    right theme immediately. Stored choice "light" | "dark" sets data-theme on
+    <html>; anything else (or nothing stored) leaves it unset, which means
+    "follow the system" via prefers-color-scheme in styles.css.
+  -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("cpareg.theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <!-- Inter from Google Fonts; falls back to system-ui when offline / file:// without network -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a href="#" class="brand" id="brand">
+      <span class="logomark" aria-hidden="true">R</span>
+      <span class="wordmark">CPA <span>REG</span></span>
+    </a>
+    <div class="topbar-right">
+      <button type="button" class="btn btn-ghost btn-sm" id="nav-home">Home</button>
+      <div class="theme-switch" role="group" aria-label="Theme" id="theme-switch" data-active="system">
+        <span class="theme-thumb" aria-hidden="true"></span>
+        <button type="button" data-theme-choice="light" title="Light theme" aria-label="Light theme">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button type="button" data-theme-choice="dark" title="Dark theme" aria-label="Dark theme">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button type="button" data-theme-choice="system" title="Follow system theme" aria-label="Follow system theme">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app">
+    <section id="view-home" class="view" hidden></section>
+    <section id="view-session" class="view" hidden></section>
+    <section id="view-summary" class="view" hidden></section>
+  </main>
+
+  <footer class="footer">
+    <span>Progress is stored in this browser's localStorage only.</span>
+  </footer>
+
+  <!--
+    Question bank loader. By default loads ./questions.js. For testing you can
+    point at another bank with ?bank=path/to/other.js (relative to this page).
+    app.js is loaded only after the bank script finishes (or fails), so
+    window.QUESTION_BANK is settled before the app boots.
+  -->
+  <script>
+    (function () {
+      var bank = "questions.js";
+      try {
+        var m = /[?&]bank=([^&#]+)/.exec(location.search);
+        if (m) bank = decodeURIComponent(m[1]);
+      } catch (e) {}
+      function loadApp() {
+        var a = document.createElement("script");
+        a.src = "app.js";
+        document.body.appendChild(a);
+      }
+      var s = document.createElement("script");
+      s.src = bank;
+      s.onload = loadApp;
+      s.onerror = loadApp; // app.js handles a missing bank gracefully
+      document.body.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
