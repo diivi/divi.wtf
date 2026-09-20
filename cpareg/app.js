@@ -337,6 +337,7 @@
   function selectBatch(n, history) {
     history = history || getHistory();
     var bank = pool();
+    var history = getHistory();
     n = Math.max(1, Math.min(n | 0, bank.length));
     var seen = [], unseen = [];
     bank.forEach(function (q) {
@@ -435,14 +436,23 @@
 
   function barClass(acc) { return acc == null ? "" : acc >= 0.7 ? "green" : acc < 0.5 ? "red" : ""; }
 
-  /** One "area" row: chip, name, accuracy bar, attempts/avg on the right. */
-  function areaRow(a, s, extraRight) {
+  /**
+   * One "area" row: chip, name, bar, stats on the right.
+   * If `cover` ({seen,total}) is given the bar shows coverage (seen ÷ in bank) and accuracy is text only;
+   * otherwise (session summary) the bar shows accuracy for that session.
+   */
+  function areaRow(a, s, extraRight, cover) {
     var acc = s.attempts ? s.accuracy : null;
+    var barW, cls;
+    if (cover) { barW = cover.total ? Math.round(cover.seen / cover.total * 100) : 0; cls = ""; }
+    else { barW = acc == null ? 0 : Math.round(acc * 100); cls = barClass(acc); }
+    var right = cover
+      ? cover.seen + " / " + cover.total + " seen · " + s.attempts + (s.attempts === 1 ? " attempt" : " attempts") + (s.attempts ? " · avg " + fmtTime(s.avgMs) : "")
+      : (extraRight || "") + s.attempts + (s.attempts === 1 ? " attempt" : " attempts") + (s.attempts ? " · avg " + fmtTime(s.avgMs) : "");
     return '<div class="area-row"><div class="area-chip">' + escapeHtml(a) + '</div>' +
       '<div class="area-main"><div class="area-name">' + escapeHtml(AREA_NAMES[a] || "") + "</div>" +
-      '<div class="bar"><div class="bar-fill ' + barClass(acc) + '" style="--w:' + (acc == null ? 0 : Math.round(acc * 100)) + '%"></div></div></div>' +
-      '<div class="area-side"><b>' + pct(acc) + "</b><br>" + (extraRight || "") +
-      s.attempts + (s.attempts === 1 ? " attempt" : " attempts") + (s.attempts ? " · avg " + fmtTime(s.avgMs) : "") + "</div></div>";
+      '<div class="bar"><div class="bar-fill ' + cls + '" style="--w:' + barW + '%"></div></div></div>' +
+      '<div class="area-side"><b>' + pct(acc) + (cover ? '</b> <span class="muted">accuracy</span><br>' : "</b><br>") + right + "</div></div>";
   }
 
   /** Small inline yes/no box rendered into `host`. */
@@ -462,6 +472,7 @@
     var active = getActive();
     var sessions = getSessions();
     var bank = pool();
+    var history = getHistory();
     var st = computeStats(bank);
     var t = st.totals;
     var scope = Scope.get();
@@ -499,12 +510,16 @@
       stat("Time studied", fmtTime(t.totalMs), "clock", "amber") +
       "</div>";
 
-    html += '<div class="card"><div class="card-head"><h2>By area</h2><span class="eyebrow">accuracy · attempts</span></div><div class="area-list">';
+    html += '<div class="card"><div class="card-head"><h2>By area</h2><span class="eyebrow">coverage · accuracy</span></div><div class="area-list">';
     var areaKeys = AREA_ORDER.concat(Object.keys(AREA_NAMES).filter(function (a) { return AREA_ORDER.indexOf(a) < 0; }));
-    var bankCount = {}; bank.forEach(function (q) { bankCount[q.area] = (bankCount[q.area] || 0) + 1; });
+    var bankCount = {}, seenCount = {};
+    bank.forEach(function (q) {
+      bankCount[q.area] = (bankCount[q.area] || 0) + 1;
+      if (history[q.id] && history[q.id].seen > 0) seenCount[q.area] = (seenCount[q.area] || 0) + 1;
+    });
     areaKeys.forEach(function (a) {
       if (!AREA_NAMES[a]) return;
-      html += areaRow(a, st.byArea[a] || emptyAgg(), (bankCount[a] || 0) + " in bank · ");
+      html += areaRow(a, st.byArea[a] || emptyAgg(), "", { seen: seenCount[a] || 0, total: bankCount[a] || 0 });
     });
     html += "</div></div>";
 
