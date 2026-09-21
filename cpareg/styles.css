@@ -661,6 +661,7 @@ body.exam-mode #view-session { animation: none; }
   padding: var(--s3) 0; border-top: 1px solid var(--border);
 }
 .result-row:first-child { border-top: none; padding-top: 0; }
+.result-row > div:nth-child(2) { min-width: 0; }
 .result-row .idx { color: var(--text-muted); font-weight: 600; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
 .result-row .rtopic { font-weight: 600; font-size: 0.93rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .result-row .rmeta { color: var(--text-muted); font-size: 0.78rem; margin-top: 2px; }
