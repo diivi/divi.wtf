@@ -37,8 +37,13 @@ No build step is required; the site is plain static files.
 
 - **Home** shows bank size, seen/unseen counts, accuracy, total study time and a
   per-area breakdown. Pick a batch size and press **Start**.
-- Each batch is mostly unseen questions plus ~5% repeats (questions you got
-  wrong or skipped come back first, oldest first). Repeats show a "Repeat" badge.
+- Each batch is mostly unseen questions plus ~5% repeats (flagged questions come
+  back first, then ones you got wrong or skipped, oldest first). Repeats show a
+  "Repeat" badge.
+- **Flags**: press the flag next to the question number (or `F`) during a test or
+  while reviewing one. Flags are kept after the test: they show in the summary,
+  in a **Flagged** section on Home (with Unflag and "Practice all flagged"), and in
+  the export as `flagged` on each question plus a top-level `flagged` id list.
 - **Session**: click an option (or press A–D / 1–4). The correct option turns green,
   a wrong pick turns red, and the explanation for every option is shown. Use
   Prev/Next, the arrow keys, or the numbered strip to move around. Each question's

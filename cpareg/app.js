@@ -339,7 +339,8 @@
         skipped: Math.max(0, seen - (h.correct || 0) - (h.wrong || 0)),
         lastResult: h.lastResult || null,
         lastSeen: iso(h.lastSeen),
-        avgMs: seen ? Math.round((h.totalMs || 0) / seen) : null
+        avgMs: seen ? Math.round((h.totalMs || 0) / seen) : null,
+        flagged: !!h.flagged
       };
     });
     var weakAreas = Object.keys(st.byTopic).map(function (t) {
@@ -361,6 +362,7 @@
       byArea: byArea,
       byTopic: byTopic,
       weakAreas: weakAreas,
+      flagged: flaggedIds(st.history),
       questions: questions,
       sessions: getSessions().map(sessionToExport)
     };
@@ -371,13 +373,13 @@
   /* ------------------------------------------------------------------ */
   /**
    * Pick n question ids: mostly unseen, plus ~5% repeats drawn from
-   * previously-wrong/skipped (oldest first) then correct (oldest first).
+   * flagged questions first, then previously-wrong/skipped (oldest first),
+   * then correct (oldest first).
    * Returns { ids, repeatIds }.
    */
   function selectBatch(n, history) {
     history = history || getHistory();
     var bank = pool();
-    var history = getHistory();
     n = Math.max(1, Math.min(n | 0, bank.length));
     var seen = [], unseen = [];
     bank.forEach(function (q) {
@@ -391,13 +393,27 @@
     if (fresh.length < n - repeats) repeats = Math.min(n - fresh.length, seen.length);
 
     var byLastSeen = function (a, b) { return ((history[a].lastSeen || 0) - (history[b].lastSeen || 0)); };
-    var wrongish = seen.filter(function (id) { var r = history[id].lastResult; return r === "wrong" || r === "skipped"; }).sort(byLastSeen);
-    var right = seen.filter(function (id) { return history[id].lastResult === "correct"; }).sort(byLastSeen);
-    var other = seen.filter(function (id) { return wrongish.indexOf(id) < 0 && right.indexOf(id) < 0; }).sort(byLastSeen);
-    var repeatIds = wrongish.concat(right, other).slice(0, repeats);
+    var flaggedIds = seen.filter(function (id) { return !!history[id].flagged; }).sort(byLastSeen);
+    var rest = seen.filter(function (id) { return !history[id].flagged; });
+    var wrongish = rest.filter(function (id) { var r = history[id].lastResult; return r === "wrong" || r === "skipped"; }).sort(byLastSeen);
+    var right = rest.filter(function (id) { return history[id].lastResult === "correct"; }).sort(byLastSeen);
+    var other = rest.filter(function (id) { return wrongish.indexOf(id) < 0 && right.indexOf(id) < 0; }).sort(byLastSeen);
+    var repeatIds = flaggedIds.concat(wrongish, right, other).slice(0, repeats);
 
     var ids = shuffle(fresh.concat(repeatIds));
     return { ids: ids, repeatIds: repeatIds };
+  }
+
+  /** Ids flagged in history (persist across sessions until unflagged). */
+  function flaggedIds(history) {
+    history = history || getHistory();
+    return Object.keys(history).filter(function (id) { return history[id] && history[id].flagged; });
+  }
+  function setHistoryFlag(id, on) {
+    var history = getHistory();
+    var h = history[id] || (history[id] = { seen: 0, correct: 0, wrong: 0, lastSeen: null, lastResult: null, totalMs: 0 });
+    if (on) h.flagged = true; else delete h.flagged;
+    save(KEYS.history, history);
   }
 
   /* ------------------------------------------------------------------ */
@@ -612,9 +628,32 @@
     });
     html += "</div></div>";
 
+    var flagged = flaggedIds(history).filter(function (id) { return BY_ID[id]; }).sort(function (a, b) {
+      return ((history[b].lastSeen || 0) - (history[a].lastSeen || 0));
+    });
+    html += '<div class="card" id="flagged-card"><div class="card-head"><h2>Flagged</h2><span class="eyebrow">' +
+      (flagged.length ? flagged.length + (flagged.length === 1 ? " question" : " questions") + " · come back first among repeats" : "flag a question during a test to keep it here") + "</span></div>";
+    if (flagged.length) {
+      html += '<div class="result-list">';
+      flagged.forEach(function (id, i) {
+        var q = BY_ID[id], h = history[id];
+        var badge = h.lastResult === "correct" ? '<span class="rbadge correct">' + icon("check", 12) + "Correct</span>"
+          : h.lastResult === "wrong" ? '<span class="rbadge wrong">' + icon("x", 12) + "Wrong</span>"
+          : h.lastResult === "skipped" ? '<span class="rbadge skipped">Skipped</span>' : "";
+        html += '<div class="result-row"><div class="idx">' + (i + 1) + "</div>" +
+          '<div><div class="rtopic">' + escapeHtml(q.topic || id) + '</div><div class="rmeta">' + escapeHtml(unitLabel(q.area)) + " · " + escapeHtml(UNIT_SHORT[q.area] || "") + " · <code>" + escapeHtml(id) + "</code>" +
+          (h.lastSeen ? " · last seen " + escapeHtml(fmtDateTime(h.lastSeen)) : "") + "</div></div>" +
+          badge + '<div class="rtime">' + (h.seen || 0) + "×</div>" +
+          '<button type="button" class="btn-ghost btn-sm" data-unflag="' + escapeHtml(id) + '" title="Remove flag">Unflag</button></div>';
+      });
+      html += "</div>" +
+        '<div class="btn-row" style="margin-top:16px"><button type="button" class="btn-primary btn-sm" id="btn-drill-flagged">' + icon("play") + "Practice all flagged</button></div>";
+    }
+    html += "</div>";
+
     var def = Math.min(20, bank.length);
     var selUnits = Units.get();
-    html += '<div class="card card-lg"><div class="card-head"><h2>New session</h2><span class="eyebrow">~5% repeats, wrong ones first</span></div>' +
+    html += '<div class="card card-lg"><div class="card-head"><h2>New session</h2><span class="eyebrow">~5% repeats · flagged first, then wrong ones</span></div>' +
       (EXTRA_COUNT ? '<div class="scope-row"><div class="seg" role="group" aria-label="Question scope">' +
         '<button type="button" data-scope="reg" aria-pressed="' + (scope === "reg") + '">2026 REG scope only</button>' +
         '<button type="button" data-scope="all" aria-pressed="' + (scope === "all") + '">Include TCP-scope extras</button></div>' +
@@ -685,6 +724,15 @@
       startSession(n);
     });
     input.addEventListener("keydown", function (e) { if (e.key === "Enter") startBtn.click(); });
+    $all("[data-unflag]", root).forEach(function (b) {
+      b.addEventListener("click", function () { setHistoryFlag(b.getAttribute("data-unflag"), false); renderHome({ keepScroll: true }); });
+    });
+    if ($("#btn-drill-flagged", root)) {
+      $("#btn-drill-flagged", root).addEventListener("click", function () {
+        if (getActive() && !confirm("A session is already in progress. Discard it and start a new one?")) return;
+        startSession(flagged.length, flagged);
+      });
+    }
 
     if ($("#btn-resume", root)) {
       $("#btn-resume", root).addEventListener("click", function () { openSession(getActive()); });
@@ -722,8 +770,11 @@
   }
 
   /* ---------- Session ---------- */
-  function startSession(n) {
-    var pick = selectBatch(n);
+  function startSession(n, onlyIds) {
+    var pick = onlyIds ? { ids: shuffle(onlyIds.slice()), repeatIds: onlyIds.slice() } : selectBatch(n);
+    var history = getHistory();
+    var flags = {};
+    pick.ids.forEach(function (id) { if (history[id] && history[id].flagged) flags[id] = true; });
     var session = {
       id: newId(),
       startedAt: Date.now(),
@@ -732,6 +783,7 @@
       cursor: 0,
       answers: {},
       timers: {},
+      flags: flags,
       timerStartedAt: null
     };
     save(KEYS.active, session);
@@ -800,7 +852,8 @@
     var reveal = !review && state.justAnswered === id;
     state.justAnswered = null;
     var showTimers = Prefs.showTimers.get();
-    var flags = (!review && s.flags) || {};
+    var flags = review ? {} : (s.flags || {});
+    if (review) { var rh = getHistory(); ids.forEach(function (qid) { if (rh[qid] && rh[qid].flagged) flags[qid] = true; }); }
     var flagged = !!flags[id];
     var qElapsed = review ? (s.results[cursor].ms || 0) : Timer.elapsed(s, id);
     var clockOn = review || showTimers;
@@ -839,7 +892,7 @@
       var a = review ? reviewAnswer(s.results[i]) : s.answers[qid];
       var cls = a ? (a.chosen == null ? "skipped" : a.correct ? "correct" : "wrong") : "";
       if (i === cursor) cls += " current";
-      if (!review && flags[qid]) cls += " flagged";
+      if (flags[qid]) cls += " flagged";
       html += '<button type="button" class="' + cls + '" data-jump="' + i + '" title="' + escapeHtml(qid) + '">' + (i + 1) + "</button>";
     });
     html += "</div>";
@@ -850,7 +903,7 @@
         '<div class="exam-qnav">' +
           '<button type="button" class="exam-arrow" id="btn-prev" aria-label="Previous"' + (cursor === 0 ? " disabled" : "") + ">" + icon("tri-left", 18) + "</button>" +
           '<span class="exam-qnum">' + (cursor + 1) +
-            (review ? "" : '<button type="button" class="exam-flag' + (flagged ? " on" : "") + '" id="btn-flag" title="' + (flagged ? "Remove flag" : "Flag for review") + '" aria-pressed="' + flagged + '">' + icon("flag-solid", 16) + "</button>") +
+            '<button type="button" class="exam-flag' + (flagged ? " on" : "") + '" id="btn-flag" title="' + (flagged ? "Remove flag" : "Flag for review") + '" aria-pressed="' + flagged + '">' + icon("flag-solid", 16) + "</button>" +
           "</span>" +
           '<button type="button" class="exam-arrow" id="btn-next" aria-label="Next"' + (cursor === ids.length - 1 ? " disabled" : "") + ">" + icon("tri-right", 18) + "</button>" +
           '<span class="exam-qid">' + escapeHtml(id) + '</span>' +
@@ -939,9 +992,7 @@
         b.addEventListener("click", function () { answerQuestion(b.getAttribute("data-key")); });
       });
     }
-    if (!review) {
-      $("#btn-flag", root).addEventListener("click", function () { toggleFlag(); });
-    }
+    $("#btn-flag", root).addEventListener("click", function () { toggleFlag(); });
     if (review) {
       $("#btn-back-summary", root).addEventListener("click", function () { renderSummary(s); });
       Timer.stopTicking();
@@ -971,15 +1022,25 @@
   }
 
   function toggleFlag() {
-    var s = state.session;
+    var review = state.review, s = review ? review.session : state.session;
     if (!s) return;
-    var id = s.questionIds[s.cursor];
-    s.flags = s.flags || {};
-    if (s.flags[id]) delete s.flags[id]; else s.flags[id] = true;
-    persistSession();
-    var btn = $("#btn-flag", views.session), strip = $('.exam-strip [data-jump="' + s.cursor + '"]', views.session);
-    if (btn) { btn.classList.toggle("on", !!s.flags[id]); btn.setAttribute("aria-pressed", String(!!s.flags[id])); btn.title = s.flags[id] ? "Remove flag" : "Flag for review"; }
-    if (strip) strip.classList.toggle("flagged", !!s.flags[id]);
+    var cursor = review ? review.index : s.cursor;
+    var id = review ? s.results[cursor].id : s.questionIds[cursor];
+    var on;
+    if (review) {
+      // After the test, the flag lives in history (persists until unflagged).
+      var h = getHistory()[id];
+      on = !(h && h.flagged);
+      setHistoryFlag(id, on);
+    } else {
+      s.flags = s.flags || {};
+      if (s.flags[id]) delete s.flags[id]; else s.flags[id] = true;
+      on = !!s.flags[id];
+      persistSession();
+    }
+    var btn = $("#btn-flag", views.session), strip = $('.exam-strip [data-jump="' + cursor + '"]', views.session);
+    if (btn) { btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on)); btn.title = on ? "Remove flag" : "Flag for review"; }
+    if (strip) strip.classList.toggle("flagged", on);
   }
 
   /** Generic overlay panel (title + arbitrary HTML). Returns close(). */
@@ -1007,7 +1068,8 @@
   }
 
   function openOverview(ids, s, review, cursor, navigate) {
-    var flags = (!review && s.flags) || {};
+    var flags = review ? {} : (s.flags || {});
+    if (review) { var rh = getHistory(); ids.forEach(function (qid) { if (rh[qid] && rh[qid].flagged) flags[qid] = true; }); }
     var rows = ids.map(function (qid, i) {
       var a = review ? reviewAnswer(s.results[i]) : s.answers[qid];
       var st = a ? (a.chosen == null ? "Skipped" : a.correct ? "Correct" : "Incorrect") : (review ? "Skipped" : "Unanswered");
@@ -1031,7 +1093,7 @@
     openPanel("Help", '<ul class="help-list">' +
       "<li><b>Answer</b>: click a choice, or press <kbd>A</kbd>–<kbd>D</kbd> / <kbd>1</kbd>–<kbd>4</kbd>. Feedback and the explanation appear immediately.</li>" +
       "<li><b>Move</b>: the arrows, <kbd>←</kbd> <kbd>→</kbd>, or the numbers above the question.</li>" +
-      "<li><b>Flag</b>: the flag next to the question number, or <kbd>F</kbd>. Flags show in the number strip and Overview.</li>" +
+      "<li><b>Flag</b>: the flag next to the question number, or <kbd>F</kbd>. Flags show in the number strip and Overview, are kept after the test (see Flagged on Home), and come back first among repeats.</li>" +
       "<li><b>Overview</b>: lists every question with its status; click one to jump.</li>" +
       "<li><b>Calc.</b>: a basic calculator, as on the real exam.</li>" +
       "<li><b>End Test</b>: records unanswered questions as skipped and shows your summary.</li>" +
@@ -1137,15 +1199,18 @@
       var q = BY_ID[id] || {};
       var a = s.answers[id];
       var ms = s.timers[id] || 0;
+      var flagged = !!(s.flags && s.flags[id]);
       var r = {
         id: id, area: q.area || null, topic: q.topic || null,
         chosen: a ? a.chosen : null,
         correct: a ? a.correct : null,
         skipped: !a,
+        flagged: flagged,
         ms: ms
       };
       var h = history[id] || { seen: 0, correct: 0, wrong: 0, lastSeen: null, lastResult: null, totalMs: 0 };
       h.seen = (h.seen || 0) + 1;
+      if (flagged) h.flagged = true; else delete h.flagged; // flag state at end of test wins
       if (a && a.correct) h.correct = (h.correct || 0) + 1;
       else if (a) h.wrong = (h.wrong || 0) + 1;
       h.lastSeen = now;
@@ -1204,7 +1269,7 @@
         : r.correct ? '<span class="rbadge correct">' + icon("check", 12) + "Correct</span>"
         : '<span class="rbadge wrong">' + icon("x", 12) + "Wrong · " + escapeHtml(r.chosen) + "</span>";
       html += '<div class="result-row"><div class="idx">' + (i + 1) + "</div>" +
-        '<div><div class="rtopic">' + escapeHtml(r.topic || r.id) + '</div><div class="rmeta">' + escapeHtml(unitLabel(r.area)) + " · " + escapeHtml(UNIT_SHORT[r.area] || "") + " · <code>" + escapeHtml(r.id) + "</code></div></div>" +
+        '<div><div class="rtopic">' + (r.flagged ? '<span class="ov-flag" title="Flagged">' + icon("flag-solid", 12) + "</span> " : "") + escapeHtml(r.topic || r.id) + '</div><div class="rmeta">' + escapeHtml(unitLabel(r.area)) + " · " + escapeHtml(UNIT_SHORT[r.area] || "") + " · <code>" + escapeHtml(r.id) + "</code></div></div>" +
         badge + '<div class="rtime">' + fmtTime(r.ms) + "</div>" +
         '<button type="button" class="btn-ghost btn-sm review-btn" data-review="' + i + '"' + (BY_ID[r.id] ? "" : " disabled") + ">Review</button></div>";
     });
@@ -1238,7 +1303,7 @@
     if ($("#modal")) return; // calculator / overview / confirm open
     var review = state.review, s = review ? review.session : state.session;
     if (!s) return;
-    if (!review && (e.key === "f" || e.key === "F")) { e.preventDefault(); toggleFlag(); return; }
+    if (e.key === "f" || e.key === "F") { e.preventDefault(); toggleFlag(); return; }
     var len = review ? s.results.length : s.questionIds.length;
     var cursor = review ? review.index : s.cursor;
     if (e.key === "ArrowLeft") {
