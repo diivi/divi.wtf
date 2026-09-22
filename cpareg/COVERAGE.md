@@ -1,6 +1,6 @@
-# REG question bank — Blueprint coverage and review (2026-09-20)
+# REG question bank — Blueprint coverage and review (2026-09-20, updated 2026-09-22)
 
-Source of truth: AICPA *Uniform CPA Examination Blueprints* effective 2026 (REG section, pages REG1–REG17 of the official PDF). Bank: `questions.js`, 145 questions (REG-001 … REG-145). `node validate.js questions.js` → **OK: bank is valid.**
+Source of truth: AICPA *Uniform CPA Examination Blueprints* effective 2026 (REG section, pages REG1–REG17 of the official PDF). Bank: `questions.js`, 178 questions (REG-001 … REG-178). Ids marked `*` in the map are the 33 AICPA Newly Released 2026 REG MCQs (REG-146 … REG-178, source `AICPANewlyReleasedQuestions.pdf`), tagged `AICPA-released-2026`; the release's three "beyond the scope of the CPA Exam" items (repeat examinations, agency advantages, audit adjustments to a later year) and its two simulations were not added. On 2026-09-22 the 122 in-scope original items were restyled to the released-item format (see "Exam style" in `QUESTION_SPEC.md`): no `reference` crib, one rule per item, generic actors, no calendar years, R&U/Application only. Per-row counts in the map below predate the 2026-09-22 additions; run `node validate.js` for live totals. `node validate.js questions.js` → **OK: bank is valid.**
 
 Important finding: the 2026 REG Blueprint is narrower than the writer assumed. Gains/losses on dispositions (§1031, §1033, §121, §267, §1231/§1245), gift/estate tax, AMT, kiddie tax, §351 formation, E&P distributions, liquidations, PHC/AET, consolidated returns, S-corp built-in gains, §751/§754, trusts/estates, UBTI and §911 are **not** in the 2026 REG Blueprint (they sit in the TCP discipline). Those 23 questions were kept (they are accurate and were commissioned), but each carries the tag `beyond-2026-REG-blueprint` and a topic label ending in "(2026 Blueprint: TCP scope)" so the app can filter or de-emphasise them. In-scope count: **122** (I 23, II 29, III 10, IV 35, V 25).
 
@@ -8,51 +8,51 @@ Important finding: the 2026 REG Blueprint is narrower than the writer assumed. G
 
 | Area | Group | Topic | Question ids | # |
 |---|---|---|---|---|
-| I (10–20%) | A. Ethics and responsibilities in tax practice | 1. Regulations governing practice before the IRS (Circular 230) | 001, 002, 003 | 3 |
+| I (10–20%) | A. Ethics and responsibilities in tax practice | 1. Regulations governing practice before the IRS (Circular 230) | 001, 002, 003, 146*, 147* | 3 |
 | I | A. | 2. IRC and Regulations related to tax return preparers (+ AICPA SSTS) | 004, 005, 006, 007, 101 | 5 |
 | I | B. Licensing and disciplinary systems | — | 008, 102 | 2 |
 | I | C. Federal tax procedures | 1. Audits, appeals and the judicial process | 013, 103 | 2 |
 | I | C. | (statute of limitations — assessment/refund, within Group C) | 009, 010 | 2 |
-| I | C. | 2. Substantiation and disclosure | 104, 105, 107 | 3 |
-| I | C. | 3. Taxpayer penalties | 011, 012 | 2 |
+| I | C. | 2. Substantiation and disclosure | 104, 105, 107, 148* | 3 |
+| I | C. | 3. Taxpayer penalties | 011, 012, 149* | 2 |
 | I | C. | 4. Authoritative hierarchy | 106 | 1 |
 | I | D. Legal duties and responsibilities | 1. Common law duties and liabilities to clients and third parties | 015 | 1 |
 | I | D. | 2. Privileged communications, confidentiality and privacy acts | 014, 108 | 2 |
 | **I total** | | | | **23 (15.9%)** |
 | II (15–25%) | A. Agency | 1. Authority of agents and principals | 016, 018 | 2 |
-| II | A. | 2. Duties and liabilities of agents and principals | 017, 109 | 2 |
-| II | B. Contracts | 1. Formation | 019, 020, 021, 022 | 4 |
-| II | B. | 2. Performance and discharge | 024, 110 | 2 |
-| II | B. | 3. Breach and remedies | 023, 111 | 2 |
+| II | A. | 2. Duties and liabilities of agents and principals | 017, 109, 150* | 2 |
+| II | B. Contracts | 1. Formation | 019, 020, 021, 022, 151* | 4 |
+| II | B. | 2. Performance and discharge | 024, 110, 152*, 153* | 2 |
+| II | B. | 3. Breach and remedies | 023, 111, 154* | 2 |
 | II | C. Debtor-creditor relationships | suretyship, Article 9, bankruptcy distribution | 025, 026, 027, 028, 117 | 5 |
 | II | D. Federal laws and regulations | bankruptcy (types, discharge, avoidance) | 029, 030, 114 | 3 |
 | II | D. | employment taxes and worker classification | 031, 032, 115 | 3 |
 | II | D. | qualified health plans (ACA) | 112 | 1 |
 | II | D. | anti-bribery (FCPA) | 113 | 1 |
-| II | E. Business structure | 1. Selection, formation, operation and termination | 034, 116 | 2 |
+| II | E. Business structure | 1. Selection, formation, operation and termination | 034, 116, 155* | 2 |
 | II | E. | 2. Rights, duties, obligations and authority of owners and management | 033, 035 | 2 |
 | **II total** | | | | **29 (20.0%)** |
-| III (5–15%) | A. Basis of assets | purchased / converted / gift / inherited / wash sale / intangibles | 036, 037, 118, 119, 120, 121 | 6 |
-| III | B. Cost recovery | MACRS, bonus, §179, §197 | 044, 045, 122, 123 | 4 |
+| III (5–15%) | A. Basis of assets | purchased / converted / gift / inherited / wash sale / intangibles | 036, 037, 118, 119, 120, 121, 156* | 6 |
+| III | B. Cost recovery | MACRS, bonus, §179, §197 | 044, 045, 122, 123, 157*, 158*, 159* | 4 |
 | III | *(TCP scope)* | dispositions §1031/§1033/§121/§267/§1245/§1231 | 038–043 | 6 |
 | **III total** | | | | **16 (11.0%)** — 10 in scope |
-| IV (22–32%) | A. Gross income (inclusions and exclusions) | | 046, 047, 048, 049, 069, 124, 125, 126 | 8 |
+| IV (22–32%) | A. Gross income (inclusions and exclusions) | | 046, 047, 048, 049, 069, 124, 125, 126, 160*, 161*; capital gains / basis / holding period (AICPA task RIV-A0.2): 162*, 163*, 164* | 8 |
 | IV | B. Reporting of items from pass-through entities | | 127, 128 | 2 |
-| IV | C. Adjustments and deductions to arrive at AGI and taxable income (incl. QBI) | | 050–056, 070, 129 | 9 |
-| IV | D. Loss limitations | | 059, 060, 061, 130, 131 | 5 |
-| IV | E. Filing status | | 057, 058, 132 | 3 |
-| IV | F. Computation of tax and credits | | 064, 065, 066, 067, 068, 133, 134, 135 (+062 kiddie, 063 AMT tagged TCP) | 10 |
+| IV | C. Adjustments and deductions to arrive at AGI and taxable income (incl. QBI) | | 050–056, 070, 129, 166* | 9 |
+| IV | D. Loss limitations | | 059, 060, 061, 130, 131, 165* | 5 |
+| IV | E. Filing status | | 057, 058, 132, 167*, 168* | 3 |
+| IV | F. Computation of tax and credits | | 064, 065, 066, 067, 068, 133, 134, 135, 169* (+062 kiddie, 063 AMT tagged TCP) | 10 |
 | IV | *(TCP scope)* | gift and estate tax | 071, 072 | 2 |
 | **IV total** | | | | **39 (26.9%)** — 35 in scope |
-| V (23–33%) | A. Differences between book and tax income | Schedule M-1 / M-3 | 097, 136 | 2 |
-| V | B. C corporations | 1. Taxable income, tax liability, credits (+§448 methods) | 075, 076, 077, 078, 098, 137 | 6 |
+| V (23–33%) | A. Differences between book and tax income | Schedule M-1 / M-3 | 097, 136, 170*, 171*, 172*, 173*, 174* | 2 |
+| V | B. C corporations | 1. Taxable income, tax liability, credits (+§448 methods) | 075, 076, 077, 078, 098, 137, 175*, 176* | 6 |
 | V | B. | 2. State and local tax issues | 094, 138 | 2 |
 | V | C. S corporations | 1. Eligibility and election | 082, 139 | 2 |
 | V | C. | 2. Ordinary business income, separately stated items, AAA | 084, 140 | 2 |
 | V | C. | 3. Basis of shareholder's interest | 083, 141 | 2 |
 | V | D. Partnerships | 1. Ordinary business income and separately stated items | 142 | 1 |
-| V | D. | 2. Basis of partner's interest | 086, 087, 088, 143 | 4 |
-| V | E. Limited liability companies | | 099, 144 | 2 |
+| V | D. | 2. Basis of partner's interest | 086, 087, 088, 143, 177* | 4 |
+| V | E. Limited liability companies | | 099, 144, 178* | 2 |
 | V | F. Tax-exempt organizations | types | 100, 145 | 2 |
 | V | *(TCP scope)* | §351, E&P distributions, liquidations, PHC/AET, consolidated | 073, 074, 079, 080, 081, 096 | 6 |
 | V | *(TCP scope)* | BIG tax; §751/§754; trusts; UBTI; §911 | 085; 089, 090; 091, 092; 093; 095 | 7 |

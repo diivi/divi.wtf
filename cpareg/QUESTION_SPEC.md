@@ -47,15 +47,30 @@ No ES modules, no `export`, no `require`. It must load via a plain `<script>` ta
 | IV  | Federal Taxation of Individuals | 22–32% | 27 |
 | V   | Federal Taxation of Entities (including tax preparation) | 23–33% | 28 |
 
+## Exam style (derived from the 2026 AICPA Newly Released REG MCQs, REG-146 to REG-178)
+
+The released items are the style model. Match them, not textbook-style problems:
+
+- **One rule per question.** A stem tests a single concept with 2-4 numbers at most. Never combine two computations into one item ("what is X and what is Y").
+- **Stem length 25-70 words.** Generic actors: "A taxpayer", "A corporation", "A CPA", or a bare surname / "Moore Co." No biographies (age, marital status, occupation) unless the rule turns on them.
+- **No calendar years.** Use "Year 1, Year 4" or "the current year". Never "2025".
+- **No `reference` crib.** The exam gives no rule summaries. `reference` is `""` except for a rate table or fact table that the exam itself would put in the stem. The Blueprint says inflation-indexed amounts are not tested: if a question needs one, state the figure in one clause of the stem ("the annual limit is $X") or rewrite to avoid it.
+- **Options are short.** Numeric items: four amounts. Conceptual items: four phrases under ~20 words. "Amount, character" pairs (e.g. "$3,000, long-term") are fine; sentence-length compound options are not.
+- **Every distractor is one specific wrong step** (used FMV instead of carryover basis; forgot the liability decrease; applied the individual $3,000 rule to a corporation). The explanation for each wrong option names that step and shows the arithmetic that produces it.
+- **Skill is Remembering & Understanding or Application only.** AICPA MCQs are never Analysis; Analysis is tested in simulations. Do not label MCQs Analysis.
+- **"Except" / "not" stems** and "which of the following is correct regarding" stems are common on the exam and are fine.
+- Explanations: "Correct. ..." / "Incorrect. ..." then 2-4 sentences citing the rule (IRC §, Circular 230 §, UCC article).
+- Items transcribed from AICPA releases carry `source: "AICPA Newly Released 2026, MCQ-NNNNN (task)"` and the tag `AICPA-released-2026`; never edit their wording.
+
 ## Content rules
 
 - Written for the **2026 CPA Exam** (AICPA REG Blueprint in effect for 2026 testing). Verify the current Blueprint and its groups/topics via web search before writing; do not rely on memory alone.
-- Use **tax year 2025 figures** (standard deduction, brackets, §179 limits, gift exclusion, etc.) and state "Tax year 2025" in `reference` whenever a figure matters. Reflect 2025 law changes (e.g. One Big Beautiful Bill Act provisions effective for 2025) where relevant.
+- Law as in effect for the 2026 exam (tax year 2025 law, including OBBBA changes). Do not put calendar years or inflation-indexed amounts in stems unless the figure is supplied in the stem (see Exam style).
 - Each question is fully self-contained: every number, rate or table needed to solve it appears in `stem` or `reference`.
 - Exactly 4 options, exactly one correct. No "all of the above" / "none of the above".
 - Distractors must be plausible (common mistakes), not obviously silly.
 - Explanations for **every** option, including the correct one. Explain the underlying rule, not just "incorrect".
-- Mix of skill levels roughly 20% Remembering & Understanding, 60% Application, 20% Analysis.
+- Skill mix roughly 25% Remembering & Understanding, 75% Application. No Analysis MCQs (see Exam style).
 - Calculation questions should show the working in the correct-answer explanation.
 - Keep stems realistic in exam style (third-person fact patterns, "Which of the following...", "What amount...").
 - Markdown-lite only: `**bold**`, paragraphs separated by a blank line, pipe tables (`| a | b |` with a `|---|---|` separator row), and `- ` bullet lines. No HTML, no headings.

@@ -545,6 +545,7 @@ body.exam-mode #view-session { animation: none; }
 .exam-pill.pill-topic { background: var(--ex-pill2-bg); }
 .exam-pill.pill-repeat { background: var(--ex-yellow-bg); color: var(--ex-yellow-text); }
 .exam-pill.pill-tcp { background: var(--ex-line); color: var(--ex-muted); }
+.exam-pill.pill-aicpa { background: var(--ex-green-bg); color: var(--ex-green-text); font-weight: 600; }
 .exam-pill.pill-time { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.85rem; }
 
 .exam-body { padding: 24px 40px 8px; flex: 1; }

@@ -40,7 +40,7 @@
       var doomed = [];
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf(PREFIX) === 0 && k !== PREFIX + "theme" && k !== PREFIX + "scope" && k !== PREFIX + "units" && k !== PREFIX + "showTimers") doomed.push(k); // keep theme/scope/units/showTimers preferences
+        if (k && k.indexOf(PREFIX) === 0 && k !== PREFIX + "theme" && k !== PREFIX + "scope" && k !== PREFIX + "bank" && k !== PREFIX + "units" && k !== PREFIX + "showTimers") doomed.push(k); // keep theme/scope/units/showTimers preferences
       }
       doomed.forEach(function (k) { localStorage.removeItem(k); });
     } catch (e) {}
@@ -65,6 +65,16 @@
   var EXTRA_TAG = "beyond-2026-REG-blueprint";
   function isExtra(q) { return !!(q && Array.isArray(q.tags) && q.tags.indexOf(EXTRA_TAG) >= 0); }
   var EXTRA_COUNT = BANK.filter(isExtra).length;
+  /* Bank picker: 1 = AICPA released items (tag "AICPA-released-2026"), 2 = Claude-written items.
+   * cpareg.bank = "aicpa" | "claude" | "both" (default both). */
+  var AICPA_TAG = "AICPA-released-2026";
+  function isAicpa(q) { return !!(q && ((Array.isArray(q.tags) && q.tags.indexOf(AICPA_TAG) >= 0) || q.source)); }
+  var AICPA_COUNT = BANK.filter(isAicpa).length;
+  var CLAUDE_COUNT = BANK.length - AICPA_COUNT;
+  var Bank = {
+    get: function () { var v = load("bank", "both"); return v === "aicpa" || v === "claude" ? v : "both"; },
+    set: function (v) { save("bank", v === "aicpa" || v === "claude" ? v : "both"); }
+  };
   /** Misc preferences. showTimers: "1" when the session clocks should be visible (default off). */
   var Prefs = {
     showTimers: {
@@ -102,7 +112,14 @@
     }
   };
   /** The bank after the scope filter (no units). */
-  function scopedBank() { return Scope.get() === "all" ? BANK : BANK.filter(function (q) { return !isExtra(q); }); }
+  function scopedBank() {
+    var b = Bank.get();
+    return BANK.filter(function (q) {
+      if (b === "aicpa" && !isAicpa(q)) return false;
+      if (b === "claude" && isAicpa(q)) return false;
+      return Scope.get() === "all" || !isExtra(q);
+    });
+  }
   /** The bank as currently scoped AND unit-filtered (used by selection and Home stats). */
   function pool() {
     var sel = Units.get();
@@ -357,6 +374,8 @@
       exportedAt: new Date().toISOString(),
       bankSize: BANK.length,
       scope: Scope.get(),
+      bank: Bank.get(),
+      aicpaQuestions: AICPA_COUNT,
       extraQuestions: EXTRA_COUNT,
       totals: st.totals,
       byArea: byArea,
@@ -581,6 +600,7 @@
     var st = computeStats(scoped);
     var t = st.totals;
     var scope = Scope.get();
+    var bankPick = Bank.get();
     var html = "";
 
     if (!BANK.length) {
@@ -654,6 +674,11 @@
     var def = Math.min(20, bank.length);
     var selUnits = Units.get();
     html += '<div class="card card-lg"><div class="card-head"><h2>New session</h2><span class="eyebrow">~5% repeats · flagged first, then wrong ones</span></div>' +
+      (AICPA_COUNT ? '<div class="scope-row"><div class="seg" role="group" aria-label="Question bank">' +
+        '<button type="button" data-bank="aicpa" aria-pressed="' + (bankPick === "aicpa") + '">1 · AICPA bank (' + AICPA_COUNT + ')</button>' +
+        '<button type="button" data-bank="claude" aria-pressed="' + (bankPick === "claude") + '">2 · Claude bank (' + CLAUDE_COUNT + ')</button>' +
+        '<button type="button" data-bank="both" aria-pressed="' + (bankPick === "both") + '">Both</button></div>' +
+        '<span class="muted small">Bank 1 is the AICPA Newly Released 2026 REG questions, verbatim. Bank 2 is the Claude-written set.</span></div>' : "") +
       (EXTRA_COUNT ? '<div class="scope-row"><div class="seg" role="group" aria-label="Question scope">' +
         '<button type="button" data-scope="reg" aria-pressed="' + (scope === "reg") + '">2026 REG scope only</button>' +
         '<button type="button" data-scope="all" aria-pressed="' + (scope === "all") + '">Include TCP-scope extras</button></div>' +
@@ -702,6 +727,9 @@
     var clamp = function (n) { n = parseInt(n, 10); if (!n || n < 1) n = 1; if (n > bank.length) n = bank.length; return n; };
     $all("[data-scope]", root).forEach(function (b) {
       b.addEventListener("click", function () { Scope.set(b.getAttribute("data-scope")); renderHome({ keepScroll: true }); });
+    });
+    $all("[data-bank]", root).forEach(function (b) {
+      b.addEventListener("click", function () { Bank.set(b.getAttribute("data-bank")); renderHome({ keepScroll: true }); });
     });
     var syncChips = function () {
       $all("[data-pick]", root).forEach(function (c) { c.classList.toggle("active", parseInt(c.getAttribute("data-pick"), 10) === clamp(input.value)); });
@@ -911,6 +939,7 @@
         "</div>" +
         '<div class="exam-pills">' +
           (isRepeat ? '<span class="exam-pill pill-repeat">Repeat</span>' : "") +
+          (isAicpa(q) ? '<span class="exam-pill pill-aicpa" title="AICPA Newly Released 2026 question">AICPA</span>' : "") +
           (isExtra(q) ? '<span class="exam-pill pill-tcp" title="Topic moved to the TCP discipline in the 2026 Blueprint">Beyond 2026 REG</span>' : "") +
           (review ? '<span class="exam-pill pill-time">' + fmtTime(s.results[cursor].ms) + "</span>" : "") +
           (q ? '<span class="exam-pill">' + escapeHtml(q.skill) + "</span>" : "") +
