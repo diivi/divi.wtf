@@ -36,7 +36,8 @@ No build step is required; the site is plain static files.
 ## Using the site
 
 - **Home** shows bank size, seen/unseen counts, accuracy, total study time and a
-  per-area breakdown. Pick a batch size and press **Start**.
+  per-area breakdown. Once every question in the current scope has been seen, Home
+  adds a celebration card (with confetti). Pick a batch size and press **Start**.
 - Each batch is mostly unseen questions plus ~5% repeats (flagged questions come
   back first, then ones you got wrong or skipped, oldest first). Repeats show a
   "Repeat" badge.

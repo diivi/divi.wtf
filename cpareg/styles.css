@@ -355,6 +355,16 @@ body.modal-open { overflow: hidden; }
 .ring-meta { font-size: 0.9rem; color: var(--text-muted); }
 .ring-meta b { display: block; color: var(--text); font-size: 1.15rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 
+/* ---------- Completion easter egg ---------- */
+.card.celebrate { display: flex; align-items: center; gap: var(--s4); border-color: #ff5e8a; background: linear-gradient(135deg, rgba(255,94,138,0.12), rgba(124,140,255,0.12)); animation: pop 0.6s var(--ease) both; }
+.card.celebrate h2 { margin: 0 0 4px; }
+.card.celebrate .celebrate-msg { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.card.celebrate .celebrate-emoji { font-size: 2.4rem; line-height: 1; }
+.card.celebrate button { margin-left: auto; }
+@keyframes pop { from { transform: scale(0.94); opacity: 0; } to { transform: none; opacity: 1; } }
+.confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
+@media (max-width: 640px) { .card.celebrate { flex-wrap: wrap; } .card.celebrate button { margin-left: 0; } }
+
 /* ---------- Stat tiles ---------- */
 .stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s3); margin-bottom: var(--s4); }
 .stat {

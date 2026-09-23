@@ -137,3 +137,49 @@ OBBBA consistency check: no question presents the $10,000 SALT cap as current la
 5. **REG-121 arithmetic relies on 6 months of amortization** (business began July 1); the exam sometimes counts the month of commencement as a full month, which this does.
 6. **"Data and technology" representative tasks** (review of automated diagnostic/validation checks, source-data completeness for Forms 1040/1065/1120-S, depreciation schedules) are not testable in single MCQ form; the bank has no items of that type. They are TBS-style tasks.
 7. The Blueprint states candidates "will not be tested on … amounts or limitations that are indexed to inflation" and that wages exclude tips/overtime unless stated. All indexed figures in the bank are therefore supplied in `reference`, which matches exam practice.
+
+## Batch 2026-09-23 — REG-179 … REG-278 (100 items, tag `batch-2026-09-23`)
+
+Written against the representative-task list of the official 2026 REG Blueprint (`CPA_Exam_Blueprints_2026.pdf`, pages REG6–REG17, re-downloaded from the AICPA CDN on 2026-09-23). Every in-scope group/topic now has multiple items; the "review source data / automated diagnostics" tasks remain simulation-only. Each item was written by one agent and independently reviewed by another (answer key recomputed, citations checked, duplicates against the prior 178 removed). Bank after this batch: **278** total, **255** in scope (I 39, II 51, III 26, IV 69, V 70). `node validate.js` → OK. Skill mix of the batch: 20 R&U, 80 Application (no Analysis, per the AICPA released-item style).
+
+| Area | Topic | New ids | # |
+|---|---|---|---|
+| I | Circular 230 (§10.27 contingent fees, §10.28 records, §10.29 conflicts) | 179, 180, 181 | 3 |
+| I | Preparer penalties (§6694(b) amount, §6695 "except") | 182, 183 | 2 |
+| I | Audits, appeals, judicial process (jury/prepayment forums, 90-day letter) | 184, 185 | 2 |
+| I | Statute of limitations (refund claim look-back, §6513 deemed dates) | 186 | 1 |
+| I | Taxpayer penalties (§6663 civil fraud) | 187 | 1 |
+| I | Authoritative hierarchy (regs vs Rev. Rul. vs PLR) | 188 | 1 |
+| I | Common law liability (Ultramares / constructive fraud) | 189 | 1 |
+| I | §7525 practitioner privilege | 190 | 1 |
+| II | Agency authority (termination by death, ratification) | 191, 192 | 2 |
+| II | Agency liability (implied warranty of authority) | 193 | 1 |
+| II | Contracts formation (unilateral, UCC 2-207, UCC 2-209) | 194, 195, 196 | 3 |
+| II | Performance/discharge (death in personal-services contract, novation) | 197, 198 | 2 |
+| II | Breach/remedies (UCC 2-706 resale damages, liquidated damages) | 199, 200 | 2 |
+| II | Debtor-creditor (UCC 9-324 PMSI in equipment, surety subrogation) | 201, 202 | 2 |
+| II | Bankruptcy (Chapter 13) | 203 | 1 |
+| II | Employment taxes (§6672 trust fund recovery penalty) | 204 | 1 |
+| II | ACA (§36B premium tax credit) | 205 | 1 |
+| II | Owners/management (director conflicting-interest safe harbor) | 206 | 1 |
+| III | Basis (alternate valuation date, loss-property gift sold below FMV, converted residence sold at gain, partial wash sale, loan costs, §195 phase-out, FIFO lots) | 207–213 | 7 |
+| III | Cost recovery (MACRS year-of-sale, 39-yr mid-month, §179 income limit, bonus eligibility, §197 customer list) | 214–218 | 5 |
+| IV | Gross income inclusions/exclusions (§79, §132, interest/return of capital, §72 IRA ratio, §108 insolvency, post-TCJA alimony, §101(d)) | 219–225 | 7 |
+| IV | Capital gains (netting, exactly-one-year holding period) | 226, 227 | 2 |
+| IV | Pass-through reporting (S-corp K-1 not SE income, partner-level §179) | 228, 229 | 2 |
+| IV | Adjustments/deductions (§162(l), HSA eligibility, $750k mortgage cap, 30% AGI charitable, §199A wage/UBIA limit) | 230–234 | 5 |
+| IV | Loss limitations (LT carryover use, §469(g) release, §465 nonrecourse) | 235, 236, 237 | 3 |
+| IV | Filing status/dependents (HOH for parent, multiple support agreement) | 238, 239 | 2 |
+| IV | Computation/credits (§6654 100% safe harbor, Additional Medicare Tax, lifetime learning credit) | 240, 241, 242 | 3 |
+| V | Schedule M-1/M-3 (charitable limit + §453, officer life insurance, capital loss + fines, prepaid rent + bad debts, permanent vs temporary, DRD not an M-1 item) | 243–248 | 6 |
+| V | C corp (charitable carryover, DRD NOL exception, capital loss c/f, §6655 large corp, §248 + stock costs, §163(j), §267(a)(2)) | 249–255 | 7 |
+| V | SALT (single-sales-factor + allocation, P.L. 86-272 nexus) | 256, 257 | 2 |
+| V | S corp eligibility/election (ineligible shareholder, Form 2553 consent, terminating events) | 258, 259, 260 | 3 |
+| V | S corp income/AAA (ordinary income, separately stated, AAA/OAA, 2% shareholder health) | 261–264 | 4 |
+| V | S corp basis (ordering rules, excess distribution, guarantee no basis) | 265, 266, 267 | 3 |
+| V | Partnership income (guaranteed payment + loss share, ordinary income table, page-1 items, §709) | 268–271 | 4 |
+| V | Partner basis (items with no basis effect, §704(d) with distributions, §731 deemed distribution) | 272, 273, 274 | 3 |
+| V | LLC (corporate-owned SMLLC, deemed 8832 via 2553) | 275, 276 | 2 |
+| V | Exempt orgs (§501(c)(6) dues, §6033(j) filing/revocation) | 277, 278 | 2 |
+
+Review changes made before merge: REG-217 had no correct option (leased-then-purchased asset is bonus-eligible under Reg. §1.168(k)-2(b)(3)(iii)) → option replaced; REG-193 had two defensible answers → stem rewritten; REG-186 explanation fixed to cite §6513; near-duplicates of existing items replaced (187 vs 011, 189 vs 015, 207 vs 037, 208 vs 036, 221 vs 049, 235 vs 061, 237 vs 267, 243 vs 097, 252 vs 077, 272 vs 086). Close cousins kept deliberately because the task is central: 219/048 (§79), 240/068 (§6654 branches), 261/140 and 269/142 (ordinary income tables), 247/136 (M-3).

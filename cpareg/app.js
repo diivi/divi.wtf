@@ -477,7 +477,50 @@
   /* ------------------------------------------------------------------ */
   /* 7. Views                                                            */
   /* ------------------------------------------------------------------ */
-  var state = {
+  /* Easter egg: canvas confetti shown on Home once every question in the current scope has been seen. */
+function launchConfetti() {
+  var c = document.createElement("canvas");
+  c.className = "confetti";
+  c.setAttribute("aria-hidden", "true");
+  document.body.appendChild(c);
+  var ctx = c.getContext("2d");
+  var W = c.width = window.innerWidth, H = c.height = window.innerHeight;
+  var colors = ["#ff5e8a", "#ffb547", "#5ee0c9", "#7c8cff", "#ffe066", "#ff8fd8"];
+  var pieces = [];
+  for (var i = 0; i < 180; i++) {
+    pieces.push({
+      x: Math.random() * W, y: -20 - Math.random() * H * 0.5,
+      w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+      vx: (Math.random() - 0.5) * 2.5, vy: 2.5 + Math.random() * 3.5,
+      rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.25,
+      color: colors[i % colors.length], heart: i % 9 === 0
+    });
+  }
+  var start = null;
+  function frame(ts) {
+    if (start == null) start = ts;
+    var elapsed = ts - start;
+    ctx.clearRect(0, 0, W, H);
+    var alive = false;
+    pieces.forEach(function (p) {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.vx += Math.sin(p.y / 40) * 0.05;
+      if (p.y < H + 30) alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = elapsed > 4000 ? Math.max(0, 1 - (elapsed - 4000) / 800) : 1;
+      if (p.heart) { ctx.font = "16px serif"; ctx.textAlign = "center"; ctx.fillText("\uD83D\uDC8B", 0, 6); }
+      else ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (alive && elapsed < 4800) requestAnimationFrame(frame);
+    else if (c.parentNode) c.parentNode.removeChild(c);
+  }
+  requestAnimationFrame(frame);
+}
+
+var state = {
+    celebrated: false,   // confetti fired this page load (completion easter egg)
     view: "home",
     session: null,        // activeSession object while in Session view
     review: null,         // { session, index } while reviewing a finished session
@@ -635,6 +678,14 @@
       stat("Time studied", fmtTime(t.totalMs), "clock", "amber") +
       "</div>";
 
+    var allDone = scoped.length > 0 && t.seen >= scoped.length;
+    if (allDone) {
+      html += '<div class="card celebrate" id="celebrate-card"><div class="celebrate-emoji" aria-hidden="true">\uD83C\uDF89</div>' +
+        '<div><h2>You completed every question</h2>' +
+        '<p class="celebrate-msg">ur reward for completing all questions - a kiss from dv \uD83D\uDC8B</p></div>' +
+        '<button type="button" class="btn-ghost btn-sm" id="btn-confetti">More confetti</button></div>';
+    }
+
     html += '<div class="card"><div class="card-head"><h2>By area</h2><span class="eyebrow">coverage · accuracy</span></div><div class="area-list">';
     var areaKeys = AREA_ORDER.concat(Object.keys(AREA_NAMES).filter(function (a) { return AREA_ORDER.indexOf(a) < 0; }));
     var bankCount = {}, seenCount = {};
@@ -714,6 +765,10 @@
     if (keepY != null) root.classList.add("no-anim");
     root.innerHTML = html;
     showView("home");
+    if (allDone) {
+      if (!state.celebrated) { state.celebrated = true; launchConfetti(); }
+      $("#btn-confetti", root).addEventListener("click", function () { launchConfetti(); });
+    }
     if (keepY != null) {
       window.scrollTo(0, keepY);
       setTimeout(function () { root.classList.remove("no-anim"); }, 60);

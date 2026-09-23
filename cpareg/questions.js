@@ -2,6 +2,8 @@
 // AICPA Newly Released Questions — REG (July 2026 release). 33 in-scope MCQs; MCQ-0XXXX items marked
 // "beyond the scope of the CPA Exam" in the release (#3 repeat examinations, #6 agency advantages,
 // #34 audit adjustments to a later year) were deliberately skipped.
+// Batch 2026-09-23: REG-179 .. REG-278 (100 items, tag "batch-2026-09-23") written against the 2026 Blueprint
+// task list to fill uncovered representative tasks; see COVERAGE.md.
 window.QUESTION_BANK = [
 {
   id: "REG-001", area: "I", areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
@@ -3595,5 +3597,2410 @@ window.QUESTION_BANK = [
     D: "Incorrect. Disregarded entity is the default classification for a single-member LLC; it is treated as a sole proprietorship (or a division of its corporate owner) for federal tax purposes."
   },
   tags: ["AICPA-released-2026", "LLC", "check-the-box", "Reg. §301.7701-3", "Form 8832"]
+},
+// ---- Batch 2026-09-23, Area I ----
+{
+  id: "REG-179",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Ethics and responsibilities in tax practice — Regulations governing practice before the IRS (Circular 230)",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A client received written notice from the IRS that its Year 1 return would be examined. Ninety days later the client engaged a CPA to prepare an amended Year 1 return claiming a refund and asked to pay the CPA 20% of any refund obtained. Under Treasury Circular 230, the CPA:",
+  reference: "",
+  options: [
+    { key: "A", text: "May charge the contingent fee, because the amended return is filed within 120 days of the examination notice." },
+    { key: "B", text: "May not charge the contingent fee, because contingent fees are never permitted for amended returns." },
+    { key: "C", text: "May charge the contingent fee only if the refund claim relates solely to interest or penalties." },
+    { key: "D", text: "May not charge the contingent fee, because the client did not receive the notice before the original return was filed." }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Circular 230 §10.27(b)(2) permits a contingent fee for services rendered in connection with an IRS examination of, or challenge to, an original return, or to an amended return or claim for refund filed within 120 days of the taxpayer receiving a written notice of examination. The claim here is filed 90 days after the notice, so the fee is permitted.",
+    B: "Incorrect. This overstates the general prohibition. Although §10.27(b)(1) bars contingent fees for preparing original returns and for amended returns or refund claims generally, §10.27(b)(2) carves out amended returns and refund claims filed within 120 days of a written examination notice.",
+    C: "Incorrect. The interest-and-penalty exception in §10.27(b)(3) is a separate, independent exception. It is not a condition on the examination exception in §10.27(b)(2), which applies to any refund claim filed within the 120-day window.",
+    D: "Incorrect. Nothing in §10.27 requires the examination notice to precede the original return. The exception is measured from the taxpayer's receipt of the written notice to the filing of the amended return or refund claim."
+  },
+  tags: ["batch-2026-09-23", "Circular 230", "§10.27", "contingent fees", "examination notice"]
+},
+{
+  id: "REG-180",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Ethics and responsibilities in tax practice — Regulations governing practice before the IRS (Circular 230)",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A client terminated a CPA before paying the fee for the current-year return and demanded the return of all materials. The CPA holds the client's brokerage statements, the CPA's completed but unfiled return, and the CPA's workpapers. Under Treasury Circular 230, the CPA must return which of the following while the fee dispute is unresolved?",
+  reference: "",
+  options: [
+    { key: "A", text: "Only the brokerage statements." },
+    { key: "B", text: "The brokerage statements and the completed return." },
+    { key: "C", text: "The brokerage statements, the completed return and the workpapers." },
+    { key: "D", text: "Nothing, until the fee is paid in full." }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under Circular 230 §10.28, a practitioner must promptly return any and all records of the client that are necessary for the client to comply with federal tax obligations, even during a fee dispute. Records of the client are documents the client provided or pre-existing documents obtained from third parties; the brokerage statements qualify. The return the CPA prepared but has not been paid for is excluded from that definition, and the CPA's workpapers are the practitioner's own property.",
+    B: "Incorrect. A return or other document prepared by the practitioner is a client record only if the practitioner has been paid for it, or if it has already been provided to the client. Because the fee is unpaid, the completed return may be withheld under §10.28(b).",
+    C: "Incorrect. Practitioner workpapers are not records of the client under §10.28(b), and an unpaid-for return may be withheld. Only the client's own records must be returned unconditionally.",
+    D: "Incorrect. Circular 230 §10.28(b) expressly states that a fee dispute does not relieve the practitioner of the duty to return records the client needs to comply with federal tax obligations. Only a state law permitting retention changes this, and even then the practitioner must let the client review and copy the records."
+  },
+  tags: ["batch-2026-09-23", "Circular 230", "§10.28", "client records", "fee dispute"]
+},
+{
+  id: "REG-181",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Ethics and responsibilities in tax practice — Regulations governing practice before the IRS (Circular 230)",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A CPA is asked to represent both spouses of a divorcing couple before the IRS regarding a deficiency asserted on a joint return each spouse blames on the other. Under Treasury Circular 230, the CPA may represent both spouses only if:",
+  reference: "",
+  options: [
+    { key: "A", text: "The CPA reasonably believes it can represent each competently, the representation is lawful, and each spouse consents in writing within 30 days." },
+    { key: "B", text: "Each spouse gives oral consent after full disclosure, because written consent is required only for tax shelter matters." },
+    { key: "C", text: "The IRS revenue agent handling the case approves the joint representation in writing." },
+    { key: "D", text: "The spouses agree to an equal allocation of any deficiency before the CPA begins the engagement." }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Circular 230 §10.29 permits representation despite a conflict of interest only when (1) the practitioner reasonably believes he or she can provide competent and diligent representation to each client, (2) the representation is not prohibited by law, and (3) each affected client waives the conflict by informed consent confirmed in writing at the time the conflict is known or within 30 days. Each spouse's interest in shifting the deficiency to the other is a direct conflict.",
+    B: "Incorrect. Section 10.29(b) requires the consent to be confirmed in writing, and the practitioner must retain the written consents for at least 36 months after the representation ends. There is no oral-consent exception for non-shelter matters.",
+    C: "Incorrect. The IRS has no role in approving a practitioner's conflict waiver. The waiver is a matter between the practitioner and the affected clients under §10.29; the copies of the consents must merely be available to the IRS on request.",
+    D: "Incorrect. Nothing in §10.29 requires the clients to settle their competing positions in advance. The rule addresses the practitioner's ability to represent both clients competently and the clients' informed written consent, not the substantive outcome between them."
+  },
+  tags: ["batch-2026-09-23", "Circular 230", "§10.29", "conflict of interest", "written consent"]
+},
+{
+  id: "REG-182",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Ethics and responsibilities in tax practice — Tax return preparer rules and penalties",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A tax return preparer received $1,600 to prepare a client's individual return. The preparer knowingly deducted personal expenses as business expenses, understating the tax by $9,000. The preparer's conduct is determined to be willful. What is the preparer's penalty under IRC §6694?",
+  reference: "",
+  options: [
+    { key: "A", text: "$1,000" },
+    { key: "B", text: "$1,200" },
+    { key: "C", text: "$4,500" },
+    { key: "D", text: "$5,000" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. $1,000 is the fixed floor for an unreasonable-position understatement under §6694(a). Because the conduct here was willful, the higher §6694(b) penalty applies, and its floor is $5,000.",
+    B: "Incorrect. $1,200 is 75% of the $1,600 fee. Under §6694(b) the penalty is the greater of $5,000 or 75% of the income derived from the return, so the $5,000 floor controls because 75% of the fee ($1,200) is smaller.",
+    C: "Incorrect. $4,500 is 50% of the $9,000 understatement. The §6694 percentages are applied to the preparer's income derived from the return, not to the understatement of tax.",
+    D: "Correct. A willful attempt to understate tax, or a reckless or intentional disregard of rules, is penalized under §6694(b) at the greater of $5,000 or 75% of the income derived (or to be derived) by the preparer with respect to the return. 75% x $1,600 = $1,200, so the greater amount, $5,000, applies. The penalty is reduced by any §6694(a) penalty paid on the same return."
+  },
+  tags: ["batch-2026-09-23", "§6694(b)", "preparer penalty", "willful understatement", "income derived"]
+},
+{
+  id: "REG-183",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Ethics and responsibilities in tax practice — Tax return preparer rules and penalties",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "Each of the following acts by a paid tax return preparer results in a penalty under IRC §6695, except:",
+  reference: "",
+  options: [
+    { key: "A", text: "Failing to furnish the preparer tax identification number on a return the preparer signs." },
+    { key: "B", text: "Endorsing and depositing a client's refund check into the preparer's account." },
+    { key: "C", text: "Reporting a deduction based on the client's reasonable estimate when exact records are unavailable." },
+    { key: "D", text: "Failing to furnish the client with a completed copy of the return." }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Failing to furnish an identifying number (PTIN) is penalized under §6695(c). The same section also penalizes failing to sign the return under §6695(b).",
+    B: "Incorrect. A preparer who endorses or otherwise negotiates a client's refund check is penalized under §6695(f) for each check. This is also prohibited by Circular 230 §10.31.",
+    C: "Correct. Using a client's reasonable estimate is not an act listed in §6695. Estimates are permitted when exact data is unavailable and the estimate is reasonable under the circumstances; a preparer may in good faith rely on client-furnished information without verification under Reg. §1.6694-1(e). The §6695 penalties cover procedural failures: not furnishing a copy (a), not signing (b), no identifying number (c), not retaining a copy or list (d), not filing information returns of employed preparers (e), negotiating refund checks (f), and failing earned income credit and related due diligence (g).",
+    D: "Incorrect. Section 6695(a) penalizes failing to furnish a completed copy of the return or claim to the taxpayer no later than the time it is presented for signature."
+  },
+  tags: ["batch-2026-09-23", "§6695", "preparer penalties", "PTIN", "refund check"]
+},
+{
+  id: "REG-184",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Federal tax procedures — Audits, appeals and the judicial process",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "A taxpayer disputes a proposed income tax deficiency and wants a jury trial. Which of the following statements about the taxpayer's choice of trial court is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "The taxpayer may obtain a jury trial in the U.S. Tax Court without first paying the deficiency." },
+    { key: "B", text: "The taxpayer must pay the deficiency and sue for a refund in a U.S. district court to obtain a jury trial." },
+    { key: "C", text: "The taxpayer may obtain a jury trial in the U.S. Court of Federal Claims after paying the deficiency." },
+    { key: "D", text: "A jury trial is available in any of the three trial courts if the deficiency is paid first." }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. The Tax Court is the only forum where the deficiency need not be paid first, but it has no jury trials. Its cases are decided by Tax Court judges (or by a special trial judge in small tax cases).",
+    B: "Correct. A jury trial is available only in a U.S. district court. Because a district court hears tax cases as refund suits, the taxpayer must first pay the deficiency, file a refund claim with the IRS and have the claim denied or six months elapse before suing.",
+    C: "Incorrect. The Court of Federal Claims, like the district court, requires prepayment and a refund claim, but it sits without a jury. Its appeals go to the Court of Appeals for the Federal Circuit rather than the taxpayer's regional circuit.",
+    D: "Incorrect. Only the district court offers a jury. The Tax Court and the Court of Federal Claims decide cases without juries regardless of whether the tax has been paid."
+  },
+  tags: ["batch-2026-09-23", "judicial process", "Tax Court", "district court", "jury trial", "prepayment"]
+},
+{
+  id: "REG-185",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Federal tax procedures — Audits, appeals and the judicial process",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer residing in the United States did not respond to a 30-day letter and then received a statutory notice of deficiency dated and mailed on March 1. The taxpayer wants to contest the deficiency without paying it. By when must the taxpayer act, and how?",
+  reference: "",
+  options: [
+    { key: "A", text: "By March 31, by filing a written protest with the IRS Independent Office of Appeals." },
+    { key: "B", text: "By May 30, by filing a petition with the U.S. Tax Court." },
+    { key: "C", text: "By July 29, by filing a petition with the U.S. Tax Court." },
+    { key: "D", text: "Within two years of paying the tax, by filing a refund suit in a U.S. district court." }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. A written protest to Appeals is the response to the 30-day letter, and that window has passed. Once the statutory notice (90-day letter) is issued, the taxpayer's route to a prepayment forum is a Tax Court petition, not a protest.",
+    B: "Correct. Under IRC §6213(a), a taxpayer has 90 days from the mailing of the notice of deficiency (March 1 through May 30) to petition the Tax Court. Filing the petition suspends assessment and collection, so the taxpayer contests the deficiency without paying it. The 90-day period is jurisdictional and cannot be extended by the IRS.",
+    C: "Incorrect. 150 days (through July 29) is the period allowed only when the notice is addressed to a person outside the United States. This taxpayer resides in the United States, so the 90-day period applies.",
+    D: "Incorrect. A refund suit in district court is available only after the taxpayer pays the tax and files a refund claim. It is not a way to contest the deficiency without paying it."
+  },
+  tags: ["batch-2026-09-23", "notice of deficiency", "90-day letter", "§6213", "Tax Court petition"]
+},
+{
+  id: "REG-186",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Federal tax procedures — Statute of limitations (assessment and refund claims)",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer filed the Year 1 return on February 1, Year 2, its due date being April 15, Year 2. The return showed $12,000 of tax, of which $9,000 was paid through withholding and $3,000 was paid with the return. The taxpayer discovers an error and files a refund claim on March 1, Year 5. What is the maximum refund allowable?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$3,000" },
+    { key: "C", text: "$9,000" },
+    { key: "D", text: "$12,000" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. $0 treats the claim as untimely by measuring three years from the actual filing date (February 1, Year 2 to February 1, Year 5). Under §6513(a), an early return is deemed filed on its due date, so the three-year period runs to April 15, Year 5, and the March 1, Year 5 claim is timely.",
+    B: "Incorrect. $3,000 assumes only the two-year look-back applies and counts only the payment made with the return. Because the claim is filed within three years of the deemed filing date, the three-year look-back covers all tax paid within the three years before the claim, plus any extension period.",
+    C: "Incorrect. $9,000 counts only the withholding and omits the $3,000 paid with the return. Both the withholding (deemed paid April 15, Year 2 under §6513(b)) and the balance paid with the early return (deemed paid on the due date under §6513(a)) fall within the three-year look-back period.",
+    D: "Correct. Under §6511(a) a refund claim must be filed within the later of three years from the date the return was filed or two years from the date the tax was paid. An early return is deemed filed on the due date (§6513(a)), so the claim filed March 1, Year 5 is within three years. Under §6511(b)(2)(A), the refund is limited to tax paid within the three years immediately preceding the claim; under §6513(b) the $9,000 withholding is deemed paid on April 15, Year 2, and under §6513(a) the $3,000 paid early with the return is likewise deemed paid on the April 15, Year 2 due date. Both fall inside the three-year window, so the full $12,000 is recoverable."
+  },
+  tags: ["batch-2026-09-23", "§6511", "§6513", "refund claim", "look-back period", "statute of limitations"]
+},
+{
+  id: "REG-187",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Federal tax procedures — Taxpayer penalties",
+  skill: "Application",
+  difficulty: 2,
+  stem: "On examination, an individual's return is found to have underpaid tax by $40,000. The IRS proves by clear and convincing evidence that part of the underpayment is due to fraud. The taxpayer establishes by a preponderance of the evidence that $10,000 of the underpayment was not attributable to fraud. What is the civil fraud penalty?",
+  reference: "",
+  options: [
+    { key: "A", text: "$6,000" },
+    { key: "B", text: "$8,000" },
+    { key: "C", text: "$22,500" },
+    { key: "D", text: "$30,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $6,000 applies the 20% accuracy-related rate of §6662 to the $30,000 fraud portion. Fraud is penalized under §6663 at 75%, and §6662(b) provides that the accuracy-related penalty does not apply to any portion of an underpayment on which the fraud penalty is imposed.",
+    B: "Incorrect. $8,000 is the 20% accuracy-related penalty on the entire $40,000 underpayment. Once the IRS proves fraud, the 75% rate of §6663 governs the fraudulent portion; the accuracy-related penalty may still be asserted only on the $10,000 nonfraud portion if a §6662 ground exists.",
+    C: "Correct. Under §6663(a) the penalty is 75% of the portion of the underpayment attributable to fraud. Under §6663(b), once the IRS proves that any portion is due to fraud, the entire underpayment is treated as fraudulent except any portion the taxpayer establishes by a preponderance of the evidence is not. The fraud portion is $40,000 - $10,000 = $30,000, and the penalty is 75% x $30,000 = $22,500.",
+    D: "Incorrect. $30,000 applies the 75% rate to the full $40,000. That would be correct only if the taxpayer failed to carry the burden of showing that part of the underpayment was not due to fraud; here the taxpayer established that $10,000 was not, so that portion is excluded under §6663(b)."
+  },
+  tags: ["batch-2026-09-23", "§6663", "civil fraud penalty", "burden of proof", "75%"]
+},
+{
+  id: "REG-188",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Federal tax procedures — Authoritative hierarchy",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "Which of the following statements about sources of federal tax authority is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "A private letter ruling may be relied upon as precedent by any taxpayer with similar facts." },
+    { key: "B", text: "A revenue ruling carries greater authority than a Treasury regulation." },
+    { key: "C", text: "A Treasury regulation carries the force of law unless it conflicts with the Internal Revenue Code." },
+    { key: "D", text: "A revenue procedure is binding only on the taxpayer who requested it." }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. A private letter ruling is issued to a specific taxpayer and, under §6110(k)(3), may not be used or cited as precedent by others. It indicates the IRS's thinking but binds the IRS only as to the requesting taxpayer.",
+    B: "Incorrect. This inverts the hierarchy. Treasury regulations are the Treasury Department's official interpretation of the Code issued under §7805 and rank above revenue rulings, which are IRS positions on specific fact patterns and are not entitled to the same deference by courts.",
+    C: "Correct. The Internal Revenue Code is the highest source of tax law after the Constitution and treaties; Treasury regulations issued under §7805 (interpretive) or a specific Code grant (legislative) have the force and effect of law and are followed by courts unless they are unreasonable or conflict with the statute. Below regulations sit revenue rulings and revenue procedures, then private letter rulings and other taxpayer-specific guidance.",
+    D: "Incorrect. Revenue procedures are published in the Internal Revenue Bulletin and state IRS practice and procedure that all taxpayers may follow. Taxpayer-specific guidance is the private letter ruling, determination letter or technical advice memorandum."
+  },
+  tags: ["batch-2026-09-23", "authoritative hierarchy", "Treasury regulations", "revenue ruling", "private letter ruling", "§6110"]
+},
+{
+  id: "REG-189",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Legal duties and responsibilities — Common law duties and liabilities to clients and third parties",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A CPA signed a client's business return without examining any of the underlying records, relying entirely on figures the client supplied, and the income was grossly overstated. A lender the CPA did not know about relied on the return and suffered a loss. In a state that follows the Ultramares rule, the lender:",
+  reference: "",
+  options: [
+    { key: "A", text: "Cannot recover, because it was not in privity of contract with the CPA." },
+    { key: "B", text: "Can recover for ordinary negligence, because lenders are foreseeable users of tax returns." },
+    { key: "C", text: "Can recover if the CPA's reckless disregard amounts to constructive fraud." },
+    { key: "D", text: "Can recover only if it proves the CPA intended to deceive the lender." }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Lack of privity bars a third party's claim for ordinary negligence under Ultramares, but it is not a defense to fraud or constructive fraud. Any third party who justifiably relies on a CPA's fraudulent or grossly negligent work may recover regardless of privity.",
+    B: "Incorrect. This states the reasonably foreseeable user rule, the broadest standard, followed by only a few states. Under Ultramares a party not in privity (or near privity) cannot recover for ordinary negligence at all; the lender here was also unknown to the CPA, so even the Restatement known-user rule would not help.",
+    C: "Correct. Ultramares v. Touche limits negligence liability to parties in privity but holds that gross negligence, a reckless disregard for the truth so extreme that it evidences a lack of any genuine belief in the work's accuracy, may be treated as constructive fraud. Constructive fraud, like actual fraud, is actionable by any third party who relied on the work, so the lender can recover if it proves the CPA's conduct rose to that level.",
+    D: "Incorrect. Intent to deceive (scienter) is required for actual fraud. Constructive fraud substitutes gross negligence or reckless disregard for actual intent, so the lender need not prove that the CPA intended to deceive it."
+  },
+  tags: ["batch-2026-09-23", "Ultramares", "privity", "constructive fraud", "gross negligence", "third-party liability"]
+},
+{
+  id: "REG-190",
+  area: "I",
+  areaName: "Ethics, Professional Responsibilities and Federal Tax Procedures",
+  topic: "Legal duties and responsibilities — Privileged communications, confidentiality and privacy acts",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A CPA advised a client on the tax treatment of a business restructuring. The client is later involved in each of the following proceedings. In which one can the client assert the IRC §7525 federally authorized tax practitioner privilege to protect the CPA's advice?",
+  reference: "",
+  options: [
+    { key: "A", text: "A criminal tax investigation by the U.S. Department of Justice." },
+    { key: "B", text: "A state income tax audit of the same restructuring." },
+    { key: "C", text: "A civil examination of the restructuring by the IRS." },
+    { key: "D", text: "A lawsuit brought by a shareholder alleging the restructuring was unfair." }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Section 7525(a)(2) limits the privilege to noncriminal tax matters before the IRS and noncriminal tax proceedings in federal court brought by or against the United States. It offers no protection in a criminal investigation or prosecution.",
+    B: "Incorrect. The §7525 privilege is a federal statute that applies only to federal tax matters. Whether communications with a CPA are privileged in a state tax audit depends on state law; many states have no accountant-client privilege.",
+    C: "Correct. Section 7525 extends the common-law attorney-client privilege, to the extent it would apply to an attorney, to tax advice communications between a taxpayer and a federally authorized tax practitioner such as a CPA. The privilege may be asserted in a noncriminal tax matter before the IRS, which includes a civil examination. It does not cover return preparation work or written communications promoting a tax shelter to a corporation (§7525(b)).",
+    D: "Incorrect. The privilege applies only in noncriminal tax matters before the IRS and in federal court proceedings brought by or against the United States. A private shareholder suit is neither, so the CPA's advice is not protected by §7525 in that litigation."
+  },
+  tags: ["batch-2026-09-23", "§7525", "tax practitioner privilege", "noncriminal", "confidentiality"]
+},
+// ---- Batch 2026-09-23, Area II ----
+{
+  id: "REG-191",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Agency — Authority of agents and principals",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A sole proprietor authorized an agent to buy inventory from a supplier the agent had dealt with for years. The proprietor died on March 1. On March 3, unaware of the death, the agent ordered $20,000 of goods from the supplier in the proprietor's name, and the supplier shipped them. Is the proprietor's estate bound by the March 3 order?",
+  reference: "",
+  options: [
+    { key: "A", text: "Yes, because the agent had actual authority when the order was placed" },
+    { key: "B", text: "Yes, because the supplier had no notice of the death and relied on apparent authority" },
+    { key: "C", text: "No, because the principal's death terminated the agent's authority by operation of law" },
+    { key: "D", text: "No, because an order for goods must be ratified in writing by the estate" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Actual authority derives from the principal's manifestations, and it ends automatically when the principal dies. The agent could not have actual authority on March 3 because there was no longer a principal to confer it, regardless of the agent's ignorance of the death.",
+    B: "Incorrect. This applies the notice rule that governs termination by act of the parties. When a principal voluntarily revokes authority, apparent authority lingers until third parties receive notice, but termination by operation of law (death, insanity, bankruptcy of the principal) ends both actual and apparent authority without any notice.",
+    C: "Correct. Under the common law of agency, the death of the principal terminates the agency by operation of law, ending actual and apparent authority immediately. Neither the agent's nor the supplier's lack of knowledge preserves the authority, so the estate is not bound by the March 3 contract; the supplier's remedy, if any, is against the agent.",
+    D: "Incorrect. Ratification is a voluntary act by which a principal adopts an unauthorized contract; it is not a prerequisite for liability on an authorized one, and there is no general writing requirement for ratification. The estate is not bound because the authority ended, not because of a missing writing."
+  },
+  tags: ["batch-2026-09-23", "agency", "termination by operation of law", "death of principal", "apparent authority"]
+},
+{
+  id: "REG-192",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Agency — Authority of agents and principals",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "An agent exceeded the scope of the agent's authority when contracting with a third party on behalf of a disclosed principal. Which of the following is required for the principal to ratify the contract?",
+  reference: "",
+  options: [
+    { key: "A", text: "The principal must ratify the entire contract with knowledge of all material facts" },
+    { key: "B", text: "The ratification must be in a signed writing delivered to the third party" },
+    { key: "C", text: "The third party must give new consideration to the principal" },
+    { key: "D", text: "The agent must have had apparent authority at the time of contracting" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Ratification requires that the principal, with knowledge of all material facts, affirm the entire transaction; a principal cannot ratify the favorable parts and reject the rest. The agent must have purported to act for the principal, the principal must have had capacity both when the act occurred and when ratifying, and the third party must not have withdrawn before ratification.",
+    B: "Incorrect. Ratification may be express or implied from conduct, such as accepting the benefits of the contract or failing to repudiate it after learning the facts. A writing is required only where the underlying contract itself must be in writing under the statute of frauds.",
+    C: "Incorrect. Ratification relates back to the time of the agent's unauthorized act and makes the original contract binding; no new consideration is needed from the third party. Consideration is an element of contract formation, not of ratification.",
+    D: "Incorrect. Ratification exists precisely for situations where the agent had no authority of any kind. If the agent had apparent authority, the principal would already be bound to the third party and ratification would be unnecessary."
+  },
+  tags: ["batch-2026-09-23", "agency", "ratification", "unauthorized acts", "material facts"]
+},
+{
+  id: "REG-193",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Agency — Duties and liabilities of agents and principals",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An individual, falsely claiming to be the purchasing agent of a corporation that had never employed the individual, ordered $30,000 of materials from a supplier in the corporation's name. The supplier had no prior dealings with the corporation. The corporation learned of the order and refused to accept the materials. Which of the following is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "The corporation is bound because the supplier reasonably believed the individual was its agent" },
+    { key: "B", text: "The individual is liable to the supplier for breach of the implied warranty of authority" },
+    { key: "C", text: "Neither the individual nor the corporation is liable because no contract was formed" },
+    { key: "D", text: "The corporation is bound because it failed to repudiate the order promptly" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Apparent authority arises only from the principal's own manifestations to the third party. The corporation never held the individual out as its agent and had no dealings with the supplier, so the supplier's belief, however sincere, rests solely on the individual's statements and cannot bind the corporation.",
+    B: "Correct. A person who purports to contract on behalf of a principal impliedly warrants to the third party that the person has authority to do so. Because the individual had no actual or apparent authority and the corporation is not bound, the individual is liable to the supplier for breach of that implied warranty of authority (and for any misrepresentation).",
+    C: "Incorrect. Although the corporation is not bound, the supplier is not without a remedy. The purported agent's implied warranty of authority makes the individual answerable to the supplier for the loss caused by the lack of authority.",
+    D: "Incorrect. Silence or delay in repudiating binds a principal only when the principal knows the facts and its inaction could reasonably be understood as affirming the transaction. The corporation refused the order when it learned of it, so there was no ratification by conduct."
+  },
+  tags: ["batch-2026-09-23", "agency", "implied warranty of authority", "apparent authority", "agent liability", "ratification"]
+},
+{
+  id: "REG-194",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Formation",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A homeowner posted a notice stating, \"I will pay $500 to whoever returns my lost dog.\" A neighbor read the notice, found the dog after a two-day search, and returned it. Which of the following best describes the arrangement between the homeowner and the neighbor?",
+  reference: "",
+  options: [
+    { key: "A", text: "A bilateral contract formed when the neighbor began searching for the dog" },
+    { key: "B", text: "A unilateral contract formed when the neighbor returned the dog" },
+    { key: "C", text: "An implied-in-fact contract formed by the parties' course of dealing" },
+    { key: "D", text: "No contract, because the neighbor never communicated acceptance" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. A bilateral contract is an exchange of a promise for a promise. The homeowner's notice asked for an act (returning the dog), not a return promise, so the neighbor's decision to start searching created no bilateral contract; at most, beginning performance makes the offer temporarily irrevocable.",
+    B: "Correct. An offer that seeks acceptance by performance rather than by a return promise creates a unilateral contract. The neighbor accepted by completing the requested act, returning the dog, and at that moment the homeowner became bound to pay $500.",
+    C: "Incorrect. An implied-in-fact contract is inferred from conduct where no express terms were stated. Here the homeowner's notice expressly stated the terms, so the contract is an express unilateral contract, not an implied one.",
+    D: "Incorrect. In a unilateral contract the offeree accepts by performing; separate notice of acceptance is not required unless the offer demands it or the offeror has no reasonable means of learning of performance. Returning the dog was both the performance and the acceptance."
+  },
+  tags: ["batch-2026-09-23", "contracts", "unilateral contract", "acceptance by performance", "types of contracts"]
+},
+{
+  id: "REG-195",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Formation",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A wholesaler sent a retailer a written offer to sell 1,000 units of goods at $30 each. The retailer, also a merchant, responded with a purchase order accepting the offer but adding a term requiring the wholesaler to pay return freight on defective units. The wholesaler shipped without objecting. Under the UCC, which of the following is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "No contract was formed because the acceptance did not mirror the offer" },
+    { key: "B", text: "A contract was formed and the return-freight term is part of it" },
+    { key: "C", text: "A contract was formed but the return-freight term is excluded" },
+    { key: "D", text: "The purchase order was a counteroffer that the wholesaler accepted by shipping" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. This applies the common-law mirror-image rule. Under UCC 2-207, a definite and seasonable expression of acceptance operates as an acceptance even though it states terms additional to those offered, unless acceptance is expressly made conditional on assent to the added terms.",
+    B: "Correct. Between merchants, an additional term in the acceptance becomes part of the contract under UCC 2-207(2) unless the offer expressly limited acceptance to its terms, the term materially alters the contract, or the offeror objects within a reasonable time. A modest freight allocation on defective goods is not a material alteration, and the wholesaler did not object, so the term is included.",
+    C: "Incorrect. This is the result when one party is not a merchant, in which case additional terms are treated merely as proposals that need express assent. Both parties here are merchants, so the additional term is automatically included absent objection or material alteration.",
+    D: "Incorrect. Under UCC 2-207 a response with additional terms is an acceptance, not a counteroffer, unless it is expressly conditioned on assent to the new terms. The contract was formed when the purchase order was sent, not when the goods were shipped."
+  },
+  tags: ["batch-2026-09-23", "contracts", "UCC 2-207", "battle of the forms", "additional terms", "merchants"]
+},
+{
+  id: "REG-196",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Formation",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A parts supplier contracted to deliver 5,000 components to a manufacturer at $12 each. Before delivery, the supplier's raw material costs rose and it asked for $14 per unit. The manufacturer agreed in a signed writing, and the supplier gave nothing new in exchange. Is the manufacturer's promise to pay $14 per unit enforceable?",
+  reference: "",
+  options: [
+    { key: "A", text: "No, because the supplier had a preexisting duty to deliver at $12" },
+    { key: "B", text: "No, because a price modification of goods must be supported by consideration" },
+    { key: "C", text: "Yes, because a good-faith modification of a contract for the sale of goods needs no consideration" },
+    { key: "D", text: "Yes, because any written modification is enforceable regardless of good faith" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. The preexisting duty rule is a common-law doctrine that governs service and construction contracts. This is a sale of goods governed by UCC Article 2, which displaces the preexisting duty rule for contract modifications.",
+    B: "Incorrect. This states the common-law rule. UCC 2-209(1) provides that an agreement modifying a contract within Article 2 needs no consideration to be binding, so long as the modification is sought in good faith.",
+    C: "Correct. Under UCC 2-209(1), a modification of a contract for the sale of goods is binding without new consideration. The requirement is good faith, which a genuine increase in the supplier's costs satisfies. Because the modified contract price ($70,000) exceeds $500, the signed writing also satisfies the statute of frauds under UCC 2-209(3).",
+    D: "Incorrect. UCC 2-209 requires that the modification be made in good faith; extortion of a price increase by threatening breach without a legitimate commercial reason would not be enforceable. A writing alone does not cure bad faith."
+  },
+  tags: ["batch-2026-09-23", "contracts", "UCC 2-209", "modification", "consideration", "good faith"]
+},
+{
+  id: "REG-197",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Performance and discharge",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A portrait artist contracted to paint a client's portrait for $15,000, and a dealer separately contracted to sell the client 100 identical prints for $5,000. Before either contract was performed, the artist died and the dealer's warehouse manager died. Which contract, if any, is discharged?",
+  reference: "",
+  options: [
+    { key: "A", text: "Only the portrait contract, because personal services died with the artist" },
+    { key: "B", text: "Only the print contract, because the dealer's employee was necessary to perform" },
+    { key: "C", text: "Both contracts, because death of a party or key employee is a supervening event" },
+    { key: "D", text: "Neither contract, because death never excuses performance of a commercial contract" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. A contract for personal services that depends on the particular skill of the promisor is discharged by objective impossibility when the promisor dies or becomes incapacitated. Painting a portrait is such a service. A contract to deliver fungible goods is not discharged by the death of an employee, because the goods can be delivered by anyone.",
+    B: "Incorrect. The death of a warehouse manager does not make delivery of standard prints impossible; the dealer can have someone else perform. Impossibility requires that performance be objectively impossible, not merely inconvenient for the particular obligor.",
+    C: "Incorrect. Death discharges only contracts requiring the personal performance of the deceased. Ordinary commercial obligations, including sales of goods, survive and bind the estate or the business, so the print contract remains enforceable.",
+    D: "Incorrect. Death of the promisor does discharge contracts for personal services because performance has become objectively impossible. The rule that commercial contracts survive death applies to obligations that others can perform, such as the print sale, not to personal services."
+  },
+  tags: ["batch-2026-09-23", "contracts", "discharge", "impossibility", "personal services", "death of party"]
+},
+{
+  id: "REG-198",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Performance and discharge",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A contractor agreed to build a garage for an owner for $60,000. The contractor delegated the entire job to a subcontractor and the owner, in a signed writing, agreed to accept the subcontractor's performance and release the contractor from all obligations. The subcontractor then abandoned the project. Whom may the owner hold liable?",
+  reference: "",
+  options: [
+    { key: "A", text: "The contractor only, because a delegating party always remains liable" },
+    { key: "B", text: "The subcontractor only, because a novation released the contractor" },
+    { key: "C", text: "Either the contractor or the subcontractor, because delegation does not discharge the delegator" },
+    { key: "D", text: "Neither, because the owner's consent to the delegation waived any claim for breach" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. A delegating party remains liable after an ordinary delegation, but here the owner did more than consent to the delegation. The owner expressly agreed to substitute the subcontractor and release the contractor, which is a novation, not a bare delegation.",
+    B: "Correct. A novation is an agreement among all three parties in which the obligee accepts a new obligor in substitution for the original one and releases the original. Because the owner agreed in writing to accept the subcontractor's performance and discharge the contractor, the contractor is released and only the subcontractor is liable for the abandonment.",
+    C: "Incorrect. This is the correct result for a delegation to which the obligee merely acquiesces: the delegator stays liable as a surety for the delegatee's performance. It does not apply where the obligee has expressly released the delegator, because that release converts the arrangement into a novation.",
+    D: "Incorrect. Consent to a delegation or novation is not a waiver of the right to performance. The owner gave up its claim against the contractor, not its claim to have the garage built, and may sue the substituted party for breach."
+  },
+  tags: ["batch-2026-09-23", "contracts", "novation", "delegation", "discharge by agreement"]
+},
+{
+  id: "REG-199",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Breach and remedies",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A buyer contracted to purchase 200 units of goods from a seller at $150 per unit. The buyer wrongfully refused delivery. The seller, after giving the buyer reasonable notice, resold the identical units in a commercially reasonable manner for $130 per unit, incurring $800 of additional advertising costs and saving $300 of delivery expense. Under the UCC, what amount may the seller recover from the buyer?",
+  reference: "",
+  options: [
+    { key: "A", text: "$3,700" },
+    { key: "B", text: "$4,000" },
+    { key: "C", text: "$4,500" },
+    { key: "D", text: "$4,800" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $3,700 correctly subtracts the $300 of delivery expense saved ($4,000 - $300) but omits the $800 of advertising incurred on the resale. Under UCC 2-710 commercially reasonable expenses incurred in reselling the goods are incidental damages the seller recovers in addition to the price differential.",
+    B: "Incorrect. $4,000 is only the contract-price minus resale-price differential (200 x ($150 - $130)). It omits the $800 of incidental resale costs the seller may recover and fails to subtract the $300 of expenses saved by the buyer's breach.",
+    C: "Correct. Under UCC 2-706, a seller who resells in good faith and in a commercially reasonable manner recovers the contract price less the resale price, plus incidental damages under 2-710, less expenses saved because of the breach: (200 x $150) - (200 x $130) = $4,000, plus $800 advertising, less $300 saved = $4,500.",
+    D: "Incorrect. $4,800 adds the $800 of incidental damages but does not subtract the $300 of delivery expense the seller saved because it no longer had to ship to the buyer. UCC 2-706 requires expenses saved in consequence of the breach to be deducted."
+  },
+  tags: ["batch-2026-09-23", "contracts", "UCC 2-706", "seller's resale damages", "incidental damages", "remedies"]
+},
+{
+  id: "REG-200",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Contracts — Breach and remedies",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Which of the following statements regarding remedies for breach of contract is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "Punitive damages are generally awarded when a breach is willful" },
+    { key: "B", text: "A liquidated damages clause is enforceable if it is a reasonable forecast of harm that was difficult to estimate" },
+    { key: "C", text: "Specific performance is available for any breach involving the sale of goods" },
+    { key: "D", text: "A nonbreaching party may recover consequential damages even if they were not foreseeable" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Punitive damages are generally not recoverable for breach of contract, however deliberate, because contract remedies aim to compensate rather than punish. They are available only when the conduct also constitutes an independent tort such as fraud.",
+    B: "Correct. Courts enforce a liquidated damages provision when, at the time of contracting, actual damages would have been difficult to estimate and the stipulated amount is a reasonable forecast of the probable loss. A clause that is disproportionate to any likely harm is an unenforceable penalty.",
+    C: "Incorrect. Specific performance is an equitable remedy reserved for cases where money damages are inadequate, such as land or unique goods (UCC 2-716). For ordinary fungible goods the buyer's remedy is cover or market-price damages, not a decree compelling delivery.",
+    D: "Incorrect. Consequential damages are recoverable only if they were reasonably foreseeable to the breaching party at the time of contracting. Unforeseeable losses are excluded under the rule of Hadley v. Baxendale and UCC 2-715."
+  },
+  tags: ["batch-2026-09-23", "contracts", "liquidated damages", "specific performance", "punitive damages", "consequential damages"]
+},
+{
+  id: "REG-201",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Debtor-creditor relationships — Suretyship, secured transactions and bankruptcy distributions",
+  skill: "Application",
+  difficulty: 3,
+  stem: "On January 5, a bank filed a financing statement perfecting a security interest in all of a company's present and after-acquired equipment. On March 1, a vendor sold the company a machine on credit, retaining a security interest in it, and the company took possession that day. The vendor filed a financing statement on March 15. As to the machine, whose interest has priority?",
+  reference: "",
+  options: [
+    { key: "A", text: "The bank, because it filed first" },
+    { key: "B", text: "The bank, because a purchase-money security interest in equipment is perfected only by possession" },
+    { key: "C", text: "The vendor, because it filed within 20 days after the company received possession" },
+    { key: "D", text: "The vendor, because a purchase-money security interest in equipment is automatically perfected" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. The general first-to-file-or-perfect rule of UCC 9-322 would favor the bank, but it is displaced by the purchase-money superpriority in UCC 9-324(a). A PMSI in equipment that is perfected within 20 days of the debtor receiving possession beats an earlier-filed conflicting interest.",
+    B: "Incorrect. A security interest in equipment may be perfected by filing a financing statement; possession is not required. The vendor's filing was effective and, because it was timely, gives the vendor superpriority.",
+    C: "Correct. Under UCC 9-324(a), a perfected purchase-money security interest in goods other than inventory or livestock has priority over a conflicting security interest in the same goods if the PMSI is perfected when the debtor receives possession or within 20 days thereafter. The vendor filed 14 days after delivery, so its PMSI defeats the bank's earlier-filed after-acquired interest.",
+    D: "Incorrect. Automatic perfection on attachment under UCC 9-309(1) applies only to a PMSI in consumer goods. A machine used in a business is equipment, so the vendor had to file (and did) to perfect; the vendor wins because the filing was within the 20-day grace period, not because perfection was automatic."
+  },
+  tags: ["batch-2026-09-23", "secured transactions", "UCC 9-324", "PMSI", "equipment", "priority", "20-day rule"]
+},
+{
+  id: "REG-202",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Debtor-creditor relationships — Suretyship, secured transactions and bankruptcy distributions",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A surety guaranteed a debtor's $50,000 bank loan, which was also secured by the debtor's equipment. The debtor defaulted and the surety paid the bank the full $50,000. Which of the following rights does the surety now have?",
+  reference: "",
+  options: [
+    { key: "A", text: "Subrogation to the bank's rights against the debtor, including the security interest in the equipment" },
+    { key: "B", text: "Exoneration, requiring the bank to return the $50,000 and proceed first against the debtor" },
+    { key: "C", text: "Contribution from the bank for one-half of the amount paid" },
+    { key: "D", text: "Recovery from the debtor only after the bank has exhausted the equipment" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. A surety that pays the creditor in full is subrogated to the creditor's rights against the principal debtor, stepping into the creditor's position with respect to the debt and any collateral securing it. The surety may therefore enforce the security interest in the equipment and also has a direct right of reimbursement against the debtor.",
+    B: "Incorrect. Exoneration is a right the surety may assert before paying, by seeking a court order compelling the debtor to pay the matured debt. Once the surety has paid, exoneration is no longer available and the surety cannot compel the creditor to refund the payment.",
+    C: "Incorrect. Contribution is the right of a co-surety to recover from other co-sureties their proportionate share of a payment. The bank is the creditor, not a co-surety, so it owes the surety nothing.",
+    D: "Incorrect. Absent an agreement otherwise, a surety is primarily liable and the creditor need not pursue the debtor or the collateral first. Correspondingly, after paying, the surety may proceed immediately against the debtor for reimbursement and may itself enforce the collateral through subrogation."
+  },
+  tags: ["batch-2026-09-23", "suretyship", "subrogation", "reimbursement", "exoneration", "guarantor rights"]
+},
+{
+  id: "REG-203",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Federal laws and regulations — Bankruptcy (types, discharge and avoidance)",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "An individual with regular monthly income has fallen behind on mortgage payments and wants to keep the home while repaying creditors over time under a court-approved plan. Which chapter of the Bankruptcy Code is designed for this purpose?",
+  reference: "",
+  options: [
+    { key: "A", text: "Chapter 7" },
+    { key: "B", text: "Chapter 9" },
+    { key: "C", text: "Chapter 11" },
+    { key: "D", text: "Chapter 13" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. Chapter 7 is a liquidation. A trustee collects and sells the debtor's nonexempt assets and distributes the proceeds to creditors; it does not provide for a repayment plan and is generally unsuitable for a debtor whose goal is to cure a mortgage default and keep the home.",
+    B: "Incorrect. Chapter 9 provides for the adjustment of debts of a municipality. It is not available to individuals.",
+    C: "Incorrect. Chapter 11 is a reorganization used primarily by businesses, although individuals may file under it. It is far more complex and costly than Chapter 13 and is not the chapter designed for an individual wage earner's repayment plan.",
+    D: "Correct. Chapter 13 (adjustment of debts of an individual with regular income) allows an individual debtor to propose a three- to five-year plan to repay creditors from future income while retaining assets, including curing a mortgage default over the life of the plan. Discharge is granted on completion of the plan."
+  },
+  tags: ["batch-2026-09-23", "bankruptcy", "Chapter 13", "types of bankruptcy", "repayment plan"]
+},
+{
+  id: "REG-204",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Federal laws and regulations — Employment taxes and worker classification",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A corporation withheld $40,000 of federal income tax and $12,000 of the employees' share of FICA from wages but, on the instructions of its treasurer, used the money to pay suppliers instead of depositing it with the Treasury. The corporation is now insolvent. What is the maximum trust fund recovery penalty the IRS may assess personally against the treasurer under IRC §6672?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0, because the penalty may be assessed only against the corporation" },
+    { key: "B", text: "$26,000" },
+    { key: "C", text: "$52,000" },
+    { key: "D", text: "$64,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. The purpose of §6672 is to reach beyond the employer entity. Any person who is responsible for collecting, accounting for and paying over withheld taxes and who willfully fails to do so is personally liable, and the penalty is commonly assessed against officers when the corporation cannot pay.",
+    B: "Incorrect. $26,000 is 50% of the trust fund taxes. The §6672 penalty is not a percentage; it equals 100% of the withheld tax that was not paid over.",
+    C: "Correct. The trust fund recovery penalty under §6672 equals the full amount of the taxes withheld from employees and not paid over: $40,000 of income tax withholding plus $12,000 of employee FICA = $52,000. The treasurer is a responsible person who willfully preferred other creditors, which satisfies the willfulness requirement.",
+    D: "Incorrect. $64,000 adds the employer's matching share of FICA ($12,000). The employer's own share is not a trust fund tax because it was never withheld from employees, so it is outside §6672 even though the corporation still owes it."
+  },
+  tags: ["batch-2026-09-23", "employment taxes", "§6672", "trust fund recovery penalty", "responsible person", "withholding"]
+},
+{
+  id: "REG-205",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Federal laws and regulations — Qualified health plans (ACA)",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Which of the following statements regarding the premium tax credit under IRC §36B is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "It is a nonrefundable credit available only to taxpayers who itemize deductions" },
+    { key: "B", text: "It is available to an individual eligible for affordable, minimum-value coverage from an employer" },
+    { key: "C", text: "It is a refundable credit for coverage purchased through a Health Insurance Marketplace" },
+    { key: "D", text: "It may be claimed only after the end of the year on the individual's tax return" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. The premium tax credit is refundable and is claimed regardless of whether the taxpayer itemizes. Its purpose is to subsidize premiums for lower- and middle-income households, many of whom have little or no tax liability.",
+    B: "Incorrect. An individual who is eligible for employer-sponsored coverage that is affordable and provides minimum value is not eligible for the premium tax credit for any month of that eligibility. The credit is intended for those without access to adequate employer coverage or government programs.",
+    C: "Correct. Under §36B the premium tax credit is a refundable credit that helps eligible individuals and families pay premiums for qualified health plans purchased through a Marketplace (Exchange). Eligibility depends on household income relative to the federal poverty line, not being eligible for other minimum essential coverage, and not being claimed as a dependent.",
+    D: "Incorrect. The credit may be paid in advance directly to the insurer during the year (advance premium tax credit) based on projected income. The taxpayer then reconciles the advance payments with the actual credit on Form 8962 when filing the return, repaying any excess subject to caps."
+  },
+  tags: ["batch-2026-09-23", "ACA", "§36B", "premium tax credit", "Marketplace", "refundable credit"]
+},
+{
+  id: "REG-206",
+  area: "II",
+  areaName: "Business Law",
+  topic: "Business structure — Rights, duties, obligations and authority of owners and management",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A director of a corporation owns a warehouse that the corporation wishes to lease. The director fully disclosed the ownership interest to the board, did not vote, and the remaining disinterested directors approved the lease at a rent equal to market rates. A shareholder later challenges the lease. Which of the following is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "The lease is void because a director may never contract with the corporation" },
+    { key: "B", text: "The lease is voidable at the corporation's option regardless of fairness" },
+    { key: "C", text: "The lease is valid because it was approved by disinterested directors after full disclosure" },
+    { key: "D", text: "The lease is valid only if it was also ratified by a majority of shareholders" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Modern corporation statutes do not prohibit transactions between a corporation and its directors. Such conflicting-interest transactions are permitted if properly approved or if fair to the corporation; an absolute ban would deprive corporations of legitimate dealings with insiders.",
+    B: "Incorrect. A self-dealing transaction is voidable only when it was neither properly approved nor fair. Where the safe-harbor procedure was followed, the transaction is not voidable merely because a director was interested.",
+    C: "Correct. Under typical state law (e.g., Model Business Corporation Act §8.61-8.62), a director's conflicting-interest transaction is protected if the material facts were disclosed and the transaction was approved by a majority of disinterested directors, or approved by disinterested shareholders, or is shown to be fair to the corporation. Full disclosure, abstention and approval by disinterested directors at market terms satisfy the duty of loyalty.",
+    D: "Incorrect. Shareholder ratification is an alternative safe harbor, not an additional requirement. Approval by disinterested directors after full disclosure is sufficient on its own; shareholder approval is needed only when disinterested director approval is unavailable or the parties choose that route."
+  },
+  tags: ["batch-2026-09-23", "corporations", "duty of loyalty", "conflicting-interest transaction", "disinterested directors", "self-dealing"]
+},
+// ---- Batch 2026-09-23, Area III ----
+{
+  id: "REG-207",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer inherited stock that the decedent had purchased for $40,000. The stock was worth $100,000 on the date of death, $92,000 when the executor distributed it to the taxpayer four months after death, and $90,000 six months after death. The executor elected the alternate valuation date. What is the taxpayer's basis in the stock?",
+  reference: "",
+  options: [
+    { key: "A", text: "$40,000" },
+    { key: "B", text: "$90,000" },
+    { key: "C", text: "$92,000" },
+    { key: "D", text: "$100,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $40,000 carries over the decedent's cost as if the stock had been received by gift. Inherited property takes a basis equal to its estate tax value under §1014, not the decedent's basis.",
+    B: "Incorrect. $90,000 is the value exactly six months after death. Under §2032(a)(1), property that is distributed, sold or otherwise disposed of within the six-month period is valued as of the date of distribution or disposition, not the six-month date.",
+    C: "Correct. When the executor elects the alternate valuation date, the basis of inherited property under §1014(a)(2) is its value on the alternate valuation date. For property distributed before the six-month date, §2032(a)(1) sets that value at the date of distribution, so the taxpayer's basis is the $92,000 value on the distribution date.",
+    D: "Incorrect. $100,000 is the date-of-death value. That is the basis only when the alternate valuation date is not elected (§1014(a)(1)); the election here shifts the valuation to the distribution date."
+  },
+  tags: ["batch-2026-09-23", "§1014", "§2032", "alternate valuation date", "inherited property"]
+},
+{
+  id: "REG-208",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer received land as a gift. The donor had held the land for five years and had an adjusted basis of $30,000; the land's fair market value on the date of the gift was $20,000. No gift tax was paid. Eight months later the taxpayer sold the land to an unrelated party for $17,000. What is the amount and character of the taxpayer's loss?",
+  reference: "",
+  options: [
+    { key: "A", text: "$3,000 short-term capital loss" },
+    { key: "B", text: "$3,000 long-term capital loss" },
+    { key: "C", text: "$13,000 short-term capital loss" },
+    { key: "D", text: "$13,000 long-term capital loss" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. When the donor's basis exceeds fair market value at the date of the gift, the donee's basis for determining loss is the $20,000 fair market value (§1015(a)). Selling for $17,000 produces a $3,000 loss. Because the donee's basis is fair market value rather than the donor's carryover basis, the donor's holding period does not tack under §1223(2) and Reg. §1.1223-1(b); the donee's own eight-month holding period makes the loss short-term.",
+    B: "Incorrect. $3,000 is the right amount, but long-term wrongly tacks the donor's five-year holding period. Tacking applies only when the donee's basis is determined by reference to the donor's basis; the fair-market-value loss basis is not, so the holding period starts on the date of the gift.",
+    C: "Incorrect. $13,000 uses the donor's $30,000 carryover basis ($30,000 - $17,000). Carryover basis applies to gains and to sales between the two basis figures, but for a sale below fair market value the loss basis is the $20,000 fair market value.",
+    D: "Incorrect. $13,000 uses the donor's $30,000 basis and also tacks the donor's holding period. Both steps are wrong for a loss sale of gifted loss property: the basis is the $20,000 fair market value and the holding period begins on the date of the gift."
+  },
+  tags: ["batch-2026-09-23", "§1015", "dual basis", "gift of loss property", "holding period", "§1223"]
+},
+{
+  id: "REG-209",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer purchased a condominium for $300,000 and used it as a personal residence. When its fair market value was $260,000, the taxpayer converted it to rental property. After renting it out for six years, during which the taxpayer properly claimed $20,000 of depreciation, the taxpayer sold the condominium for $310,000. What amount of gain should the taxpayer recognize on the sale?",
+  reference: "",
+  options: [
+    { key: "A", text: "$10,000" },
+    { key: "B", text: "$30,000" },
+    { key: "C", text: "$50,000" },
+    { key: "D", text: "$70,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $10,000 ($310,000 - $300,000) ignores the $20,000 of depreciation. Under §1016(a)(2) basis is reduced by the depreciation allowed or allowable, so the adjusted basis for gain is $280,000, not $300,000.",
+    B: "Correct. The lower fair-market-value basis of Reg. §1.165-9(b) applies only for computing a loss. For gain, the taxpayer uses the original $300,000 cost reduced by the $20,000 of depreciation, an adjusted basis of $280,000. Gain is $310,000 - $280,000 = $30,000.",
+    C: "Incorrect. $50,000 ($310,000 - $260,000) uses the $260,000 fair market value at conversion as the basis for gain without reducing it for depreciation. Fair market value at conversion is the starting point only for the loss basis and for depreciation, not for measuring gain.",
+    D: "Incorrect. $70,000 ($310,000 - ($260,000 - $20,000)) uses the loss basis (fair market value at conversion less depreciation) to compute a gain. Because the sale produced a gain, the original cost basis less depreciation controls under Reg. §1.165-9(b)(2) and §1011."
+  },
+  tags: ["batch-2026-09-23", "conversion to rental", "Reg. §1.165-9", "§1016", "adjusted basis", "gain on sale"]
+},
+{
+  id: "REG-210",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer sold 100 shares of a corporation's stock, which had a basis of $10,000, for $7,000. Ten days later the taxpayer purchased 60 shares of the same stock for $4,500. What is the taxpayer's basis in the 60 shares purchased?",
+  reference: "",
+  options: [
+    { key: "A", text: "$4,500" },
+    { key: "B", text: "$6,000" },
+    { key: "C", text: "$6,300" },
+    { key: "D", text: "$7,500" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $4,500 is the cost of the new shares with no wash-sale adjustment. Because substantially identical stock was acquired within 30 days of the loss sale, §1091 disallows part of the $3,000 loss and §1091(d) adds the disallowed amount to the basis of the replacement shares.",
+    B: "Incorrect. $6,000 carries over the original per-share basis ($10,000 / 100 = $100 x 60 shares). The replacement shares take their own cost plus the disallowed loss, not the basis of the shares that were sold.",
+    C: "Correct. The realized loss is $10,000 - $7,000 = $3,000. Only 60 of the 100 shares were replaced, so under §1091(b) 60% of the loss, $1,800, is disallowed and the remaining $1,200 is currently deductible. The disallowed $1,800 is added to the cost of the replacement shares under §1091(d): $4,500 + $1,800 = $6,300.",
+    D: "Incorrect. $7,500 ($4,500 + $3,000) adds the entire loss to the new shares' basis. When fewer shares are repurchased than were sold, the wash-sale rule applies only to the proportion of shares replaced (60/100), so only $1,800 of the loss is disallowed and added to basis."
+  },
+  tags: ["batch-2026-09-23", "§1091", "wash sale", "partial repurchase", "basis adjustment"]
+},
+{
+  id: "REG-211",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "On the first day of Year 1, a calendar-year business paid $12,000 of loan origination fees and legal costs to obtain a five-year business loan. On the last day of Year 3 the business repaid the loan in full. What amount may the business deduct for these loan costs in Year 3?",
+  reference: "",
+  options: [
+    { key: "A", text: "$2,400" },
+    { key: "B", text: "$4,800" },
+    { key: "C", text: "$7,200" },
+    { key: "D", text: "$12,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $2,400 is only the regular Year 3 amortization ($12,000 / 5 years). It ignores that the loan was retired in Year 3, which allows the remaining unamortized balance to be deducted in the year of repayment.",
+    B: "Incorrect. $4,800 is the unamortized balance for Years 4 and 5 (2 x $2,400) that is written off on repayment, but it omits the regular $2,400 amortization for Year 3 itself. Both amounts are deductible in Year 3.",
+    C: "Correct. Debt issuance costs are capitalized and amortized over the term of the loan under Reg. §1.446-5, here $12,000 / 5 = $2,400 per year. Year 3 receives its regular $2,400, and because the loan was paid off at year-end the remaining unamortized $4,800 (Years 4 and 5) is also deducted, for a total of $7,200.",
+    D: "Incorrect. $12,000 treats the entire cost as deductible in Year 3. Years 1 and 2 already absorbed $2,400 each through amortization, so only the remaining $7,200 of basis is available in Year 3."
+  },
+  tags: ["batch-2026-09-23", "loan costs", "debt issuance costs", "Reg. §1.446-5", "amortization", "early repayment"]
+},
+{
+  id: "REG-212",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A calendar-year corporation began business operations on April 1 of Year 1. Before opening it incurred $60,000 of start-up costs for market research and employee training, and it elects to deduct start-up costs to the extent allowed under §195. What amount may the corporation deduct for start-up costs in Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$3,000" },
+    { key: "B", text: "$4,000" },
+    { key: "C", text: "$5,000" },
+    { key: "D", text: "$7,750" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. The $5,000 first-year deduction under §195(b)(1)(A) is reduced dollar-for-dollar by the amount of start-up costs over $50,000. Costs of $60,000 exceed $50,000 by $10,000, so the immediate deduction is $0. The full $60,000 is amortized over 180 months beginning with the month business began: $60,000 / 180 x 9 months (April-December) = $3,000.",
+    B: "Incorrect. $4,000 amortizes $60,000 over 180 months for a full 12 months ($60,000 / 180 x 12). Amortization begins with the month in which the active trade or business begins, so only 9 months are allowed in Year 1.",
+    C: "Incorrect. $5,000 claims the full first-year deduction without applying the phase-out. Because start-up costs exceed $50,000 by $10,000, the $5,000 allowance is reduced to $0 under §195(b)(1)(A)(ii).",
+    D: "Incorrect. $7,750 takes the $5,000 immediate deduction and amortizes the $55,000 remainder over 9 months ($55,000 / 180 x 9 = $2,750). It ignores the phase-out of the $5,000 allowance when costs exceed $50,000."
+  },
+  tags: ["batch-2026-09-23", "§195", "start-up costs", "phase-out", "180-month amortization"]
+},
+{
+  id: "REG-213",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Basis of assets — Purchased, converted, gifted, inherited and intangible assets",
+  skill: "Application",
+  difficulty: 2,
+  stem: "In Year 1 a taxpayer bought 100 shares of a corporation's stock for $20 per share plus a $50 commission. In Year 2 the taxpayer bought another 100 shares for $30 per share plus a $50 commission. In Year 4 the taxpayer sold 150 shares for $40 per share without identifying which shares were sold. What is the taxpayer's recognized gain?",
+  reference: "",
+  options: [
+    { key: "A", text: "$1,925" },
+    { key: "B", text: "$2,175" },
+    { key: "C", text: "$2,425" },
+    { key: "D", text: "$2,500" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $1,925 treats the shares as sold on a last-in, first-out basis (100 Year 2 shares at $30.50 plus 50 Year 1 shares at $20.50 = $4,075 basis). Reg. §1.1012-1(c) requires first-in, first-out when the taxpayer does not adequately identify the shares sold.",
+    B: "Incorrect. $2,175 uses an average cost of $25.50 per share (($2,050 + $3,050) / 200 x 150 = $3,825 basis). Average-cost basis is available only for mutual fund shares and certain dividend-reinvestment-plan shares under Reg. §1.1012-1(e), not for ordinary corporate stock.",
+    C: "Correct. Commissions are part of the cost basis under §1012. The Year 1 lot has a basis of $2,050 ($20.50 per share) and the Year 2 lot $3,050 ($30.50 per share). With no identification, FIFO applies: the 150 shares sold are the 100 Year 1 shares ($2,050) plus 50 Year 2 shares ($1,525), a basis of $3,575. Gain is $6,000 - $3,575 = $2,425.",
+    D: "Incorrect. $2,500 applies FIFO but leaves the commissions out of basis ($2,000 + $1,500 = $3,500). Brokerage commissions paid to acquire stock are capitalized into the cost of the shares, not deducted, so they reduce the gain."
+  },
+  tags: ["batch-2026-09-23", "§1012", "stock basis", "FIFO", "Reg. §1.1012-1(c)", "commissions"]
+},
+{
+  id: "REG-214",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Cost recovery — Depreciation (MACRS, bonus, §179) and amortization",
+  skill: "Application",
+  difficulty: 2,
+  stem: "In Year 1 a calendar-year business placed in service 5-year MACRS equipment costing $100,000. The business elected out of bonus depreciation and did not elect §179 expensing. The half-year convention applies. The equipment was sold in August of Year 3. Using the table provided, what amount of depreciation is allowed for Year 3?",
+  reference: "| MACRS 5-year, 200% declining balance, half-year convention | Rate |\n|---|---|\n| Year 1 | 20.00% |\n| Year 2 | 32.00% |\n| Year 3 | 19.20% |\n| Year 4 | 11.52% |\n| Year 5 | 11.52% |\n| Year 6 | 5.76% |",
+  options: [
+    { key: "A", text: "$9,600" },
+    { key: "B", text: "$11,520" },
+    { key: "C", text: "$16,000" },
+    { key: "D", text: "$19,200" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under the half-year convention of §168(d)(4)(A), property is treated as disposed of at the midpoint of the year of disposition, so only half of the table amount is allowed in that year: $100,000 x 19.20% = $19,200 x 1/2 = $9,600. The actual month of sale (August) does not matter.",
+    B: "Incorrect. $11,520 applies the Year 4 rate (11.52%). The equipment was placed in service in Year 1, so Year 3 is its third recovery year and the 19.20% rate applies, then halved for the disposition.",
+    C: "Incorrect. $16,000 halves the Year 2 rate ($100,000 x 32% / 2). The Year 3 rate of 19.20% is the correct row of the table for the third year of the recovery period.",
+    D: "Incorrect. $19,200 is the full Year 3 table amount. Because the asset was disposed of during Year 3, the half-year convention limits the deduction to one-half of the annual amount in the year of disposition."
+  },
+  tags: ["batch-2026-09-23", "MACRS", "half-year convention", "§168(d)", "year of disposition", "5-year property"]
+},
+{
+  id: "REG-215",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Cost recovery — Depreciation (MACRS, bonus, §179) and amortization",
+  skill: "Application",
+  difficulty: 2,
+  stem: "On May 12 of Year 1, a calendar-year corporation purchased an office building for $1,170,000, of which $390,000 was allocable to the land, and immediately placed it in service. The building is nonresidential real property with a 39-year recovery period. What is the corporation's Year 1 depreciation deduction for the building?",
+  reference: "",
+  options: [
+    { key: "A", text: "$12,500" },
+    { key: "B", text: "$13,333" },
+    { key: "C", text: "$18,750" },
+    { key: "D", text: "$20,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Land is not depreciable, so the depreciable basis is $1,170,000 - $390,000 = $780,000. Nonresidential real property is depreciated straight-line over 39 years using the mid-month convention (§168(b)(3), (c), (d)(2)). Annual depreciation is $780,000 / 39 = $20,000; property placed in service in May is treated as placed in service mid-May, giving 7.5 months: $20,000 x 7.5 / 12 = $12,500.",
+    B: "Incorrect. $13,333 ($20,000 x 8 / 12) counts the full month of May. The mid-month convention of §168(d)(4)(B) treats real property as placed in service at the midpoint of the month, so May counts as half a month (7.5 months total).",
+    C: "Incorrect. $18,750 ($1,170,000 / 39 x 7.5 / 12) applies the correct convention but includes the $390,000 of land in the depreciable basis. Land has an unlimited useful life and is never depreciable.",
+    D: "Incorrect. $20,000 is a full year of depreciation on the $780,000 building. The mid-month convention limits the first year to 7.5 months for property placed in service in May."
+  },
+  tags: ["batch-2026-09-23", "nonresidential real property", "39-year", "mid-month convention", "§168", "land not depreciable"]
+},
+{
+  id: "REG-216",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Cost recovery — Depreciation (MACRS, bonus, §179) and amortization",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A sole proprietor placed $900,000 of qualifying equipment in service during the year and elected to expense the entire cost under §179. The dollar limit for the year is $2,500,000, and the phase-out begins at $4,000,000 of purchases. The proprietorship's net income before the §179 deduction was $600,000, and the proprietor also earned $100,000 of wages as an employee of an unrelated company. What amount may be deducted under §179 in the current year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$500,000" },
+    { key: "B", text: "$600,000" },
+    { key: "C", text: "$700,000" },
+    { key: "D", text: "$900,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $500,000 subtracts the wages from the proprietorship income ($600,000 - $100,000). Wages earned as an employee are added to, not subtracted from, the active trade or business income that sets the §179 limit under Reg. §1.179-2(c)(6)(iv).",
+    B: "Incorrect. $600,000 limits the deduction to the proprietorship's own net income. Under Reg. §1.179-2(c)(6)(iv) an individual's W-2 wages count as income from the active conduct of a trade or business, so the taxable income limit is $700,000.",
+    C: "Correct. The $900,000 elected is within the $2,500,000 dollar limit and no phase-out applies. However, §179(b)(3) limits the deduction to the taxpayer's aggregate taxable income from the active conduct of any trade or business, which for an individual includes wages: $600,000 + $100,000 = $700,000. The disallowed $200,000 carries forward indefinitely to later years.",
+    D: "Incorrect. $900,000 ignores the taxable income limitation of §179(b)(3). Although the full cost is within the dollar limit, only $700,000 can be deducted in the current year; the remaining $200,000 is carried forward, not deducted or lost."
+  },
+  tags: ["batch-2026-09-23", "§179", "taxable income limitation", "W-2 wages", "carryforward"]
+},
+{
+  id: "REG-217",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Cost recovery — Depreciation (MACRS, bonus, §179) and amortization",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "A calendar-year corporation acquired each of the following assets from unrelated parties during the current year and placed them in service in its business. Which asset is NOT eligible for the special depreciation allowance (bonus depreciation) under §168(k)?",
+  reference: "",
+  options: [
+    { key: "A", text: "Used machinery with a 7-year recovery period never previously used by the corporation" },
+    { key: "B", text: "Off-the-shelf computer software" },
+    { key: "C", text: "An office building with a 39-year recovery period" },
+    { key: "D", text: "Qualified improvement property installed in a leased office" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Used property qualifies for bonus depreciation under §168(k)(2)(E)(ii) as long as the taxpayer did not previously hold a depreciable interest in it and it was not acquired from a related party or in a carryover-basis transaction. Machinery with a 7-year recovery period is MACRS property with a recovery period of 20 years or less.",
+    B: "Incorrect. Off-the-shelf computer software described in §167(f)(1) is specifically listed as qualified property under §168(k)(2)(A)(i)(II), even though it is an intangible amortized over 36 months.",
+    C: "Correct. Qualified property under §168(k)(2)(A)(i)(I) is MACRS property with a recovery period of 20 years or less. Nonresidential real property has a 39-year recovery period, so the building itself is not eligible for bonus depreciation and is depreciated straight-line over 39 years. Only certain interior improvements to such a building (qualified improvement property) or, after OBBBA, a qualified production property used in manufacturing can be expensed; an office building qualifies for neither.",
+    D: "Incorrect. Qualified improvement property (interior improvements to nonresidential real property after it is placed in service) has a 15-year recovery period and is expressly qualified property under §168(k)(2)(A)(i)(IV) and (e)(6)."
+  },
+  tags: ["batch-2026-09-23", "bonus depreciation", "§168(k)", "used property", "nonresidential real property", "qualified improvement property"]
+},
+{
+  id: "REG-218",
+  area: "III",
+  areaName: "Federal Taxation of Property Transactions",
+  topic: "Cost recovery — Depreciation (MACRS, bonus, §179) and amortization",
+  skill: "Application",
+  difficulty: 2,
+  stem: "On October 1 of Year 1, a calendar-year corporation purchased the assets of a competitor's business and allocated $180,000 of the purchase price to a customer list. Management estimates that the customer list has a useful life of five years. What amount of amortization may the corporation deduct for the customer list in Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$3,000" },
+    { key: "B", text: "$9,000" },
+    { key: "C", text: "$12,000" },
+    { key: "D", text: "$36,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. A customer list acquired in connection with the purchase of a business is a §197 intangible (§197(d)(1)(C)(ii)) and must be amortized straight-line over 15 years regardless of its actual useful life, beginning with the month of acquisition. $180,000 / 15 = $12,000 per year x 3/12 (October-December) = $3,000.",
+    B: "Incorrect. $9,000 amortizes the list over its estimated five-year useful life for three months ($180,000 / 5 x 3/12). §197(a) overrides useful-life amortization and imposes a fixed 15-year period for acquired intangibles.",
+    C: "Incorrect. $12,000 is a full year of §197 amortization ($180,000 / 15). Amortization begins with the month the intangible is acquired, so only three months (October through December) are allowed in Year 1.",
+    D: "Incorrect. $36,000 is a full year of amortization over the five-year useful life ($180,000 / 5). Both the period (15 years, not 5) and the partial-year computation (3 months, not 12) are wrong."
+  },
+  tags: ["batch-2026-09-23", "§197", "customer list", "15-year amortization", "acquired intangibles"]
+},
+// ---- Batch 2026-09-23, Area IV ----
+{
+  id: "REG-219",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An employer provided an employee with $150,000 of group-term life insurance coverage for the entire year under a nondiscriminatory plan. Under the IRS uniform premium table the cost for the employee's age is $0.15 per $1,000 of coverage per month. The employee paid $60 toward the coverage through payroll deductions. What amount must the employee include in gross income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$120" },
+    { key: "B", text: "$180" },
+    { key: "C", text: "$210" },
+    { key: "D", text: "$270" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §79(a) the cost of employer-provided group-term life insurance is excluded only for the first $50,000 of coverage. The excess coverage is $100,000, so the table cost is 100 x $0.15 x 12 months = $180. Amounts the employee pays toward the coverage reduce the inclusion (§79(a)(2)), so $180 - $60 = $120 is included.",
+    B: "Incorrect. $180 is the table cost of the $100,000 of excess coverage but ignores the $60 the employee paid. Under §79(a)(2) the includible amount is the table cost less any amount paid by the employee.",
+    C: "Incorrect. $210 applies the table rate to the full $150,000 of coverage (150 x $0.15 x 12 = $270) and then subtracts the $60 employee payment. The first $50,000 of coverage is excluded under §79(a)(1) and should not be in the computation.",
+    D: "Incorrect. $270 applies the table rate to the full $150,000 of coverage and ignores both the $50,000 exclusion and the $60 employee contribution."
+  },
+  tags: ["batch-2026-09-23", "§79", "group-term life insurance", "fringe benefits", "uniform premium table"]
+},
+{
+  id: "REG-220",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "Each of the following employer-provided benefits is excluded from an employee's gross income, except:",
+  reference: "",
+  options: [
+    { key: "A", text: "Occasional personal use of the employer's photocopier" },
+    { key: "B", text: "A professional journal subscription the employee uses in performing the job" },
+    { key: "C", text: "Paid membership at an off-premises athletic club" },
+    { key: "D", text: "Employer-paid premiums for the employee's health insurance" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Occasional personal use of office equipment is a de minimis fringe benefit under §132(e): its value is so small that accounting for it would be unreasonable or administratively impracticable. It is excluded from gross income.",
+    B: "Incorrect. A subscription the employee would have been able to deduct as a business expense if the employee had paid for it is a working condition fringe under §132(d) and is excluded.",
+    C: "Correct. The §132(j)(4) exclusion for athletic facilities applies only to a facility located on the employer's premises and operated by the employer substantially for the use of employees and their families. Paying for a membership at an off-site commercial club is a taxable fringe benefit includible in wages.",
+    D: "Incorrect. Employer contributions to accident or health plans are excluded from the employee's gross income under §106, regardless of amount."
+  },
+  tags: ["batch-2026-09-23", "§132", "fringe benefits", "de minimis fringe", "working condition fringe", "§106"]
+},
+{
+  id: "REG-221",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Application",
+  difficulty: 2,
+  stem: "During the current year an individual received $2,000 of interest on U.S. Treasury bonds, $1,500 of interest on bonds issued by a city, $800 of interest paid by the IRS on a late federal income tax refund, and a $1,200 distribution from a corporation that its Form 1099-DIV reported entirely as a nondividend distribution. What amount is included in the individual's gross income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$2,000" },
+    { key: "B", text: "$2,800" },
+    { key: "C", text: "$4,300" },
+    { key: "D", text: "$5,500" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $2,000 includes only the Treasury bond interest and omits the $800 of interest paid on the tax refund. Interest the government pays on an overpayment of tax is ordinary interest income under §61(a)(4); only the refund of the tax itself is not income.",
+    B: "Correct. Interest on U.S. Treasury obligations is fully taxable for federal purposes ($2,000), and interest paid by the IRS on a refund is taxable interest income ($800), for a total of $2,800 under §61(a)(4). Interest on obligations of a state or its political subdivisions is excluded by §103(a), and a nondividend distribution is a return of capital under §301(c)(2) that reduces the shareholder's stock basis and is not income unless it exceeds basis.",
+    C: "Incorrect. $4,300 adds the $1,500 of municipal bond interest to the taxable interest ($2,800 + $1,500). Interest on bonds issued by a state, city or other political subdivision is excluded from gross income under §103(a), although it is reported on the return and counts for certain other computations.",
+    D: "Incorrect. $5,500 includes every receipt. It fails to exclude the $1,500 of municipal interest under §103(a) and treats the $1,200 nondividend distribution as income; a distribution that is not out of earnings and profits is a tax-free recovery of basis under §301(c)(2) until basis is exhausted."
+  },
+  tags: ["batch-2026-09-23", "§61(a)(4)", "§103", "interest income", "nondividend distribution", "§301(c)"]
+},
+{
+  id: "REG-222",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer, age 62, has a single traditional IRA to which the taxpayer made $20,000 of nondeductible contributions over the years, properly reported on Form 8606. During the current year the taxpayer withdrew $20,000, and the account balance at year-end was $80,000. What amount of the distribution is included in gross income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$15,000" },
+    { key: "C", text: "$16,000" },
+    { key: "D", text: "$20,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $0 treats the entire withdrawal as a tax-free return of the $20,000 of basis. Under §72(e)(8) and §408(d)(2), nondeductible contributions are not recovered first; each distribution is partly basis and partly taxable earnings in the proportion that basis bears to the total account value.",
+    B: "Incorrect. $15,000 computes the exclusion ratio using only the year-end balance ($20,000 / $80,000 = 25%, so $5,000 excluded). The denominator must be the year-end balance plus the distributions made during the year ($100,000).",
+    C: "Correct. The exclusion ratio is basis divided by the account value at year-end plus current-year distributions: $20,000 / ($80,000 + $20,000) = 20%. The excluded portion is 20% x $20,000 = $4,000 and the taxable portion is $16,000 (§72(e)(8), Form 8606). The taxpayer is over 59 1/2, so no §72(t) additional tax applies.",
+    D: "Incorrect. $20,000 taxes the entire distribution and ignores the taxpayer's $20,000 of after-tax basis from nondeductible contributions, which is recovered pro rata under §72."
+  },
+  tags: ["batch-2026-09-23", "§72", "§408(d)", "traditional IRA", "nondeductible contributions", "Form 8606"]
+},
+{
+  id: "REG-223",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer negotiated with a credit card issuer, which forgave $50,000 of the taxpayer's balance. Immediately before the discharge the taxpayer's assets had a fair market value of $120,000 and the taxpayer's total liabilities were $150,000. The taxpayer was not in a bankruptcy proceeding. What amount of cancellation of debt income must the taxpayer include in gross income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$20,000" },
+    { key: "C", text: "$30,000" },
+    { key: "D", text: "$50,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $0 assumes that any insolvent taxpayer excludes all discharged debt. Outside bankruptcy, §108(a)(3) limits the insolvency exclusion to the amount by which the taxpayer is insolvent; the remainder is income under §61(a)(11).",
+    B: "Correct. The taxpayer was insolvent by $150,000 - $120,000 = $30,000 immediately before the discharge. Under §108(a)(1)(B) and (a)(3) the exclusion is limited to that $30,000, so $50,000 - $30,000 = $20,000 of cancellation of debt income is included in gross income. Tax attributes are reduced by the excluded amount under §108(b).",
+    C: "Incorrect. $30,000 is the amount of the insolvency, which is the portion excluded, not the portion included. The includible amount is the excess of the debt discharged over the insolvency.",
+    D: "Incorrect. $50,000 includes the entire discharge and ignores the §108(a)(1)(B) insolvency exclusion, which shelters $30,000 of the forgiven debt."
+  },
+  tags: ["batch-2026-09-23", "§108", "cancellation of debt", "insolvency exclusion", "§61(a)(11)"]
+},
+{
+  id: "REG-224",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Application",
+  difficulty: 1,
+  stem: "Under a divorce decree executed after the effective date of the TCJA repeal of the alimony deduction, a taxpayer received the following from a former spouse during the current year: $30,000 designated as alimony, $12,000 of child support, and a $50,000 cash payment in settlement of the taxpayer's interest in the marital residence. What amount is included in the taxpayer's gross income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$30,000" },
+    { key: "C", text: "$42,000" },
+    { key: "D", text: "$80,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. For divorce or separation instruments executed after the TCJA effective date, alimony is neither deductible by the payer nor includible by the recipient (former §71 and §215 were repealed). Child support has never been includible, and a transfer of property (including cash) incident to divorce is a nontaxable transfer under §1041. Nothing is included.",
+    B: "Incorrect. $30,000 applies the pre-TCJA rule under which alimony was includible by the recipient under former §71. That rule continues only for instruments executed before the effective date and not later modified to adopt the new treatment.",
+    C: "Incorrect. $42,000 includes both the alimony and the child support. Child support is excluded under any regime, and post-TCJA alimony is also excluded.",
+    D: "Incorrect. $80,000 includes the alimony and the property settlement. A cash payment made incident to divorce in exchange for the taxpayer's interest in marital property is a §1041 transfer with no gain or income recognized."
+  },
+  tags: ["batch-2026-09-23", "alimony", "TCJA", "§1041", "child support", "divorce"]
+},
+{
+  id: "REG-225",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Inclusions and exclusions",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer is the beneficiary of a $200,000 life insurance policy on a parent who died in Year 1. Instead of a lump sum, the taxpayer elected to receive the proceeds in 10 equal annual installments of $24,000 beginning in Year 1. What amount must the taxpayer include in gross income for Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$4,000" },
+    { key: "C", text: "$24,000" },
+    { key: "D", text: "$40,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $0 treats the entire installment as excluded death benefit. Under §101(d) only the portion of each payment that represents the face amount is excluded; the interest element earned because the insurer holds the proceeds is taxable.",
+    B: "Correct. Under §101(a) the $200,000 face amount is excluded from gross income, and §101(d) prorates that excluded amount over the payment period: $200,000 / 10 = $20,000 of each installment is excluded. The remaining $24,000 - $20,000 = $4,000 of each payment is interest and is included in gross income.",
+    C: "Incorrect. $24,000 taxes the entire installment on the theory that electing installments forfeits the exclusion. The §101(a) exclusion is preserved for installment payments; only the interest element is taxed.",
+    D: "Incorrect. $40,000 is the total interest that will be received over the 10 years ($240,000 - $200,000). Each year's inclusion is limited to the interest element of that year's payment, $4,000."
+  },
+  tags: ["batch-2026-09-23", "§101", "life insurance proceeds", "installment payments", "interest element"]
+},
+{
+  id: "REG-226",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Capital gains, basis and holding period",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An individual taxpayer had the following capital transactions during the current year: a $5,000 short-term capital gain, an $8,000 short-term capital loss, a $12,000 long-term capital gain, and a $2,000 long-term capital loss. What is the taxpayer's net capital gain or loss for the year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$7,000 net long-term capital gain" },
+    { key: "B", text: "$7,000 net short-term capital gain" },
+    { key: "C", text: "$10,000 net long-term capital gain and a $3,000 short-term capital loss deduction" },
+    { key: "D", text: "$17,000 net capital gain" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §1222 gains and losses are first netted within each holding-period group: short-term nets to $5,000 - $8,000 = ($3,000) and long-term nets to $12,000 - $2,000 = $10,000. When one group is a net gain and the other a net loss, they are netted against each other: $10,000 - $3,000 = $7,000 net long-term capital gain, taxed at the preferential rates.",
+    B: "Incorrect. The $7,000 amount is right, but the character follows the group that produced the net gain. Because the long-term group was the net-gain group, the result is a net long-term capital gain, not short-term.",
+    C: "Incorrect. This stops after netting within each group and treats the $3,000 net short-term loss as a separate deduction against ordinary income. The $3,000 limit in §1211(b) applies only when losses exceed gains overall; here the net short-term loss must first offset the net long-term gain.",
+    D: "Incorrect. $17,000 adds the two gains and ignores the $10,000 of losses. Capital losses must be netted against capital gains under §1222 before any amount is included in income."
+  },
+  tags: ["batch-2026-09-23", "§1222", "capital gain netting", "net capital gain", "holding period"]
+},
+{
+  id: "REG-227",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Gross income — Capital gains, basis and holding period",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "A taxpayer purchased shares of stock on March 10, Year 1, and sold them at a gain on March 10, Year 2. The stock was not acquired by gift or inheritance. Which of the following statements about the character of the gain is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "Short-term, because the stock was held exactly one year and not more than one year" },
+    { key: "B", text: "Long-term, because the stock was held for a full year" },
+    { key: "C", text: "Long-term, because the holding period includes the day of purchase" },
+    { key: "D", text: "Short-term, because stock is short-term unless held more than 18 months" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §1222 a gain is long-term only if the asset was held for more than one year. The holding period begins on the day after acquisition (Rev. Rul. 66-7), so stock bought on March 10, Year 1 must be sold on or after March 11, Year 2 to be long-term. A sale on March 10, Year 2 is a holding period of exactly one year, which is short-term.",
+    B: "Incorrect. Holding an asset for exactly one year is not enough. The statutory test in §1222(3) is \"more than 1 year,\" so at least one year and one day is required.",
+    C: "Incorrect. The holding period excludes the acquisition date and includes the disposition date (Rev. Rul. 66-7). Counting the purchase day would also still produce only one year, not more than one year.",
+    D: "Incorrect. There is no 18-month holding period requirement for long-term treatment of stock. The more-than-one-year rule applies to all capital assets."
+  },
+  tags: ["batch-2026-09-23", "§1222", "holding period", "Rev. Rul. 66-7", "short-term vs long-term"]
+},
+{
+  id: "REG-228",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Reporting of items from pass-through entities",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer owns 100% of an S corporation and works full-time in its business. For the current year the taxpayer received a Form W-2 reporting $60,000 of wages and a Schedule K-1 reporting $40,000 of ordinary business income and a $5,000 net §1231 gain. What amount of the taxpayer's income from the S corporation is subject to self-employment tax?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$40,000" },
+    { key: "C", text: "$45,000" },
+    { key: "D", text: "$100,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. An S corporation shareholder's share of ordinary business income is not net earnings from self-employment (Rev. Rul. 59-221; §1402(a)). The $60,000 of wages is subject to FICA withholding through payroll, not self-employment tax, and the §1231 gain is a separately stated capital item reported on Form 4797 and Schedule D. None of the amounts is subject to self-employment tax.",
+    B: "Incorrect. $40,000 treats the K-1 ordinary income like a general partner's distributive share, which is self-employment income under §1402(a). That rule does not apply to S corporation shareholders; their pass-through income is reported on Schedule E and is exempt from self-employment tax.",
+    C: "Incorrect. $45,000 adds the §1231 gain to the ordinary income. Even for a general partner, gains from the sale of property are excluded from net earnings from self-employment under §1402(a)(3).",
+    D: "Incorrect. $100,000 combines the wages and the K-1 income. Wages are subject to FICA, which the corporation withholds and matches, and are never subject to self-employment tax."
+  },
+  tags: ["batch-2026-09-23", "S corporation", "Schedule K-1", "self-employment tax", "Rev. Rul. 59-221", "§1402"]
+},
+{
+  id: "REG-229",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Reporting of items from pass-through entities",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "An individual who is a general partner receives a Schedule K-1 from a partnership. Which of the following statements about reporting the K-1 items on the partner's Form 1040 is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "The partner's share of charitable contributions is deducted on Schedule E against the partnership income" },
+    { key: "B", text: "The partner's share of tax-exempt interest is included in the partner's gross income" },
+    { key: "C", text: "The partner's share of the §179 deduction is subject to the dollar and business-income limits at the partner level" },
+    { key: "D", text: "Guaranteed payments received reduce the partner's share of ordinary business income" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Charitable contributions are separately stated under §702(a)(4) and retain their character in the partner's hands. The partner reports them on Schedule A as an itemized deduction, subject to the partner's own AGI percentage limits, not on Schedule E.",
+    B: "Incorrect. Tax-exempt interest keeps its character when it passes through (§702(b)). It is excluded from the partner's gross income, although it increases the partner's outside basis under §705(a)(1)(B).",
+    C: "Correct. The §179 election is made at the partnership level, but §179(d)(8) applies the dollar limitation and the taxable-income limitation both to the partnership and again to each partner. The deduction is separately stated so that each partner can apply the limits to the partner's own return.",
+    D: "Incorrect. Guaranteed payments under §707(c) are reported separately as ordinary income (and self-employment income) to the receiving partner. They are deducted by the partnership in computing ordinary business income, so they are not netted again by the partner."
+  },
+  tags: ["batch-2026-09-23", "Schedule K-1", "§702", "separately stated items", "§179(d)(8)", "§707(c)"]
+},
+{
+  id: "REG-230",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Adjustments and deductions to arrive at AGI and taxable income",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A self-employed taxpayer with no other earned income reported $30,000 of net profit on Schedule C. The deduction for one-half of self-employment tax is $2,120, and the taxpayer contributed $5,000 to a SEP-IRA. The taxpayer paid $25,000 of health insurance premiums for the taxpayer and spouse and was not eligible for any employer-subsidized plan. What amount may the taxpayer deduct for self-employed health insurance in arriving at AGI?",
+  reference: "",
+  options: [
+    { key: "A", text: "$22,880" },
+    { key: "B", text: "$25,000" },
+    { key: "C", text: "$27,880" },
+    { key: "D", text: "$30,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §162(l)(2)(A) the self-employed health insurance deduction cannot exceed the earned income from the trade or business, computed as net profit less the deduction for one-half of self-employment tax and less retirement plan contributions for the owner: $30,000 - $2,120 - $5,000 = $22,880. The $2,120 of premiums that exceed the limit may be claimed as a medical expense on Schedule A, subject to the 7.5% AGI floor.",
+    B: "Incorrect. $25,000 deducts the premiums in full and ignores the earned-income limitation in §162(l)(2)(A). The deduction is capped at the net earnings of the business after the self-employment tax and retirement plan adjustments.",
+    C: "Incorrect. $27,880 reduces the net profit only by the one-half self-employment tax deduction and fails to subtract the $5,000 SEP-IRA contribution, which §162(l)(2)(A) also requires.",
+    D: "Incorrect. $30,000 is the gross Schedule C profit. Aside from exceeding the premiums actually paid, it ignores both required reductions to earned income under §162(l)(2)(A)."
+  },
+  tags: ["batch-2026-09-23", "§162(l)", "self-employed health insurance", "earned income limit", "adjustments to income"]
+},
+{
+  id: "REG-231",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Adjustments and deductions to arrive at AGI and taxable income",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Which of the following individuals is eligible to make a deductible contribution to a health savings account (HSA) for the current year?",
+  reference: "",
+  options: [
+    { key: "A", text: "An employee covered by a high-deductible health plan who is also covered by a spouse's low-deductible plan" },
+    { key: "B", text: "A retiree enrolled in Medicare who is also covered by a high-deductible health plan" },
+    { key: "C", text: "A student covered only by a high-deductible health plan who is claimed as a dependent on a parent's return" },
+    { key: "D", text: "A self-employed individual, age 45, covered only by a high-deductible health plan" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. Under §223(c)(1)(A)(ii) an eligible individual may not be covered by any health plan that is not a high-deductible health plan (other than permitted coverage such as dental, vision or specific-disease policies). Coverage under a spouse's low-deductible plan disqualifies the employee.",
+    B: "Incorrect. Section 223(b)(7) provides that an individual entitled to benefits under Medicare is not eligible to contribute to an HSA, even while covered by a high-deductible health plan. Existing HSA balances may still be used for qualified expenses.",
+    C: "Incorrect. An individual who may be claimed as a dependent on another taxpayer's return is not an eligible individual under §223(b)(6), regardless of the type of health coverage.",
+    D: "Correct. An eligible individual under §223(c)(1) is one who is covered by a high-deductible health plan, has no other non-permitted coverage, is not enrolled in Medicare and cannot be claimed as a dependent. Self-employed status does not matter; the contribution is deductible in arriving at AGI under §62(a)(19) up to the annual limit."
+  },
+  tags: ["batch-2026-09-23", "§223", "health savings account", "HDHP", "eligible individual", "adjustments to income"]
+},
+{
+  id: "REG-232",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Adjustments and deductions to arrive at AGI and taxable income",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A married couple filing jointly bought a principal residence in the current year with a $1,000,000 mortgage, all of which was used to purchase the home. The average balance during the year was $1,000,000 and the couple paid $50,000 of interest. The limit on acquisition indebtedness is $750,000. The couple itemizes deductions. What amount of the interest is deductible as qualified residence interest?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$12,500" },
+    { key: "C", text: "$37,500" },
+    { key: "D", text: "$50,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $0 assumes that exceeding the acquisition-debt limit disqualifies all of the interest. Under §163(h)(3) and Reg. §1.163-10T the limit caps the amount of debt treated as acquisition indebtedness; interest on the qualifying portion remains deductible.",
+    B: "Incorrect. $12,500 is the interest attributable to the $250,000 of debt above the limit ($50,000 x 250/1,000). That is the nondeductible personal interest; the deductible amount is the interest on the $750,000 that qualifies.",
+    C: "Correct. Only $750,000 of the $1,000,000 mortgage is acquisition indebtedness under §163(h)(3)(B)(ii). Interest is allocated pro rata: $50,000 x $750,000 / $1,000,000 = $37,500 is deductible qualified residence interest. The remaining $12,500 is nondeductible personal interest under §163(h)(1).",
+    D: "Incorrect. $50,000 deducts all of the interest and ignores the $750,000 limit on acquisition indebtedness, which OBBBA made permanent."
+  },
+  tags: ["batch-2026-09-23", "§163(h)", "qualified residence interest", "acquisition indebtedness", "itemized deductions"]
+},
+{
+  id: "REG-233",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Adjustments and deductions to arrive at AGI and taxable income",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer with AGI of $100,000 donated publicly traded stock to a public charity during the current year. The taxpayer had purchased the stock three years earlier for $20,000, and it was worth $40,000 on the date of the gift. The taxpayer made no other contributions and made no election to reduce the contribution to basis. What is the taxpayer's charitable contribution deduction for the current year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$12,000" },
+    { key: "B", text: "$20,000" },
+    { key: "C", text: "$30,000" },
+    { key: "D", text: "$40,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $12,000 applies the 30% limitation to the value of the gift (30% x $40,000) rather than to the taxpayer's contribution base. Under §170(b)(1)(C) the 30% ceiling is measured against AGI, so the limit is $30,000.",
+    B: "Incorrect. $20,000 deducts only the taxpayer's basis. Long-term capital gain property contributed to a public charity is deductible at fair market value under §170(e); the reduction to basis applies to ordinary income or short-term property, or when the taxpayer elects the 50% limit under §170(b)(1)(C)(iii).",
+    C: "Correct. Appreciated stock held more than one year is capital gain property, deductible at its $40,000 fair market value under §170(e)(1). Because the taxpayer did not elect to reduce the deduction to basis, the contribution is subject to the 30%-of-AGI limit in §170(b)(1)(C): 30% x $100,000 = $30,000. The excess $10,000 carries forward for five years under §170(d)(1).",
+    D: "Incorrect. $40,000 is the fair market value but ignores the 30%-of-AGI limitation that applies to gifts of capital gain property to public charities. The 60% limit applies only to cash contributions."
+  },
+  tags: ["batch-2026-09-23", "§170", "charitable contributions", "capital gain property", "30% limitation", "carryover"]
+},
+{
+  id: "REG-234",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Adjustments and deductions to arrive at AGI and taxable income",
+  skill: "Application",
+  difficulty: 3,
+  stem: "A single taxpayer operates a manufacturing business as a sole proprietorship. For the current year the business generated $400,000 of qualified business income, paid $100,000 of W-2 wages, and had $200,000 of unadjusted basis in qualified property. The taxpayer's taxable income before the QBI deduction is $600,000, with no net capital gain, which is above the top of the phase-in range. What is the taxpayer's qualified business income deduction?",
+  reference: "",
+  options: [
+    { key: "A", text: "$30,000" },
+    { key: "B", text: "$50,000" },
+    { key: "C", text: "$80,000" },
+    { key: "D", text: "$120,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $30,000 is the alternative wage-and-property limit (25% x $100,000 + 2.5% x $200,000 = $25,000 + $5,000). Under §199A(b)(2)(B) the limit is the greater of the two computations, and 50% of W-2 wages ($50,000) is greater.",
+    B: "Correct. Because taxable income exceeds the phase-in range, the §199A(b)(2) limitation applies in full. The deductible amount for the business is the lesser of 20% of QBI (20% x $400,000 = $80,000) or the greater of 50% of W-2 wages ($50,000) and 25% of W-2 wages plus 2.5% of the unadjusted basis of qualified property ($30,000). The wage limit is $50,000, which is less than $80,000, so the deduction is $50,000. The overall limit of 20% of taxable income less net capital gain ($120,000) does not bind.",
+    C: "Incorrect. $80,000 is 20% of QBI without applying the W-2 wage and property limitation. That limitation applies fully to taxpayers whose taxable income exceeds the top of the phase-in range under §199A(b)(3).",
+    D: "Incorrect. $120,000 is 20% of taxable income, which is the overall ceiling in §199A(a)(2), not the deduction. The deduction is the lesser of the combined QBI amount ($50,000) and that ceiling."
+  },
+  tags: ["batch-2026-09-23", "§199A", "QBI deduction", "W-2 wage limitation", "UBIA", "phase-in range"]
+},
+{
+  id: "REG-235",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Loss limitations — Capital, basis, passive, at-risk, hobby and wash sale",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A single taxpayer has a $9,000 long-term capital loss carryover from the prior year. During the current year the taxpayer realized a $2,000 short-term capital gain and had no other capital transactions. The taxpayer's ordinary income is $80,000. What amount of capital loss carries forward to the following year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$4,000" },
+    { key: "B", text: "$6,000" },
+    { key: "C", text: "$7,000" },
+    { key: "D", text: "$9,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §1212(b)(1) the carryover is treated as a long-term capital loss in the current year, so it is first netted against the $2,000 short-term gain (§1222), leaving a $7,000 net capital loss. Under §1211(b) up to $3,000 of that net loss is deducted against ordinary income, and the remaining $7,000 - $3,000 = $4,000 carries forward as a long-term loss.",
+    B: "Incorrect. $6,000 deducts the $3,000 against ordinary income but does not first offset the carryover against the current-year $2,000 gain ($9,000 - $3,000). A carryover must be netted against capital gains of the current year before the $3,000 ordinary-income deduction is applied.",
+    C: "Incorrect. $7,000 nets the carryover against the $2,000 gain but omits the $3,000 deduction against ordinary income allowed by §1211(b) ($9,000 - $2,000). The deduction is available every year in which a net capital loss remains.",
+    D: "Incorrect. $9,000 carries the entire loss forward untouched. A capital loss carryover is not preserved until it can be used solely against gains; it must be used against current-year capital gains and then against up to $3,000 of ordinary income before any remainder carries forward."
+  },
+  tags: ["batch-2026-09-23", "§1212(b)", "§1211(b)", "capital loss carryover", "netting", "$3,000 limit"]
+},
+{
+  id: "REG-236",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Loss limitations — Capital, basis, passive, at-risk, hobby and wash sale",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A taxpayer with $200,000 of wages owned a rental property in which the taxpayer did not actively participate and had $40,000 of suspended passive losses at the beginning of the current year. The property produced a $10,000 loss for the current year, and on December 31 the taxpayer sold the entire interest to an unrelated buyer, recognizing a $15,000 gain. What amount of the rental losses may the taxpayer deduct against wages in the current year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$10,000" },
+    { key: "C", text: "$35,000" },
+    { key: "D", text: "$50,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $0 applies the general rule that passive losses offset only passive income and ignores §469(g). A fully taxable disposition of the taxpayer's entire interest to an unrelated party frees the suspended and current losses from the passive limitation.",
+    B: "Incorrect. $10,000 treats only the current-year loss as allowed. Under §469(g)(1)(A) both the suspended prior-year losses and the current-year loss become deductible in the year of a qualifying disposition.",
+    C: "Correct. Under §469(g)(1)(A), when a taxpayer disposes of an entire interest in a passive activity in a fully taxable transaction to an unrelated person, the excess of the activity's losses (suspended $40,000 plus current $10,000 = $50,000) over the net income or gain from all passive activities for the year ($15,000 gain on the sale) is treated as a loss that is not from a passive activity. $50,000 - $15,000 = $35,000 is deductible against the wages.",
+    D: "Incorrect. $50,000 frees all of the losses but fails to first offset them against the $15,000 gain on the disposition, which is itself passive activity income for the year. Only the excess over that gain is deductible against nonpassive income."
+  },
+  tags: ["batch-2026-09-23", "§469(g)", "passive activity loss", "suspended losses", "disposition", "rental real estate"]
+},
+{
+  id: "REG-237",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Loss limitations — Capital, basis, passive, at-risk, hobby and wash sale",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An individual invested $40,000 cash in an equipment-leasing activity in which the individual materially participates. The activity borrowed $100,000 from an unrelated lender on a nonrecourse basis, secured only by the equipment, and the individual's share of that debt is $60,000. The activity allocated the individual a $75,000 ordinary loss for Year 1. What amount of the loss may the individual deduct in Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$40,000" },
+    { key: "B", text: "$60,000" },
+    { key: "C", text: "$75,000" },
+    { key: "D", text: "$100,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §465 a loss is deductible only to the extent the taxpayer is at risk. The amount at risk includes cash contributed ($40,000) and borrowed amounts for which the taxpayer is personally liable or has pledged other property. Nonrecourse debt secured only by the activity's own property does not increase the amount at risk; the qualified nonrecourse financing exception in §465(b)(6) applies only to real property held in a real estate activity. The deductible loss is $40,000, and the remaining $35,000 is suspended and carries forward until the amount at risk increases.",
+    B: "Incorrect. $60,000 treats the individual's share of the nonrecourse debt as the amount at risk and ignores the $40,000 cash investment. The debt share adds nothing to the at-risk amount because no one is personally liable for it, so the cash contribution is the only amount at risk.",
+    C: "Incorrect. $75,000 deducts the entire allocated loss. Material participation satisfies the passive activity rules of §469, but the at-risk limitation of §465 applies first and independently, capping the deduction at the $40,000 at risk.",
+    D: "Incorrect. $100,000 adds the $60,000 share of nonrecourse debt to the $40,000 cash as if the debt were recourse. Only debt for which the taxpayer is personally liable, or qualified nonrecourse financing on real property, increases the amount at risk under §465(b)."
+  },
+  tags: ["batch-2026-09-23", "§465", "at-risk", "nonrecourse debt", "loss limitation"]
+},
+{
+  id: "REG-238",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Filing status and dependents",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An unmarried taxpayer's parent lives in an assisted-living facility. The parent's total support for the year cost $40,000, of which the taxpayer paid $28,000 and the parent paid $12,000 from Social Security benefits. The parent's only other income was $1,000 of taxable interest. The gross income limit for a qualifying relative is $5,200. What is the taxpayer's filing status?",
+  reference: "",
+  options: [
+    { key: "A", text: "Single, because the parent does not live in the taxpayer's home" },
+    { key: "B", text: "Single, because the parent's Social Security benefits exceed the gross income limit" },
+    { key: "C", text: "Head of household, because the taxpayer maintained the household of a dependent parent" },
+    { key: "D", text: "Head of household, but only if the parent lived with the taxpayer for more than half the year" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Section 2(b)(1)(B) contains a special rule for parents: a taxpayer qualifies as head of household by maintaining a household that is the principal place of abode of a dependent parent, even if that household is not the taxpayer's own home. An assisted-living facility can be the parent's household.",
+    B: "Incorrect. Nontaxable Social Security benefits are not gross income, so they do not count toward the §152(d)(1)(B) gross income test. The parent's gross income is only the $1,000 of taxable interest, well below the $5,200 limit. The benefits do count as the parent's own contribution to support, but the taxpayer still provided more than half ($28,000 of $40,000).",
+    C: "Correct. The parent is a qualifying relative under §152(d): the relationship test is met, gross income ($1,000) is under the limit, and the taxpayer provided over half of the support. Under §2(b)(1)(B) a taxpayer who is not married at year-end and who pays more than half the cost of maintaining a household that is the principal residence of a dependent parent qualifies as head of household without the parent living with the taxpayer.",
+    D: "Incorrect. The more-than-half-year residency requirement in §2(b)(1)(A) applies to qualifying children and other qualifying relatives. The parent exception in §2(b)(1)(B) removes that requirement for a dependent parent."
+  },
+  tags: ["batch-2026-09-23", "§2(b)", "head of household", "qualifying relative", "§152(d)", "gross income test", "support test"]
+},
+{
+  id: "REG-239",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Filing status and dependents",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Three siblings together provided 83% of their parent's support during the current year: the first sibling provided 45%, the second provided 30% and the third provided 8%. The parent provided the remaining 17% and otherwise meets the tests for a qualifying relative. Which of the following statements is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "Only the first sibling may claim the parent, because that sibling provided the most support" },
+    { key: "B", text: "The first or second sibling may claim the parent if the other signs a written declaration not to claim the parent" },
+    { key: "C", text: "Any of the three siblings may claim the parent by agreement among them" },
+    { key: "D", text: "No one may claim the parent, because no single person provided more than half of the support" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Providing the largest share does not by itself confer the right to claim the dependent. Under a multiple support agreement any member of the group who provided more than 10% may be designated, provided the others who provided more than 10% waive their claim.",
+    B: "Correct. Section 152(d)(3) treats a taxpayer as providing over half of a person's support if (1) no one person provided over half, (2) over half was provided by persons each of whom could have claimed the individual but for the support test, (3) the claiming taxpayer provided more than 10%, and (4) each other person who provided more than 10% signs a written declaration (Form 2120) not to claim the individual. The first and second siblings each exceed 10%, so either may claim the parent with the other's waiver.",
+    C: "Incorrect. The third sibling provided only 8% of the support and therefore fails the more-than-10% requirement in §152(d)(3)(C). That sibling may not be designated to claim the parent, although the sibling's contribution counts toward the group's more-than-half total.",
+    D: "Incorrect. The multiple support agreement rules in §152(d)(3) exist precisely for this situation. Because the siblings collectively provided over half of the support, one qualifying member may claim the parent."
+  },
+  tags: ["batch-2026-09-23", "§152(d)(3)", "multiple support agreement", "Form 2120", "qualifying relative", "support test"]
+},
+{
+  id: "REG-240",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Computation of tax and credits",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A single taxpayer's prior-year AGI was $120,000 and prior-year tax liability was $20,000. The taxpayer's current-year tax liability is $28,000. The taxpayer's only payments during the current year were $20,500 of wage withholding spread evenly through the year, and the taxpayer will pay the balance with the return. Which of the following is correct regarding the underpayment penalty for estimated tax?",
+  reference: "",
+  options: [
+    { key: "A", text: "No penalty, because payments were at least 100% of the prior-year tax" },
+    { key: "B", text: "A penalty applies, because payments were less than 90% of the current-year tax" },
+    { key: "C", text: "A penalty applies, because payments were less than 110% of the prior-year tax" },
+    { key: "D", text: "No penalty, because the balance due with the return is under $1,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. Under §6654(d)(1)(B) an individual avoids the estimated tax penalty by paying, through withholding and timely estimates, the lesser of 90% of the current-year tax or 100% of the prior-year tax. Prior-year tax was $20,000 and the taxpayer's prior-year AGI did not exceed $150,000, so the 100% safe harbor applies; $20,500 of evenly withheld tax exceeds it. The $7,500 balance is due with the return but carries no §6654 penalty.",
+    B: "Incorrect. Falling short of 90% of the current-year tax ($25,200) does not trigger a penalty when the taxpayer meets the alternative prior-year safe harbor. The required annual payment is the lesser of the two amounts.",
+    C: "Incorrect. The 110% requirement in §6654(d)(1)(C) applies only when prior-year AGI exceeded $150,000 ($75,000 for married filing separately). This taxpayer's prior-year AGI was $120,000, so the 100% safe harbor applies.",
+    D: "Incorrect. The de minimis exception in §6654(e)(1) applies when the tax due after withholding is less than $1,000. Here the balance is $28,000 - $20,500 = $7,500, so this exception is unavailable, although the prior-year safe harbor still eliminates the penalty."
+  },
+  tags: ["batch-2026-09-23", "§6654", "estimated tax", "safe harbor", "underpayment penalty", "withholding"]
+},
+{
+  id: "REG-241",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Computation of tax and credits",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A married couple files a joint return. One spouse earned $180,000 of wages and the other earned $120,000 of wages; neither had self-employment income. The threshold for the Additional Medicare Tax is $250,000 for a joint return and $200,000 for other filers. What amount of Additional Medicare Tax must the couple report on their return?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$450" },
+    { key: "C", text: "$900" },
+    { key: "D", text: "$2,700" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $0 reasons that because neither spouse individually exceeded $200,000, no tax applies. Under §3101(b)(2) the tax is computed on the couple's combined wages against the $250,000 joint threshold, and the couple reports it on Form 8959 even though neither employer was required to withhold it.",
+    B: "Correct. Under §3101(b)(2) the Additional Medicare Tax is 0.9% of wages in excess of the threshold that applies to the taxpayer's filing status. Combined wages of $300,000 exceed the $250,000 joint threshold by $50,000, so the tax is $50,000 x 0.9% = $450. Employers withhold only on wages over $200,000 paid to an individual employee, so here nothing was withheld and the full $450 is due with the return.",
+    C: "Incorrect. $900 applies the $200,000 threshold for single filers to the couple's combined wages ($100,000 x 0.9%). The threshold for a joint return is $250,000.",
+    D: "Incorrect. $2,700 applies 0.9% to all $300,000 of wages. The Additional Medicare Tax applies only to wages above the applicable threshold, not to all wages."
+  },
+  tags: ["batch-2026-09-23", "§3101(b)(2)", "Additional Medicare Tax", "Form 8959", "0.9%", "joint return"]
+},
+{
+  id: "REG-242",
+  area: "IV",
+  areaName: "Federal Taxation of Individuals",
+  topic: "Computation of tax and credits",
+  skill: "Application",
+  difficulty: 2,
+  stem: "During the current year a taxpayer paid $8,000 of tuition for graduate courses the taxpayer took to improve job skills and $6,000 of tuition for a dependent child who took one course at a college while enrolled less than half-time. The taxpayer's MAGI is below the phase-out range, and no other education benefit is claimed for these expenses. What is the taxpayer's lifetime learning credit?",
+  reference: "",
+  options: [
+    { key: "A", text: "$1,600" },
+    { key: "B", text: "$2,000" },
+    { key: "C", text: "$2,800" },
+    { key: "D", text: "$4,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $1,600 is 20% of only the taxpayer's own $8,000 of tuition and excludes the dependent's expenses. Under §25A(f)(1) qualified tuition includes amounts paid for the taxpayer, spouse or a dependent, and less-than-half-time enrollment does not disqualify expenses for the lifetime learning credit.",
+    B: "Correct. The lifetime learning credit under §25A(c) is 20% of up to $10,000 of qualified tuition and related expenses paid for all eligible students on the return combined. Total qualified expenses are $8,000 + $6,000 = $14,000, limited to $10,000, so the credit is 20% x $10,000 = $2,000. The credit is nonrefundable and the child's part-time, single-course enrollment qualifies for the lifetime learning credit even though it would not qualify for the American opportunity credit.",
+    C: "Incorrect. $2,800 is 20% of the full $14,000 of expenses and ignores the $10,000 per-return cap in §25A(c)(1).",
+    D: "Incorrect. $4,000 applies a $10,000 limit separately to each student ($2,000 each). Unlike the American opportunity credit, the lifetime learning credit limit is per taxpayer return, not per student."
+  },
+  tags: ["batch-2026-09-23", "§25A", "lifetime learning credit", "education credits", "nonrefundable credit"]
+},
+// ---- Batch 2026-09-23, Area V ----
+{
+  id: "REG-243",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Differences between book and tax income — Schedule M-1/M-3",
+  skill: "Application",
+  difficulty: 3,
+  stem: "An accrual-basis C corporation reported net income per books of $600,000 for the current year. Book expenses included $70,000 of charitable contributions paid during the year. Book income included a $20,000 gain on an installment sale for which the corporation uses the installment method for tax and received no payments during the year. What amount is the corporation's taxable income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$580,000" },
+    { key: "B", text: "$585,000" },
+    { key: "C", text: "$600,000" },
+    { key: "D", text: "$603,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $580,000 ($650,000 - $70,000) deducts the full contribution. A corporation's charitable deduction is limited to 10% of taxable income computed before the charitable deduction (§170(b)(2)(A)), so only $65,000 is deductible this year and the $5,000 excess carries forward for five years.",
+    B: "Correct. Start with book income $600,000, add back the $70,000 of contributions (deducted separately subject to the limit) and subtract the $20,000 installment gain deferred under §453 until payments are received: $650,000 is taxable income before the charitable deduction. The limit is 10% x $650,000 = $65,000. Taxable income = $650,000 - $65,000 = $585,000; the $5,000 excess is a carryover (§170(d)(2)).",
+    C: "Incorrect. $600,000 makes no net adjustment, deducting the full $70,000 of contributions against a $670,000 base and leaving the deferred installment gain in income. Both the §453 deferral and the 10% limit must be applied.",
+    D: "Incorrect. $603,000 forgets the installment-sale deferral: it computes the limit on a $670,000 base (10% = $67,000) and deducts that from $670,000. Under §453 the gain is recognized only as payments are received, so the $20,000 is removed from the current-year base before the 10% limit is applied."
+  },
+  tags: ["batch-2026-09-23", "Schedule M-1", "§170(b)(2)", "§453", "installment method", "charitable contribution limit"]
+},
+{
+  id: "REG-244",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Differences between book and tax income — Schedule M-1/M-3",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A C corporation's net income per books for the current year was $800,000. Book expenses included $15,000 of premiums on a life insurance policy covering the company's president, under which the corporation is the beneficiary. Book income also included $200,000 of proceeds received under a similar policy on the death of another officer. What amount is the corporation's taxable income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$600,000" },
+    { key: "B", text: "$615,000" },
+    { key: "C", text: "$800,000" },
+    { key: "D", text: "$815,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $600,000 ($800,000 - $200,000) removes the excluded proceeds but fails to add back the $15,000 of premiums. Premiums on a policy under which the corporation is the beneficiary are nondeductible under §264(a)(1).",
+    B: "Correct. Book income $800,000 + nondeductible premiums $15,000 (§264(a)(1), because the corporation is directly or indirectly the beneficiary) - life insurance proceeds $200,000 (excluded from gross income under §101(a)) = $615,000. Both items are permanent differences.",
+    C: "Incorrect. $800,000 makes no adjustment. Both the premiums (nondeductible) and the death proceeds (excludable) are book/tax differences that must be reconciled on Schedule M-1.",
+    D: "Incorrect. $815,000 adds back the premiums but leaves the $200,000 of proceeds in taxable income. Life insurance proceeds paid by reason of the insured's death are excluded under §101(a) even when the beneficiary is a corporation."
+  },
+  tags: ["batch-2026-09-23", "Schedule M-1", "§264", "§101(a)", "officer life insurance", "permanent differences"]
+},
+{
+  id: "REG-245",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Differences between book and tax income — Schedule M-1/M-3",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A C corporation reported net income per books of $420,000 for the current year. The books included a $10,000 capital gain, a $35,000 capital loss and $8,000 of fines paid to a state regulator for violating environmental rules. There were no capital gains in the prior three years. What amount is the corporation's taxable income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$428,000" },
+    { key: "B", text: "$445,000" },
+    { key: "C", text: "$453,000" },
+    { key: "D", text: "$463,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $428,000 adds back only the $8,000 of fines. A corporation may deduct capital losses only to the extent of capital gains (§1211(a)), so the $25,000 net capital loss deducted for book purposes must also be added back.",
+    B: "Incorrect. $445,000 adds back the $25,000 net capital loss but not the fines. Fines and penalties paid to a government for violation of law are nondeductible under §162(f).",
+    C: "Correct. Book income $420,000 + net capital loss $25,000 ($35,000 loss - $10,000 gain, nondeductible for a corporation under §1211(a) and carried back 3 years and forward 5 years) + fines $8,000 (nondeductible under §162(f)) = $453,000.",
+    D: "Incorrect. $463,000 adds back the entire $35,000 capital loss plus the fines. The capital loss is deductible to the extent of the $10,000 capital gain, so only the $25,000 excess is a reconciling item."
+  },
+  tags: ["batch-2026-09-23", "Schedule M-1", "§1211(a)", "§162(f)", "corporate capital loss", "fines and penalties"]
+},
+{
+  id: "REG-246",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Differences between book and tax income — Schedule M-1/M-3",
+  skill: "Application",
+  difficulty: 3,
+  stem: "An accrual-basis C corporation reported net income per books of $300,000. On December 1 of the current year it received $24,000 of rent covering the next 12 months and recognized $2,000 of it in book income. Book bad debt expense under the allowance method was $18,000; accounts actually written off during the year totaled $11,000. What amount is the corporation's taxable income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$307,000" },
+    { key: "B", text: "$322,000" },
+    { key: "C", text: "$329,000" },
+    { key: "D", text: "$340,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $307,000 adjusts only for bad debts ($18,000 - $11,000). Prepaid rent is not an \"advance payment\" eligible for the one-year deferral of §451(c) (Reg. §1.451-8 excludes rent), so the $22,000 received but not yet earned for book purposes is taxable when received.",
+    B: "Incorrect. $322,000 adjusts only for the rent. For tax purposes bad debts are deductible only under the specific charge-off method (§166; the reserve method is not permitted), so the $7,000 by which the book allowance exceeds actual write-offs must be added back.",
+    C: "Correct. Book income $300,000 + unearned rent taxable on receipt $22,000 ($24,000 received - $2,000 already in book income; prepaid rent is excluded from §451(c) deferral) + excess of book bad debt expense over specific write-offs $7,000 ($18,000 - $11,000, §166) = $329,000.",
+    D: "Incorrect. $340,000 adds back the entire $18,000 allowance-method expense along with the $22,000 rent. The $11,000 of receivables actually written off is deductible under §166, so only the $7,000 excess is a reconciling item."
+  },
+  tags: ["batch-2026-09-23", "Schedule M-1", "§451(c)", "prepaid rent", "§166", "bad debt reserve", "temporary differences"]
+},
+{
+  id: "REG-247",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Differences between book and tax income — Schedule M-1/M-3",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "A C corporation with total assets of $60 million files Schedule M-3 and must classify each book/tax difference as temporary or permanent. Which of the following is a permanent difference?",
+  reference: "",
+  options: [
+    { key: "A", text: "A bonus accrued to a 60% shareholder and paid in the fourth month of the following year" },
+    { key: "B", text: "MACRS depreciation in excess of straight-line book depreciation" },
+    { key: "C", text: "An increase in the allowance for doubtful accounts" },
+    { key: "D", text: "The 50% of business meals disallowed for tax purposes" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. Under §267(a)(2) the corporation may not deduct the bonus until the cash-method related shareholder includes it in income, i.e., in the year paid. The deduction is deferred, not lost, so the difference reverses in the following year and is temporary.",
+    B: "Incorrect. Accelerated tax depreciation is the classic temporary difference. Total depreciation over the asset's life is the same for book and tax; only the timing differs, so the excess reverses in later years.",
+    C: "Incorrect. The allowance method is used for book purposes but tax allows a deduction only when specific receivables are written off (§166). The difference reverses when the accounts are actually charged off, so it is temporary.",
+    D: "Correct. The 50% of business meal expense disallowed under §274(n) is never deductible in any year. A difference that will never reverse is a permanent difference, reported in the permanent-difference column of Schedule M-3."
+  },
+  tags: ["batch-2026-09-23", "Schedule M-3", "permanent difference", "temporary difference", "§274(n)", "§267(a)(2)"]
+},
+{
+  id: "REG-248",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Differences between book and tax income — Schedule M-1/M-3",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Schedule M-1 of Form 1120 reconciles net income per books with taxable income before the net operating loss deduction and special deductions. Which of the following items is NOT a reconciling item on Schedule M-1?",
+  reference: "",
+  options: [
+    { key: "A", text: "Federal income tax expense recorded on the books" },
+    { key: "B", text: "The dividends-received deduction" },
+    { key: "C", text: "Tax-exempt interest income recorded on the books" },
+    { key: "D", text: "Premiums on officer life insurance where the corporation is the beneficiary" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Federal income tax expense reduces book income but is never deductible (§275), so it is added back on Schedule M-1 as an expense recorded on books but not deducted on the return.",
+    B: "Correct. Schedule M-1 reconciles book income to Form 1120 line 28, taxable income before the NOL deduction and the special deductions (the dividends-received deduction under §243). Because the DRD is subtracted after line 28, it is not part of the M-1 reconciliation.",
+    C: "Incorrect. Municipal bond interest is included in book income but excluded from gross income under §103, so it is subtracted on Schedule M-1 as income recorded on books but not included on the return.",
+    D: "Incorrect. Premiums on a policy under which the corporation is the beneficiary are nondeductible under §264(a)(1). They reduce book income but not taxable income, so they are added back on Schedule M-1."
+  },
+  tags: ["batch-2026-09-23", "Schedule M-1", "dividends-received deduction", "§243", "line 28", "special deductions"]
+},
+{
+  id: "REG-249",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A C corporation had a $25,000 charitable contribution carryover from Year 1. In Year 2 it made cash contributions of $30,000 to qualified charities, and its taxable income for purposes of the charitable contribution limitation was $400,000. What amount of charitable contribution carryover remains available to Year 3?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$10,000" },
+    { key: "C", text: "$15,000" },
+    { key: "D", text: "$25,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $0 assumes that the full $55,000 of current and carried-over contributions was deductible in Year 2. The deduction is limited to 10% of the limitation base, or $40,000 (§170(b)(2)), so $15,000 cannot be used in Year 2.",
+    B: "Incorrect. $10,000 is the amount of the carryover that was used in Year 2 ($40,000 limit - $30,000 current-year contributions), not the amount remaining. The remaining carryover is $25,000 - $10,000 = $15,000.",
+    C: "Correct. The Year 2 limit is 10% x $400,000 = $40,000. Current-year contributions are deducted first ($30,000), leaving $10,000 of capacity that absorbs part of the Year 1 carryover (§170(d)(2)). The remaining $15,000 ($25,000 - $10,000) carries forward; corporate carryovers expire after five years.",
+    D: "Incorrect. $25,000 treats the 10% limit as applying only to current-year contributions and leaves the carryover untouched. The carryover is deducted in the earliest year in which the limit is not fully absorbed by current-year contributions, so $10,000 of it is used in Year 2."
+  },
+  tags: ["batch-2026-09-23", "§170(b)(2)", "§170(d)(2)", "charitable contribution carryover", "10% limit", "C corporation"]
+},
+{
+  id: "REG-250",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 3,
+  stem: "A C corporation's taxable income before the dividends-received deduction was $140,000, which included $300,000 of dividends from a domestic corporation in which it owns 10% of the stock. The corporation had no other special deductions. What amount is the corporation's dividends-received deduction?",
+  reference: "",
+  options: [
+    { key: "A", text: "$70,000" },
+    { key: "B", text: "$140,000" },
+    { key: "C", text: "$150,000" },
+    { key: "D", text: "$195,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $70,000 applies the 50% taxable-income limitation (50% x $140,000). The limitation does not apply when the full DRD creates or increases a net operating loss (§246(b)(2)), which is the case here.",
+    B: "Incorrect. $140,000 limits the DRD to taxable income so that taxable income becomes zero. Neither the statute nor the regulations impose such a cap; the DRD is either the full 50% or 50% of taxable income, depending on the NOL test.",
+    C: "Correct. The tentative DRD for less-than-20% ownership is 50% x $300,000 = $150,000 (§243(a)(1)). The taxable-income limit (50% x $140,000 = $70,000) is disregarded because deducting the full $150,000 produces an NOL ($140,000 - $150,000 = -$10,000) (§246(b)(2)). The full $150,000 is allowed and the corporation has a $10,000 NOL.",
+    D: "Incorrect. $195,000 applies the 65% rate that belongs to dividends from a corporation that is at least 20% owned (§243(c)). With 10% ownership the applicable percentage is 50%."
+  },
+  tags: ["batch-2026-09-23", "dividends-received deduction", "§243", "§246(b)", "NOL exception", "taxable income limitation"]
+},
+{
+  id: "REG-251",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A C corporation had a $50,000 net capital loss in Year 1 and no capital gains in the three preceding years. In Year 2 the corporation had a $30,000 net capital gain and $400,000 of ordinary income. What amount of capital loss carryforward is available to the corporation in Year 3?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$17,000" },
+    { key: "C", text: "$20,000" },
+    { key: "D", text: "$50,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $0 assumes the entire Year 1 loss was absorbed in Year 2. Only $30,000 of it could be used, because a corporation may deduct capital losses only against capital gains (§1211(a)).",
+    B: "Incorrect. $17,000 applies the individual rule that allows $3,000 of net capital loss to offset ordinary income (§1211(b)). That rule does not apply to corporations; the excess loss offsets only capital gains.",
+    C: "Correct. With no prior-year gains, nothing is carried back. In Year 2 the $50,000 carryforward offsets the $30,000 net capital gain (§1212(a)), leaving $20,000. The carryforward is treated as short-term and expires if not used within five years after Year 1.",
+    D: "Incorrect. $50,000 treats the loss as unusable in Year 2. A capital loss carryforward is applied against net capital gain in the earliest carryforward year, so $30,000 must be used in Year 2."
+  },
+  tags: ["batch-2026-09-23", "corporate capital loss", "§1211(a)", "§1212(a)", "carryforward", "five-year limit"]
+},
+{
+  id: "REG-252",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A calendar-year C corporation reported taxable income of $1,200,000 in Year 1 and paid income tax of $252,000 for that year. It expects its Year 2 tax liability to be $300,000. Which of the following describes the estimated tax payments the corporation must make for Year 2 to avoid an underpayment penalty?",
+  reference: "",
+  options: [
+    { key: "A", text: "Four installments totaling $252,000, based on the prior-year tax" },
+    { key: "B", text: "Four installments totaling $300,000; only the first installment may be based on the prior-year tax, with any shortfall made up in the second" },
+    { key: "C", text: "Four installments totaling 110% of the prior-year tax" },
+    { key: "D", text: "No estimated payments, because corporations pay their tax with the return" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. The prior-year safe harbor of §6655(d)(1)(B)(ii) is not available to a large corporation, one with taxable income of $1,000,000 or more in any of the three preceding years (§6655(g)(2)). Because Year 1 taxable income was $1,200,000, the corporation cannot base all four installments on the $252,000 prior-year tax.",
+    B: "Correct. Under §6655 a corporation must pay estimated tax in four installments equal to 25% of the required annual payment, which is 100% of the current-year tax for a large corporation. §6655(d)(2)(B) allows a large corporation to use the prior-year tax for its first installment only, and the reduction must be recaptured in the second installment. Corporations must make estimated payments if their tax is expected to be $500 or more.",
+    C: "Incorrect. The 110% figure belongs to the individual safe harbor in §6654(d)(1)(C) for taxpayers whose prior-year AGI exceeded $150,000. There is no corporate 110% rule; a large corporation must pay 100% of the current-year tax (or use the annualized-income method).",
+    D: "Incorrect. Corporations are subject to the estimated tax rules of §6655 whenever their expected tax is $500 or more, with installments due on the 15th day of the 4th, 6th, 9th and 12th months of the tax year. Paying the entire liability with the return would trigger the underpayment addition to tax."
+  },
+  tags: ["batch-2026-09-23", "§6655", "corporate estimated tax", "large corporation", "safe harbor", "underpayment penalty"]
+},
+{
+  id: "REG-253",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 3,
+  stem: "A corporation began business on April 1, Year 1. It incurred $52,000 of organizational expenditures (legal fees for the charter, state incorporation fees and organizational meeting costs) and $10,000 of costs to issue its stock (underwriting commissions and certificate printing). The corporation elects to deduct organizational expenditures. What amount may it deduct for Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$3,000" },
+    { key: "B", text: "$3,100" },
+    { key: "C", text: "$5,450" },
+    { key: "D", text: "$7,350" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $3,000 is only the immediate deduction after the phase-out ($5,000 - ($52,000 - $50,000)). The remaining $49,000 of organizational expenditures is amortized over 180 months beginning with the month business began, adding $2,450 for the nine months of Year 1.",
+    B: "Incorrect. $3,100 adds the $10,000 of stock issuance costs to the organizational expenditures ($62,000), which eliminates the $5,000 immediate deduction and amortizes $62,000 x 9/180. Costs of issuing stock are not organizational expenditures under §248; they are charged against paid-in capital and are neither deductible nor amortizable.",
+    C: "Correct. Under §248, the immediate deduction is $5,000 reduced by the excess of organizational costs over $50,000: $5,000 - $2,000 = $3,000. The remaining $49,000 is amortized over 180 months from April: $49,000 x 9/180 = $2,450. Total Year 1 deduction = $3,000 + $2,450 = $5,450. Stock issuance costs are excluded entirely.",
+    D: "Incorrect. $7,350 takes the full $5,000 immediate deduction and amortizes $47,000 ($47,000 x 9/180 = $2,350). The immediate deduction phases out dollar for dollar once organizational expenditures exceed $50,000, so only $3,000 is allowed immediately."
+  },
+  tags: ["batch-2026-09-23", "§248", "organizational expenditures", "stock issuance costs", "180-month amortization", "phase-out"]
+},
+{
+  id: "REG-254",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 3,
+  stem: "A C corporation with average annual gross receipts of $80 million (above the $31 million small-business threshold) reported taxable income of $700,000 after deducting $600,000 of business interest expense and including $50,000 of business interest income. Depreciation deducted was $250,000. What amount of business interest expense may the corporation deduct for the current year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$425,000" },
+    { key: "B", text: "$450,000" },
+    { key: "C", text: "$500,000" },
+    { key: "D", text: "$600,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $425,000 computes adjusted taxable income without adding back depreciation ($700,000 + $600,000 - $50,000 = $1,250,000; 30% = $375,000; plus $50,000 interest income). Under §163(j)(8) as amended, ATI is computed by adding back depreciation, amortization and depletion (an EBITDA-based measure).",
+    B: "Incorrect. $450,000 is 30% of the correct ATI of $1,500,000 but omits the business interest income. The §163(j) limit is the sum of business interest income plus 30% of ATI (plus any floor plan financing interest).",
+    C: "Correct. ATI = taxable income $700,000 + business interest expense $600,000 - business interest income $50,000 + depreciation $250,000 = $1,500,000. Limit = $50,000 business interest income + 30% x $1,500,000 ($450,000) = $500,000 (§163(j)(1)). The disallowed $100,000 carries forward indefinitely (§163(j)(2)).",
+    D: "Incorrect. $600,000 deducts all of the interest as though the small-business exemption applied. The exemption in §163(j)(3) is available only to taxpayers whose average annual gross receipts do not exceed the §448(c) threshold ($31 million here); this corporation's $80 million exceeds it."
+  },
+  tags: ["batch-2026-09-23", "§163(j)", "business interest limitation", "adjusted taxable income", "EBITDA", "carryforward"]
+},
+{
+  id: "REG-255",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — Taxable income, tax liability, credits and accounting methods",
+  skill: "Application",
+  difficulty: 2,
+  stem: "On December 15, Year 1, an accrual-method calendar-year C corporation accrued a $100,000 bonus payable to its president, a cash-method individual who owns 60% of the corporation's stock. The corporation paid $40,000 of the bonus on December 30, Year 1, and the remaining $60,000 on February 15, Year 2. What amount of the bonus may the corporation deduct in Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$40,000" },
+    { key: "C", text: "$60,000" },
+    { key: "D", text: "$100,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $0 treats compensation paid to a controlling shareholder as nondeductible. Reasonable compensation to a shareholder-employee is deductible under §162(a)(1); §267(a)(2) only defers the deduction until the related payee includes the amount in income.",
+    B: "Correct. Under §267(a)(2), an accrual-method payer may not deduct an amount owed to a related cash-method payee (here a more-than-50% shareholder, §267(b)(2)) until the day the payee includes it in income. The president includes $40,000 in Year 1 when paid, so the corporation deducts $40,000 in Year 1 and $60,000 in Year 2.",
+    C: "Incorrect. $60,000 is the amount deductible in Year 2, when the balance is paid and included in the president's income. Year 1's deduction is limited to the $40,000 actually paid in Year 1.",
+    D: "Incorrect. $100,000 applies the general accrual rule and the 2.5-month rule of Reg. §1.404(b)-1T, under which bonuses paid within 2.5 months after year-end are deductible when accrued. That rule does not override §267(a)(2) for a related-party payee; the deduction is matched to the shareholder's inclusion."
+  },
+  tags: ["batch-2026-09-23", "§267(a)(2)", "related-party accrual", "accrued bonus", "matching rule", "controlling shareholder"]
+},
+{
+  id: "REG-256",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — State and local tax issues",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A corporation has $1,000,000 of apportionable business income and $100,000 of nonbusiness rental income from real property located in State X. Its State X factors are: property 20%, payroll 40%, sales 60%. State X apportions business income using a single sales factor and allocates nonbusiness income from real property to the state where the property is located. What amount is the corporation's State X taxable income?",
+  reference: "",
+  options: [
+    { key: "A", text: "$500,000" },
+    { key: "B", text: "$600,000" },
+    { key: "C", text: "$660,000" },
+    { key: "D", text: "$700,000" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. $500,000 uses an equally weighted three-factor formula ((20% + 40% + 60%) / 3 = 40%; $1,000,000 x 40% = $400,000 + $100,000). State X uses a single sales factor, so property and payroll are ignored.",
+    B: "Incorrect. $600,000 apportions business income correctly ($1,000,000 x 60%) but omits the nonbusiness rental income. Nonbusiness income is not apportioned; it is allocated in full to a single state, here State X where the property sits.",
+    C: "Incorrect. $660,000 apportions the total of business and nonbusiness income ($1,100,000 x 60%). Nonbusiness income is removed from the apportionable base and allocated specifically; only business income is multiplied by the apportionment factor.",
+    D: "Correct. Business income is apportioned by the single sales factor: $1,000,000 x 60% = $600,000. Nonbusiness rental income from real property is allocated to the situs state: $100,000 to State X. State X taxable income = $600,000 + $100,000 = $700,000."
+  },
+  tags: ["batch-2026-09-23", "apportionment", "allocation", "single sales factor", "nonbusiness income", "state taxable income"]
+},
+{
+  id: "REG-257",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "C corporations — State and local tax issues",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A corporation manufactures equipment in State A and sells it to customers in State B, where it has no office or property. Under Public Law 86-272, which of the following activities in State B would subject the corporation to State B's net income tax?",
+  reference: "",
+  options: [
+    { key: "A", text: "Sales representatives solicit orders that are sent to State A for approval and shipped from State A" },
+    { key: "B", text: "Sales representatives distribute catalogs and free samples to prospective customers" },
+    { key: "C", text: "Company technicians perform warranty repairs on equipment at customer sites" },
+    { key: "D", text: "The corporation advertises its products in State B newspapers" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Solicitation of orders for tangible personal property that are sent outside the state for approval and filled by shipment from outside the state is exactly the activity P.L. 86-272 protects. It does not create income tax nexus.",
+    B: "Incorrect. Distributing catalogs and free samples is ancillary to solicitation and is treated as protected solicitation under P.L. 86-272 and the Multistate Tax Commission's guidelines.",
+    C: "Correct. P.L. 86-272 protects only the solicitation of orders for sales of tangible personal property. Performing repair or warranty services in the state is an unprotected activity that goes beyond solicitation, so it establishes nexus for State B's net income tax. (The law never protects against sales/use tax collection duties or taxes not measured by net income.)",
+    D: "Incorrect. Advertising in local media is a form of solicitation. Advertising alone, without in-state property, employees or unprotected services, does not create nexus under P.L. 86-272."
+  },
+  tags: ["batch-2026-09-23", "P.L. 86-272", "nexus", "solicitation", "state income tax", "unprotected activities"]
+},
+{
+  id: "REG-258",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Eligibility and election",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "A corporation intends to elect S status. Which of the following shareholders would make the corporation ineligible to be an S corporation?",
+  reference: "",
+  options: [
+    { key: "A", text: "The estate of a deceased shareholder" },
+    { key: "B", text: "A §501(c)(3) charitable organization" },
+    { key: "C", text: "An individual who is a resident alien" },
+    { key: "D", text: "A general partnership" }
+  ],
+  answer: "D",
+  explanations: {
+    A: "Incorrect. Estates (both decedents' estates and bankruptcy estates) are permitted S corporation shareholders under §1361(b)(1)(B).",
+    B: "Incorrect. Organizations exempt under §501(c)(3), as well as qualified retirement plan trusts under §401(a), are permitted shareholders (§1361(c)(6)).",
+    C: "Incorrect. Only nonresident alien individuals are prohibited shareholders (§1361(b)(1)(C)). A resident alien is treated like a U.S. citizen and may own S corporation stock.",
+    D: "Correct. An S corporation may not have a partnership, a corporation (other than certain wholly owned S corporation subsidiaries) or a nonresident alien as a shareholder (§1361(b)(1)). A general partnership shareholder terminates or prevents the election."
+  },
+  tags: ["batch-2026-09-23", "S corporation", "§1361(b)", "eligible shareholders", "partnership shareholder", "nonresident alien"]
+},
+{
+  id: "REG-259",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Eligibility and election",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A calendar-year C corporation has four shareholders. On February 1, Year 2, one shareholder sold all of that shareholder's stock to a new investor. On March 10, Year 2, the corporation filed Form 2553 signed by the three continuing shareholders and the new investor; the former shareholder did not consent. Absent relief, when is the S election effective?",
+  reference: "",
+  options: [
+    { key: "A", text: "Year 2, because it was filed by the 15th day of the third month and all current shareholders consented" },
+    { key: "B", text: "Year 3, because a person who held stock during Year 2 before the election did not consent" },
+    { key: "C", text: "Never, unless a new Form 2553 is filed in Year 3" },
+    { key: "D", text: "Year 2, provided the former shareholder consents within 60 days of filing" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Timely filing is necessary but not sufficient. For an election filed during the tax year to be effective for that year, every person who was a shareholder at any time during the portion of the year before the election must also consent (§1362(b)(2)(B)(ii)).",
+    B: "Correct. Under §1362(b)(2)(B), an election made within the first 2.5 months is effective for the current year only if all persons who held stock at any time during the pre-election portion of the year consent. Because the former shareholder did not consent, the election is treated as made for the following tax year, Year 3 (subject to IRS relief for inadvertent failures under §1362(b)(5) and Rev. Proc. 2013-30).",
+    C: "Incorrect. A defective current-year election is not void. By statute it is treated as made for the following tax year, so no new Form 2553 is required.",
+    D: "Incorrect. There is no automatic 60-day cure period in the statute. Late consents are honored only under the IRS's discretionary relief procedures, not as a matter of right."
+  },
+  tags: ["batch-2026-09-23", "S election", "Form 2553", "§1362(b)", "shareholder consent", "2.5-month rule"]
+},
+{
+  id: "REG-260",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Eligibility and election",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An S corporation has 40 unrelated individual shareholders and no accumulated earnings and profits. Which of the following events during the current year terminates the S election?",
+  reference: "",
+  options: [
+    { key: "A", text: "The corporation issues nonvoting common stock with the same distribution and liquidation rights as its voting stock" },
+    { key: "B", text: "The corporation borrows from a shareholder under a written note with a fixed maturity and a market interest rate" },
+    { key: "C", text: "A shareholder transfers shares to a limited partnership in which the shareholder is a partner" },
+    { key: "D", text: "Two shareholders marry, and ten new unrelated individuals buy shares, bringing the count to 50" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Differences in voting rights alone do not create a second class of stock (§1361(c)(4)). As long as all shares carry identical rights to distribution and liquidation proceeds, the one-class requirement is met.",
+    B: "Incorrect. A written unconditional promise to pay a fixed sum on demand or on a specified date, with interest not contingent on profits, is \"straight debt\" under the §1361(c)(5) safe harbor and is not treated as a second class of stock.",
+    C: "Correct. A partnership is not a permitted S corporation shareholder (§1361(b)(1)(B)). The election terminates on the day the stock is transferred to the ineligible shareholder (§1362(d)(2)), splitting the year into a short S year and a short C year.",
+    D: "Incorrect. The limit is 100 shareholders, and spouses (and members of a family) are counted as one shareholder (§1361(c)(1)). Fifty shareholders, or fewer after aggregation, is well within the limit."
+  },
+  tags: ["batch-2026-09-23", "S election termination", "§1362(d)", "one class of stock", "straight debt", "ineligible shareholder"]
+},
+{
+  id: "REG-261",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Ordinary business income, separately stated items and AAA",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A calendar-year S corporation reported the following for the current year:\n\n| Item | Amount |\n|---|---|\n| Gross receipts | $900,000 |\n| Cost of goods sold | $400,000 |\n| Officer compensation | $150,000 |\n| Other salaries | $100,000 |\n| Rent expense | $60,000 |\n| MACRS depreciation | $30,000 |\n| Charitable contributions | $15,000 |\n| §1231 gain | $25,000 |\n| Interest income on investments | $5,000 |\n| §179 expense | $40,000 |\n\nWhat amount is the corporation's ordinary business income on Form 1120-S?",
+  reference: "",
+  options: [
+    { key: "A", text: "$120,000" },
+    { key: "B", text: "$145,000" },
+    { key: "C", text: "$160,000" },
+    { key: "D", text: "$190,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $120,000 deducts the $40,000 §179 expense in arriving at ordinary income. The §179 deduction is separately stated on Schedule K (§1366(a)(1)(A)) because each shareholder applies the dollar and business-income limitations individually.",
+    B: "Incorrect. $145,000 deducts the $15,000 of charitable contributions. Charitable contributions are separately stated so that each shareholder applies the §170 percentage limits on the shareholder's own return.",
+    C: "Correct. Ordinary business income = $900,000 - $400,000 - $150,000 - $100,000 - $60,000 - $30,000 = $160,000. Charitable contributions, §1231 gain, portfolio interest income and the §179 deduction are separately stated items passed through on Schedule K-1 and excluded from ordinary income (§1366(a)).",
+    D: "Incorrect. $190,000 includes the $25,000 §1231 gain and $5,000 of investment interest income in ordinary income. Both are separately stated because their character (§1231 netting, portfolio income) matters at the shareholder level."
+  },
+  tags: ["batch-2026-09-23", "S corporation", "ordinary business income", "separately stated items", "§1366", "Form 1120-S"]
+},
+{
+  id: "REG-262",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Ordinary business income, separately stated items and AAA",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "Which of the following items of an S corporation is included in the computation of ordinary business income rather than being separately stated on Schedule K?",
+  reference: "",
+  options: [
+    { key: "A", text: "Charitable contributions" },
+    { key: "B", text: "Net §1231 gain" },
+    { key: "C", text: "Depreciation on equipment used in operations" },
+    { key: "D", text: "§179 expense deduction" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Charitable contributions are separately stated because the §170 percentage limitations are applied at the shareholder level, not by the corporation.",
+    B: "Incorrect. Net §1231 gain is separately stated so each shareholder can combine it with the shareholder's own §1231 gains and losses in the §1231 netting process.",
+    C: "Correct. Ordinary MACRS depreciation on operating assets is a trade or business deduction that reduces ordinary business income on page 1 of Form 1120-S. Only items whose separate treatment could affect a shareholder's tax liability differently must be separately stated (§1366(a)(1)(A)).",
+    D: "Incorrect. The §179 deduction is separately stated because the annual dollar limit and the taxable-income limitation apply to each shareholder individually."
+  },
+  tags: ["batch-2026-09-23", "S corporation", "separately stated items", "§1366(a)", "Schedule K", "depreciation"]
+},
+{
+  id: "REG-263",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Ordinary business income, separately stated items and AAA",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An S corporation with no accumulated earnings and profits began the year with an accumulated adjustments account (AAA) of $40,000. During the year it reported ordinary business income of $70,000, tax-exempt interest of $5,000, nondeductible meal expenses of $4,000 and charitable contributions of $10,000, and it distributed $60,000 cash to its shareholders. What is the AAA balance at year-end?",
+  reference: "",
+  options: [
+    { key: "A", text: "$36,000" },
+    { key: "B", text: "$40,000" },
+    { key: "C", text: "$41,000" },
+    { key: "D", text: "$46,000" }
+  ],
+  answer: "A",
+  explanations: {
+    A: "Correct. AAA = $40,000 + $70,000 ordinary income - $4,000 nondeductible expenses - $10,000 charitable contributions - $60,000 distributions = $36,000 (§1368(e)(1)). Tax-exempt income and expenses related to it are excluded from AAA and tracked in the other adjustments account (OAA).",
+    B: "Incorrect. $40,000 omits the $4,000 of nondeductible expenses. Nondeductible, noncapital expenses (other than those related to tax-exempt income) reduce AAA just as they reduce stock basis.",
+    C: "Incorrect. $41,000 increases AAA by the $5,000 of tax-exempt interest. Unlike stock basis, AAA is not increased by tax-exempt income (§1368(e)(1)(A)); that income goes to OAA.",
+    D: "Incorrect. $46,000 omits the $10,000 of charitable contributions. Separately stated deductions reduce AAA even though they are not part of ordinary business income."
+  },
+  tags: ["batch-2026-09-23", "accumulated adjustments account", "§1368(e)", "OAA", "tax-exempt income", "S corporation distributions"]
+},
+{
+  id: "REG-264",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Ordinary business income, separately stated items and AAA",
+  skill: "Application",
+  difficulty: 2,
+  stem: "An S corporation pays $12,000 of health insurance premiums for its president, who owns 40% of the stock and is an employee. Which of the following correctly describes the treatment of the premiums?",
+  reference: "",
+  options: [
+    { key: "A", text: "Deductible by the corporation as an employee benefit and excluded from the president's income" },
+    { key: "B", text: "Deductible by the corporation as compensation, included in the president's Form W-2 wages, and deductible by the president as self-employed health insurance" },
+    { key: "C", text: "A nondeductible distribution to the president that reduces the accumulated adjustments account" },
+    { key: "D", text: "Included in the president's wages subject to FICA and deductible by the president only as an itemized medical expense" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. The §106 exclusion for employer-provided health coverage is not available to a more-than-2% shareholder, because §1372 treats the S corporation as a partnership and the shareholder as a partner for fringe benefit purposes.",
+    B: "Correct. Under §1372, a more-than-2% shareholder-employee is treated like a partner: the premiums are deductible by the corporation as compensation, reported as wages in box 1 of the shareholder's Form W-2 (Rev. Rul. 91-26), and the shareholder deducts them above the line as self-employed health insurance under §162(l), provided the plan is established by the corporation.",
+    C: "Incorrect. The premiums are compensation for services, not a distribution with respect to stock. They do not run through AAA as a distribution; they reduce ordinary business income as a deductible expense.",
+    D: "Incorrect. Premiums paid under a plan for a 2% shareholder are excluded from FICA wages (Ann. 92-16) even though they are included in income tax wages, and the shareholder deducts them above the line under §162(l), not as an itemized medical expense."
+  },
+  tags: ["batch-2026-09-23", "§1372", "2% shareholder", "health insurance", "§162(l)", "fringe benefits", "S corporation"]
+},
+{
+  id: "REG-265",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Basis of shareholder's interest",
+  skill: "Application",
+  difficulty: 3,
+  stem: "The sole shareholder of an S corporation had a stock basis of $30,000 at the beginning of the year and no debt basis. For the year the corporation reported a $40,000 ordinary loss, a $6,000 long-term capital gain and $2,000 of nondeductible meal expenses, and it distributed $10,000 cash to the shareholder. The shareholder materially participates and is fully at risk. What amount of the ordinary loss may the shareholder deduct for the year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$18,000" },
+    { key: "B", text: "$24,000" },
+    { key: "C", text: "$26,000" },
+    { key: "D", text: "$34,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $18,000 ($30,000 - $10,000 - $2,000) omits the $6,000 capital gain. All income items, including separately stated capital gains, increase stock basis first under Reg. §1.1367-1(f) before any decreases are applied.",
+    B: "Correct. Under the ordering rules of Reg. §1.1367-1(f), basis is (1) increased for income items: $30,000 + $6,000 = $36,000; (2) decreased for distributions: - $10,000 = $26,000; (3) decreased for nondeductible expenses: - $2,000 = $24,000; and (4) decreased for losses. The loss is deductible only to the extent of the $24,000 remaining basis (§1366(d)(1)); the other $16,000 is suspended and carried forward.",
+    C: "Incorrect. $26,000 stops after the distribution and ignores the $2,000 of nondeductible expenses. Nondeductible noncapital expenses reduce basis before losses do, so they consume basis that would otherwise support the loss.",
+    D: "Incorrect. $34,000 ($36,000 - $2,000) applies the loss before the distribution. Distributions reduce basis ahead of losses under the ordering rules; applying the loss first would understate the suspended loss and misstate the tax-free portion of the distribution."
+  },
+  tags: ["batch-2026-09-23", "stock basis", "Reg. §1.1367-1(f)", "ordering rules", "§1366(d)", "suspended loss"]
+},
+{
+  id: "REG-266",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Basis of shareholder's interest",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A shareholder's stock basis in an S corporation was $25,000 at the beginning of the year. The corporation, which has never been a C corporation and has no accumulated earnings and profits, allocated $15,000 of ordinary income to the shareholder and distributed $55,000 cash to the shareholder during the year. What amount and character of income, if any, does the shareholder recognize on the distribution?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$15,000 capital gain" },
+    { key: "C", text: "$30,000 capital gain" },
+    { key: "D", text: "$55,000 dividend" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. A distribution is tax-free only to the extent of stock basis (§1368(b)(1)). Basis after the income allocation is $40,000, so the $55,000 distribution exceeds basis and the excess is taxable.",
+    B: "Correct. Stock basis is first increased by the shareholder's share of income: $25,000 + $15,000 = $40,000 (Reg. §1.1367-1(f)). The distribution reduces basis to zero, and the $15,000 excess over basis is treated as gain from the sale of the stock, i.e., capital gain (§1368(b)(2)).",
+    C: "Incorrect. $30,000 ($55,000 - $25,000) measures the distribution against beginning-of-year basis. Income items for the year increase basis before the distribution is applied, so basis available is $40,000, not $25,000.",
+    D: "Incorrect. A distribution is a dividend only to the extent of accumulated earnings and profits from C corporation years (§1368(c)). This corporation has none, so no part of the distribution is a dividend."
+  },
+  tags: ["batch-2026-09-23", "S corporation distributions", "§1368(b)", "stock basis", "capital gain", "no E&P"]
+},
+{
+  id: "REG-267",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "S corporations — Basis of shareholder's interest",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A shareholder owns 50% of an S corporation and has a stock basis of $10,000. During the year the shareholder lent the corporation $15,000 under a written note and personally guaranteed a $30,000 bank loan to the corporation. The shareholder's share of the corporation's ordinary loss for the year is $60,000. The shareholder materially participates and is at risk for all amounts. What amount of the loss may the shareholder deduct?",
+  reference: "",
+  options: [
+    { key: "A", text: "$10,000" },
+    { key: "B", text: "$25,000" },
+    { key: "C", text: "$55,000" },
+    { key: "D", text: "$60,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $10,000 counts only stock basis. Under §1366(d)(1)(B), losses may also be deducted against the shareholder's adjusted basis in indebtedness of the corporation to the shareholder, so the $15,000 direct loan also supports the loss.",
+    B: "Correct. The loss limit is stock basis plus debt basis: $10,000 + $15,000 = $25,000 (§1366(d)(1)). A shareholder's guarantee of a third-party loan does not create debt basis because the shareholder has made no actual economic outlay (Reg. §1.1366-2(a)(2)(ii)). The remaining $35,000 is suspended and carried forward.",
+    C: "Incorrect. $55,000 adds the $30,000 guaranteed bank loan to basis. Unlike a partner, an S shareholder gets no basis for entity-level debt, and a mere guarantee produces basis only if and when the shareholder actually pays on it.",
+    D: "Incorrect. $60,000 deducts the entire loss. The material participation and at-risk rules are satisfied, but the §1366(d) basis limitation is applied first and caps the deduction at $25,000."
+  },
+  tags: ["batch-2026-09-23", "debt basis", "§1366(d)", "shareholder guarantee", "Reg. §1.1366-2", "loss limitation"]
+},
+{
+  id: "REG-268",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Ordinary business income and separately stated items",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A partner holds a 40% interest in the profits and losses of a calendar-year partnership and receives a $50,000 guaranteed payment for services each year. For the current year the partnership had ordinary income of $30,000 before deducting the guaranteed payment. What amount of ordinary income from the partnership must the partner report for the year?",
+  reference: "",
+  options: [
+    { key: "A", text: "$12,000" },
+    { key: "B", text: "$42,000" },
+    { key: "C", text: "$50,000" },
+    { key: "D", text: "$62,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $12,000 (40% x $30,000) treats the guaranteed payment as a distribution rather than as income. Guaranteed payments are ordinary income to the recipient under §707(c), regardless of partnership income, in addition to the partner's distributive share.",
+    B: "Correct. The guaranteed payment is deductible by the partnership (§707(c), §162), producing an ordinary loss of $30,000 - $50,000 = $(20,000). The partner reports the $50,000 guaranteed payment as ordinary income plus a 40% share of the loss, $(8,000): $50,000 - $8,000 = $42,000. Both the guaranteed payment and the distributive share are also net earnings from self-employment for a general partner.",
+    C: "Incorrect. $50,000 reports the guaranteed payment but ignores the partner's distributive share of the resulting ordinary loss. The payment is deducted in computing partnership ordinary income, which flips the $30,000 income to a $20,000 loss that is shared 40%.",
+    D: "Incorrect. $62,000 adds the guaranteed payment to a 40% share of the pre-payment income ($50,000 + $12,000). Because the guaranteed payment is a partnership deduction, the distributive share must be computed after it is deducted."
+  },
+  tags: ["batch-2026-09-23", "guaranteed payments", "§707(c)", "distributive share", "partnership loss", "self-employment income"]
+},
+{
+  id: "REG-269",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Ordinary business income and separately stated items",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A calendar-year partnership reported the following for the current year:\n\n| Item | Amount |\n|---|---|\n| Sales | $1,200,000 |\n| Cost of goods sold | $500,000 |\n| Salaries to employees | $200,000 |\n| Guaranteed payments to partners | $80,000 |\n| Health insurance premiums paid for partners | $20,000 |\n| Rent expense | $60,000 |\n| Depreciation | $40,000 |\n| Charitable contributions | $10,000 |\n| Long-term capital gain | $30,000 |\n| Tax-exempt interest | $5,000 |\n\nWhat amount is the partnership's ordinary business income on page 1 of Form 1065?",
+  reference: "",
+  options: [
+    { key: "A", text: "$290,000" },
+    { key: "B", text: "$300,000" },
+    { key: "C", text: "$320,000" },
+    { key: "D", text: "$335,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $290,000 deducts the $10,000 of charitable contributions. Charitable contributions are separately stated on Schedule K so that each partner applies the §170 limitations on the partner's own return.",
+    B: "Correct. Ordinary business income = $1,200,000 - $500,000 - $200,000 - $80,000 - $20,000 - $60,000 - $40,000 = $300,000. Health insurance premiums paid for partners are treated as guaranteed payments (Rev. Rul. 91-26) and are deductible by the partnership; charitable contributions, capital gains and tax-exempt interest are separately stated (§702(a)).",
+    C: "Incorrect. $320,000 fails to deduct the $20,000 of partner health insurance premiums. Premiums a partnership pays for a partner's coverage are guaranteed payments under §707(c): deductible by the partnership and income to the partner (who may deduct them under §162(l)).",
+    D: "Incorrect. $335,000 includes the $30,000 long-term capital gain and $5,000 of tax-exempt interest. Capital gains are separately stated because their character matters at the partner level, and tax-exempt interest is never included in taxable income."
+  },
+  tags: ["batch-2026-09-23", "partnership ordinary income", "§702(a)", "guaranteed payments", "partner health insurance", "Form 1065"]
+},
+{
+  id: "REG-270",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Ordinary business income and separately stated items",
+  skill: "Remembering & Understanding",
+  difficulty: 1,
+  stem: "Which of the following items is deducted in computing a partnership's ordinary business income on page 1 of Form 1065?",
+  reference: "",
+  options: [
+    { key: "A", text: "Charitable contributions" },
+    { key: "B", text: "Guaranteed payments to partners for services" },
+    { key: "C", text: "Political contributions" },
+    { key: "D", text: "Investment interest expense" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Charitable contributions are separately stated under §702(a)(4) so that each partner applies the individual or corporate §170 limits. They never reduce ordinary business income.",
+    B: "Correct. Guaranteed payments for services or the use of capital are treated as payments to a non-partner (§707(c)) and are deducted by the partnership under §162 in arriving at ordinary business income (loss). They are reported as ordinary income by the recipient partner.",
+    C: "Incorrect. Political contributions are nondeductible under §162(e)(1)(B). They are reported on Schedule K as nondeductible expenses, reduce the partners' bases, but do not reduce ordinary income.",
+    D: "Incorrect. Investment interest expense is separately stated (§702(a)) because the §163(d) limitation on investment interest is applied at the partner level."
+  },
+  tags: ["batch-2026-09-23", "Form 1065", "ordinary business income", "guaranteed payments", "separately stated items", "nondeductible expenses"]
+},
+{
+  id: "REG-271",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Ordinary business income and separately stated items",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A limited partnership began business on July 1, Year 1. Before opening it paid $8,000 of legal fees to draft the partnership agreement and state filing fees, and $30,000 of brokerage commissions to sell limited partnership interests to investors. The partnership makes all available elections. What amount may the partnership deduct for these costs in Year 1?",
+  reference: "",
+  options: [
+    { key: "A", text: "$5,000" },
+    { key: "B", text: "$5,100" },
+    { key: "C", text: "$6,100" },
+    { key: "D", text: "$8,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $5,000 is only the immediate deduction under §709(b). The remaining $3,000 of organizational expenses is amortized over 180 months beginning with the month business began, adding $100 for the six months of Year 1.",
+    B: "Correct. Organizational expenses (drafting the agreement, filing fees) qualify under §709(b): $5,000 immediately (no phase-out because total is under $50,000) plus amortization of the remaining $3,000 over 180 months from July: $3,000 x 6/180 = $100. Total = $5,100. Syndication costs are excluded.",
+    C: "Incorrect. $6,100 amortizes the $30,000 of brokerage commissions along with the organizational costs ($5,000 + $33,000 x 6/180). Syndication expenses, the costs of promoting and selling interests in the partnership, are neither deductible nor amortizable under §709(a); they are permanently capitalized.",
+    D: "Incorrect. $8,000 deducts all organizational expenses currently. Only $5,000 may be deducted immediately; the balance must be amortized over 180 months (§709(b)(1))."
+  },
+  tags: ["batch-2026-09-23", "§709", "organizational expenses", "syndication costs", "180-month amortization", "partnership"]
+},
+{
+  id: "REG-272",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Basis of partner's interest",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Which of the following items has NO effect on a partner's adjusted basis in the partnership interest?",
+  reference: "",
+  options: [
+    { key: "A", text: "The partner's distributive share of the partnership's tax-exempt interest income" },
+    { key: "B", text: "A guaranteed payment received by the partner for services" },
+    { key: "C", text: "The partner's share of the partnership's nondeductible fines" },
+    { key: "D", text: "An increase in the partner's share of the partnership's recourse liabilities" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Tax-exempt income increases outside basis under §705(a)(1)(B). Without the increase the income would be taxed later as gain on a sale or distribution, defeating the exemption.",
+    B: "Correct. A guaranteed payment under §707(c) is treated as a payment to a non-partner: it is ordinary income to the recipient and a deduction (or capitalized cost) to the partnership. It is not a distribution, so it does not reduce the recipient's basis; the partner's basis is affected only indirectly through the partner's distributive share of the partnership's resulting income or loss (§705(a)).",
+    C: "Incorrect. Nondeductible, noncapital expenditures such as fines and the disallowed portion of meals reduce outside basis under §705(a)(2)(B), even though no deduction is allowed, so the partner cannot later recover the amount as a loss.",
+    D: "Incorrect. Under §752(a) an increase in a partner's share of partnership liabilities is treated as a contribution of money by the partner and increases outside basis; a decrease is a deemed distribution under §752(b)."
+  },
+  tags: ["batch-2026-09-23", "§705", "§707(c)", "§752", "outside basis", "guaranteed payments"]
+},
+{
+  id: "REG-273",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Basis of partner's interest",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A partner had an outside basis of $20,000 at the beginning of the year. For the year the partner was allocated a $35,000 share of the partnership's ordinary loss and $3,000 of tax-exempt interest, and received an $8,000 cash distribution. The partner's share of liabilities did not change. What amount of the ordinary loss is suspended under §704(d) and carried forward?",
+  reference: "",
+  options: [
+    { key: "A", text: "$12,000" },
+    { key: "B", text: "$15,000" },
+    { key: "C", text: "$20,000" },
+    { key: "D", text: "$23,000" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. $12,000 applies the loss before the distribution ($23,000 of basis absorbs $23,000 of loss, leaving $12,000 suspended). Under Reg. §1.704-1(d)(2) and §705, basis is increased for income items and decreased for distributions before the loss limitation is applied.",
+    B: "Incorrect. $15,000 is the amount of loss that IS deductible ($20,000 + $3,000 - $8,000 = $15,000 of basis), not the amount suspended. The question asks for the excess carried forward.",
+    C: "Correct. Basis available for losses = $20,000 + $3,000 tax-exempt income (§705(a)(1)(B)) - $8,000 distribution = $15,000. Under §704(d) the partner deducts $15,000 of the $35,000 loss; the remaining $20,000 is suspended and carried forward indefinitely until the partner has sufficient basis.",
+    D: "Incorrect. $23,000 ($35,000 - $12,000) omits the $3,000 basis increase for tax-exempt interest. Tax-exempt income increases outside basis under §705(a)(1)(B) even though it is never taxed, so it supports an additional $3,000 of loss."
+  },
+  tags: ["batch-2026-09-23", "§704(d)", "outside basis", "loss limitation", "ordering rules", "suspended loss", "§705"]
+},
+{
+  id: "REG-274",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Partnerships — Basis of partner's interest",
+  skill: "Application",
+  difficulty: 3,
+  stem: "A partner with an outside basis of $50,000 received a nonliquidating distribution of $30,000 cash and inventory with an adjusted basis to the partnership of $15,000 and a fair market value of $25,000. In the same year the partner's share of partnership liabilities decreased by $30,000. What amount of gain must the partner recognize?",
+  reference: "",
+  options: [
+    { key: "A", text: "$0" },
+    { key: "B", text: "$10,000" },
+    { key: "C", text: "$25,000" },
+    { key: "D", text: "$35,000" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. $0 compares only the $30,000 of actual cash to the $50,000 basis. A decrease in a partner's share of liabilities is a deemed distribution of money under §752(b), so total money distributed is $60,000, which exceeds basis.",
+    B: "Correct. Money distributed = $30,000 cash + $30,000 deemed distribution from the liability decrease (§752(b)) = $60,000. Gain is recognized to the extent money exceeds outside basis: $60,000 - $50,000 = $10,000 (§731(a)(1)). Basis is reduced to zero, and the inventory takes a $0 basis in the partner's hands (§732(a)(2)).",
+    C: "Incorrect. $25,000 adds the $15,000 basis of the inventory to the money distributed. Distributions of property other than money never trigger gain to the distributee under §731(a); instead the property's basis is limited to the partner's remaining outside basis.",
+    D: "Incorrect. $35,000 adds the inventory at its $25,000 fair market value. Property distributions do not cause gain recognition, and even when property basis is relevant it is the partnership's adjusted basis, not fair market value, that carries over (§732)."
+  },
+  tags: ["batch-2026-09-23", "§731(a)", "§752(b)", "deemed distribution", "partnership distribution", "outside basis", "§732"]
+},
+{
+  id: "REG-275",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Limited liability companies — Tax classification options",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A C corporation is the sole member of a limited liability company formed under state law. The LLC has not filed Form 8832 and has several employees. How is the LLC's activity reported for federal tax purposes?",
+  reference: "",
+  options: [
+    { key: "A", text: "On the LLC's own Form 1120, because an LLC owned by a corporation is taxed as a corporation" },
+    { key: "B", text: "On Form 1065, with the corporation reported as the sole partner" },
+    { key: "C", text: "On the corporation's Form 1120 as a division, although the LLC is treated as a separate employer for employment taxes" },
+    { key: "D", text: "On Schedule C attached to the corporation's return" }
+  ],
+  answer: "C",
+  explanations: {
+    A: "Incorrect. Absent an election, a domestic single-member LLC is not classified as a corporation. The default classification under Reg. §301.7701-3(b)(1)(ii) is a disregarded entity, regardless of whether the owner is an individual or a corporation.",
+    B: "Incorrect. A partnership requires at least two members. A single-member LLC can never be a partnership; its only choices are disregarded entity (default) or association taxable as a corporation (by election on Form 8832).",
+    C: "Correct. A single-member LLC that has not elected corporate treatment is disregarded as separate from its owner (Reg. §301.7701-3(b)(1)(ii)), so its income, deductions and credits are reported on the owner's Form 1120 as if it were a division. However, Reg. §301.7701-2(c)(2)(iv) treats the disregarded LLC as a separate entity for federal employment taxes (it files its own Forms 941 under its own EIN) and for certain excise taxes.",
+    D: "Incorrect. Schedule C is used by an individual sole proprietor, including an individual who owns a disregarded single-member LLC. A corporate owner simply includes the LLC's items in its own Form 1120."
+  },
+  tags: ["batch-2026-09-23", "single-member LLC", "disregarded entity", "Reg. §301.7701-3", "employment taxes", "Form 1120"]
+},
+{
+  id: "REG-276",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Limited liability companies — Tax classification options",
+  skill: "Application",
+  difficulty: 2,
+  stem: "Two U.S. individuals form a limited liability company that has never filed a federal return. All members share equally in distributions and liquidation rights. They want the LLC taxed as an S corporation beginning with its first tax year. Which filing accomplishes this?",
+  reference: "",
+  options: [
+    { key: "A", text: "Form 8832 only, electing association status; S status then applies automatically" },
+    { key: "B", text: "Form 2553 only, which is treated as a deemed election to be classified as an association" },
+    { key: "C", text: "Form 1065 with a statement electing S corporation treatment" },
+    { key: "D", text: "Form 8832 and Form 2553 must both be filed, or the S election is invalid" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Form 8832 makes the LLC an association taxable as a C corporation. S status is never automatic; it requires a separate election under §1362(a), which Form 8832 alone does not make.",
+    B: "Correct. Under Reg. §301.7701-3(c)(1)(v)(C), an eligible entity that timely files Form 2553 is deemed to have elected to be classified as an association effective the same date, so no Form 8832 is needed. The LLC must satisfy the §1361 requirements: all members are eligible shareholders and the identical economic rights satisfy the one-class-of-stock rule.",
+    C: "Incorrect. Form 1065 is the partnership return, the default classification for a multi-member LLC. Filing it would confirm partnership status; there is no S election that can be made on a partnership return.",
+    D: "Incorrect. Filing both is permitted but not required. The regulations expressly provide that a timely Form 2553 carries a deemed Form 8832 election, so the S election is valid without a separate classification election."
+  },
+  tags: ["batch-2026-09-23", "LLC", "Form 2553", "deemed Form 8832 election", "Reg. §301.7701-3(c)", "S corporation classification"]
+},
+{
+  id: "REG-277",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Tax-exempt organizations — Types and filing requirements",
+  skill: "Application",
+  difficulty: 2,
+  stem: "A corporation pays $5,000 of annual dues to a trade association exempt under §501(c)(6). The association reports that 20% of dues are attributable to lobbying state legislators. Which of the following correctly describes the corporation's deduction?",
+  reference: "",
+  options: [
+    { key: "A", text: "$5,000 as a charitable contribution subject to the 10% limit" },
+    { key: "B", text: "$4,000 as an ordinary business expense; the lobbying portion is nondeductible" },
+    { key: "C", text: "$0, because payments to non-charitable exempt organizations are not deductible" },
+    { key: "D", text: "$5,000 as an ordinary business expense, because the association, not the payer, is responsible for lobbying" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Charitable contribution treatment under §170 is available only for gifts to §170(c) organizations, chiefly §501(c)(3) charities and governmental units. A §501(c)(6) business league is not a §170(c) organization.",
+    B: "Correct. Dues paid to a trade or professional association are ordinary and necessary business expenses under §162(a). However, §162(e)(3) disallows the portion of dues allocable to the association's lobbying and political activities, which the organization must disclose to members (§6033(e)). Deduction = $5,000 x 80% = $4,000.",
+    C: "Incorrect. The exempt status of the recipient does not control deductibility by the payer. A business-related payment to a §501(c)(6) organization is deductible under §162 to the extent it is not allocable to lobbying.",
+    D: "Incorrect. §162(e)(3) specifically looks through the association and denies the member's deduction for the portion of dues the organization notifies it is allocable to lobbying, unless the organization elects to pay the proxy tax itself."
+  },
+  tags: ["batch-2026-09-23", "§501(c)(6)", "§162(e)", "association dues", "lobbying", "§170(c)", "tax-exempt organizations"]
+},
+{
+  id: "REG-278",
+  area: "V",
+  areaName: "Federal Taxation of Entities (including tax preparation)",
+  topic: "Tax-exempt organizations — Types and filing requirements",
+  skill: "Remembering & Understanding",
+  difficulty: 2,
+  stem: "Which of the following statements regarding the annual filing requirements of tax-exempt organizations is correct?",
+  reference: "",
+  options: [
+    { key: "A", text: "Churches must file Form 990 annually regardless of gross receipts" },
+    { key: "B", text: "An organization that fails to file its required annual return or notice for three consecutive years automatically loses its exempt status" },
+    { key: "C", text: "Private foundations with gross receipts under the small-organization threshold may file Form 990-N" },
+    { key: "D", text: "Organizations with gross receipts normally at or below the small-organization threshold have no annual filing obligation" }
+  ],
+  answer: "B",
+  explanations: {
+    A: "Incorrect. Churches, their integrated auxiliaries and conventions or associations of churches are exempt from the annual return requirement under §6033(a)(3)(A)(i). They may file Form 990 voluntarily but are not required to.",
+    B: "Correct. Under §6033(j), an organization that fails to file a required Form 990, 990-EZ, 990-PF or 990-N for three consecutive years has its exemption automatically revoked as of the due date of the third return. It must reapply (Form 1023 or 1024) to regain exempt status.",
+    C: "Incorrect. Private foundations must file Form 990-PF every year regardless of size (§6033(c)). The Form 990-N e-Postcard is available only to small organizations that are not private foundations.",
+    D: "Incorrect. Small organizations (gross receipts normally $50,000 or less) are relieved of filing a full return, but they must submit the electronic Form 990-N notice under §6033(i). Failing to submit it counts toward the three-year automatic revocation."
+  },
+  tags: ["batch-2026-09-23", "Form 990", "§6033", "automatic revocation", "Form 990-N", "private foundation", "tax-exempt organizations"]
 }
 ];
