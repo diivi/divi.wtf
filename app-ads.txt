@@ -2,6 +2,7 @@ google.com, pub-3976030705205276, DIRECT, f08c47fec0942fa0
 google.com, pub-3286127850409078, DIRECT, f08c47fec0942fa0
 vungle.com, 6abeb805fb6acbb421dc10f9, DIRECT, c107d686becd2d77
 inmobi.com, 8da14fad73214b57bbfb20f6613b32b6, DIRECT, 83e75a7ae333ca9d
+facebook.com, 1966842157345349, DIRECT, c3e20eee3f780d68
 # Unity Ads (AdMob mediation) - authorised sellers from the Unity dashboard
 unity.com, 153620460, DIRECT, 96cabb5fbdde37a7
 adwmg.com, 159512, RESELLER, c9688a22012618e7
